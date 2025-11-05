@@ -10,6 +10,12 @@ import { useAuthStore, type Tokens } from '#stores/auth';
 
 import { deserialize, Json, serialize, type JsonArray, type JsonObject } from './utils';
 
+// Extend AxiosRequestConfig to include custom properties
+export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
+  ignoreUnauthorized?: boolean;
+  _retry?: boolean;
+}
+
 type Options = {
   baseURL: string;
   getTokens: () => Tokens;
@@ -52,20 +58,32 @@ export default class HttpClient {
         return response;
       },
       async (exception: AxiosError) => {
-        const config = exception.config;
+        const config = exception.config as ExtendedAxiosRequestConfig | undefined;
 
-        // eslint-disable-next-line
-        // @ts-ignore
         const ignoreUnauthorized = config?.ignoreUnauthorized;
+        const isRetry = config?._retry;
 
-        if (exception.response?.status === 401 && !ignoreUnauthorized) {
-          if (typeof this.options.onUnauthorized !== 'function') {
-            throw exception;
+        if (exception.response?.status === 401 && !ignoreUnauthorized && !isRetry && config) {
+          // Mark this request as a retry to prevent infinite loops
+          config._retry = true;
+
+          try {
+            // Try to refresh the token
+            console.log('🔄 Token expired, attempting to refresh...');
+            const renewSession = useAuthStore.getState().renewSession;
+            await renewSession();
+
+            console.log('✅ Token refreshed, retrying original request');
+            // Retry the original request with the new token
+            return this.axios(config);
+          } catch (refreshError) {
+            // Token refresh failed, logout
+            console.log('❌ Token refresh failed, logging out');
+            if (typeof this.options.onUnauthorized === 'function') {
+              this.options.onUnauthorized();
+            }
+            return Promise.reject(exception);
           }
-
-          this.options.onUnauthorized();
-
-          return Promise.reject(exception);
         }
 
         if (exception.response?.status === 422) {
