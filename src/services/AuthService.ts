@@ -17,7 +17,7 @@ import type {
   SignUpAsCoolingUserResponse,
 } from '#types/api.responses';
 
-import HttpClient, { type HttpClientOptions } from './HttpClient';
+import HttpClient, { type HttpClientOptions, type ExtendedAxiosRequestConfig } from './HttpClient';
 import RecaptchaService from './RecaptchaService';
 import ErrorUtil, { type CustomError } from './utils/ErrorUtil';
 
@@ -106,7 +106,8 @@ class AuthService extends HttpClient {
     try {
       const { data } = await this.post<RefreshSessionResponse>(
         EAuthenticationEndpoints.REFRESH_TOKEN_ENDPOINT,
-        { refresh: refreshToken }
+        { refresh: refreshToken },
+        { ignoreUnauthorized: true } as ExtendedAxiosRequestConfig // Don't trigger interceptor to prevent infinite loop
       );
 
       if (!data?.access) throw new Error('No valid access token provided');
@@ -114,7 +115,7 @@ class AuthService extends HttpClient {
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
-      console.log(JSON.stringify(customError));
+      console.log('❌ Token refresh failed:', JSON.stringify(customError));
       throw customError;
     }
   };
@@ -240,7 +241,11 @@ class AuthService extends HttpClient {
 
   public logout = async (refreshToken: string): Promise<void> => {
     try {
-      await this.post<void>(EAuthenticationEndpoints.LOGOUT_ENDPOINT, { refresh: refreshToken });
+      await this.post<void>(
+        EAuthenticationEndpoints.LOGOUT_ENDPOINT,
+        { refresh: refreshToken },
+        { ignoreUnauthorized: true } as ExtendedAxiosRequestConfig // Don't trigger interceptor if already logged out
+      );
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
       console.log(JSON.stringify(customError));
