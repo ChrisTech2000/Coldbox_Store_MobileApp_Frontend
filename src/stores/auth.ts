@@ -157,20 +157,57 @@ export function useAuthManager() {
 
         // App came to foreground
         if (nextAppState === 'active' && isAuthenticated) {
-          console.log('App became active, checking token...');
           try {
             const isExpired = verifySession();
-            console.log('Token expired?', isExpired);
 
             if (isExpired) {
               // Token expired while app was in background, try to refresh
               console.log('Attempting to renew session...');
-              try {
-                await renewSession();
-                console.log('✅ Session renewed after app returned to foreground');
-              } catch (error) {
-                console.log('❌ Failed to renew session on foreground:', error);
-                revokeSession();
+
+              // Retry up to 3 times with exponential backoff
+              const retries = 3;
+              let retryDelay = 1000; // Start with 1 second
+
+              for (let attempt = 1; attempt <= retries; attempt++) {
+                try {
+                  await renewSession();
+                  console.log(
+                    `✅ Session renewed after app returned to foreground (attempt ${attempt})`
+                  );
+                  return; // Success, exit early
+                } catch (error) {
+                  const errorMessage = error instanceof Error ? error.message : '';
+                  const errorCode = (error as { code?: string })?.code;
+                  const errorResponse = (error as { response?: { status?: number } })?.response;
+
+                  const isNetworkError =
+                    errorMessage.toLowerCase().includes('network') ||
+                    errorMessage.toLowerCase().includes('timeout') ||
+                    errorCode === 'ECONNABORTED' ||
+                    errorCode === 'ENOTFOUND' ||
+                    !errorResponse; // No response usually means network issue
+
+                  const isInvalidToken =
+                    errorResponse?.status === 401 || errorResponse?.status === 403;
+
+                  // If it's an invalid token error, don't retry - just logout
+                  if (isInvalidToken) {
+                    console.log('Refresh token is invalid/expired, logging out');
+                    revokeSession();
+                    return;
+                  }
+
+                  // If it's a network error and we have retries left, wait and retry
+                  if (isNetworkError && attempt < retries) {
+                    console.log(`Retrying in ${retryDelay}ms...`);
+                    await new Promise((resolve) => setTimeout(resolve, retryDelay));
+                    retryDelay *= 2; // Exponential backoff
+                  } else if (attempt === retries) {
+                    // All retries exhausted, logout
+                    console.log('All refresh attempts failed, logging out');
+                    revokeSession();
+                  }
+                }
               }
             } else {
               console.log('Token still valid, no refresh needed');
