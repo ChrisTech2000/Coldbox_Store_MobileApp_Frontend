@@ -130,11 +130,13 @@ function PayoutSettings(
 
   const onSubmit = useCallback(
     async (data: FormValues) => {
+      const accountTypeEnum = mapEnum(t)[data.accountType];
+
       try {
         if (farmer) {
           await MarketplaceService.addFirstPaystackAccount({
             ownedByUserId: farmer.id,
-            accountType: mapEnum(t)[data.accountType],
+            accountType: accountTypeEnum,
             bankCode: data.bank,
             accountNumber: data.accountNumber,
             countryCode: countriesMeta.getISOByName(data.country) ?? 'NG',
@@ -145,7 +147,7 @@ function PayoutSettings(
             ...(user?.role === ERoles.EMPLOYEE && props.route.params?.isCompanyView
               ? { companyId: company?.id }
               : {}),
-            accountType: mapEnum(t)[data.accountType],
+            accountType: accountTypeEnum,
             bankCode: data.bank,
             accountNumber: data.accountNumber,
             countryCode: countriesMeta.getISOByName(data.country) ?? 'NG',
@@ -179,17 +181,34 @@ function PayoutSettings(
         reportCrash(error as Error);
       }
     },
-    [user, company, farmer]
+    [
+      user,
+      company,
+      farmer,
+      bank,
+      accountType,
+      t,
+      toast,
+      reset,
+      props.navigation,
+      props.route.params,
+    ]
   );
 
   useEffect(() => {
-    if (bank) setValue('bank', `${bank.code}`, { shouldDirty: true });
-  }, [bank]);
+    if (bank) {
+      setValue('bank', `${bank.code}`, { shouldDirty: true, shouldValidate: true });
+    }
+  }, [bank, setValue]);
 
   useEffect(() => {
-    if (accountType)
-      setValue('accountType', mapBankAccountTypes(t)[accountType], { shouldDirty: true });
-  }, [accountType, t]);
+    if (accountType) {
+      setValue('accountType', mapBankAccountTypes(t)[accountType], {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    }
+  }, [accountType, t, setValue]);
 
   useEffect(() => {
     if (data?.length && availableBanks?.banks?.length) {
@@ -203,20 +222,23 @@ function PayoutSettings(
 
       if (!accounts.length) return;
 
+      const mostRecentAccount = accounts[0];
+      const accountTypeDisplay = mapBankAccountTypes(t)[mostRecentAccount.accountType];
+
       reset({
         country: t('Dashboard.AccountDetails.PayoutSettings.form.nigeria'),
-        accountName: accounts?.[0]?.accountName ?? '',
-        accountNumber: accounts?.[0]?.accountNumber ?? '',
-        accountType: accounts?.[0]?.accountType.toString(),
-        bank: availableBanks?.banks?.find((b) => b.code === accounts?.[0]?.bankCode)?.code,
+        accountName: mostRecentAccount.accountName ?? '',
+        accountNumber: mostRecentAccount.accountNumber ?? '',
+        accountType: accountTypeDisplay,
+        bank: availableBanks?.banks?.find((b) => b.code === mostRecentAccount.bankCode)?.code,
       });
 
       setBank(
-        availableBanks?.banks?.find((b) => b.code.toString() === accounts?.[0]?.bankCode) ?? null
+        availableBanks?.banks?.find((b) => b.code.toString() === mostRecentAccount.bankCode) ?? null
       );
-      setAccountType(accounts?.[0]?.accountType);
+      setAccountType(mostRecentAccount.accountType);
     }
-  }, [data, availableBanks]);
+  }, [data, availableBanks, t, reset, setBank, setAccountType, props.route.params?.isCompanyView]);
 
   if (isLoadingAvailableBanks || isLoadingBankAccounts) {
     return (

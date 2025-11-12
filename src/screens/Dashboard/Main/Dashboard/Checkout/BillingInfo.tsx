@@ -17,7 +17,7 @@ import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
-import { EPaymentMethod, EPaymentThrough, EPricingType } from '#types/global';
+import { ECoolingUnitMetric, EPaymentMethod, EPaymentThrough, EPricingType } from '#types/global';
 import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 
 import { CheckOut2ScreenOverlay } from '#screens/Dashboard/Tutorial/CheckoutOverlays';
@@ -109,10 +109,20 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const priceType = useMemo(() => {
     const type = coolingUnit?.commonPricingType?.type;
     const price = coolingUnit?.commonPricingType?.value;
-    return type === EPricingType.PERIODICITY
-      ? `${price}${currency} / ${t('Dashboard.CrateManagement.CheckOut.crate')} / ${t('Dashboard.CrateManagement.CheckOut.day')}`
-      : price;
-  }, [coolingUnit, currency]);
+    const metric = coolingUnit?.commonPricingType?.metric;
+
+    if (type === EPricingType.PERIODICITY) {
+      if (metric === ECoolingUnitMetric.KILOGRAMS) {
+        return `${price}${currency} / ${t('Dashboard.ProduceDetails.kilogram')} / ${t('Dashboard.CrateManagement.CheckOut.day')}`;
+      }
+      return `${price}${currency} / ${t('Dashboard.CrateManagement.CheckOut.crate')} / ${t('Dashboard.CrateManagement.CheckOut.day')}`;
+    }
+
+    if (metric === ECoolingUnitMetric.KILOGRAMS) {
+      return `${price}${currency} / ${t('Dashboard.ProduceDetails.kilogram')}`;
+    }
+    return `${price}${currency} / ${t('Dashboard.CrateManagement.CheckOut.crate')}`;
+  }, [coolingUnit, currency, t]);
 
   const cratePrices = useMemo(() => {
     return (crates ?? []).map((crate) => {
