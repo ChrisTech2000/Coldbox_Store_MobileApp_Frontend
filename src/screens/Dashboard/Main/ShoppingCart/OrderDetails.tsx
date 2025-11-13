@@ -17,8 +17,12 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
+import { getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
+import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
+import ColdtivateService from '#services/ColdtivateService';
+import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
@@ -34,6 +38,7 @@ import ListCouponsBottomSheet from './components/ListCouponsBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import OrderPickupMethod from './components/OrderPickupMethod';
 import { OwnershipModal } from './components/OwnershipModal';
+import { groupCartItemsByCoolingUnitAndCrop } from './utils/groupCartItems';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 
@@ -56,6 +61,15 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   ]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const { data: cropsResult } = useApiCall(
+    'getAllCrops',
+    ColdtivateService.getAllCrops,
+    undefined,
+    { defaultData: [] }
+  );
+
+  const crops = useTranslatedCrops(cropsResult);
 
   const onPay = useCallback(
     async (evt: GestureResponderEvent) => {
@@ -93,32 +107,15 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   );
 
   const cartDataByCoolingUnit = useMemo(() => {
-    if (!cartData?.items) return [];
-
-    const groupedData = cartData.items.reduce(
-      (acc, item) => {
-        const coolingUnit = coolingUnits?.find((c) => c.id === item.relCoolingUnitId);
-        if (!coolingUnit) return acc;
-
-        if (!acc[coolingUnit.id]) {
-          acc[coolingUnit.id] = [];
-        }
-        acc[coolingUnit.id].push(item);
-        return acc;
-      },
-      {} as Record<string, typeof cartData.items>
-    );
-
-    return Object.entries(groupedData).map(([coolingUnit, items]) => ({
-      coolingUnit,
-      items,
-    }));
-  }, [cartData, coolingUnits]);
+    return groupCartItemsByCoolingUnitAndCrop(cartData?.items, coolingUnits);
+  }, [cartData?.items, coolingUnits]);
 
   const unitsMap = useMemo(
     () => new Map(coolingUnits?.map((coolingUnit) => [coolingUnit.id, coolingUnit])),
     [coolingUnits]
   );
+
+  const cropsMap = useMemo(() => new Map(crops?.map((crop) => [crop.id, crop])), [crops]);
 
   if (!cartData) {
     return (
@@ -139,26 +136,32 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
       <View tw="flex-1 pb-8 space-y-6">
         <FlashList
           data={cartDataByCoolingUnit}
-          keyExtractor={(item) => `cooling-unit-${item.coolingUnit}`}
+          keyExtractor={(item) => `cooling-unit-${item.coolingUnit.id}`}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}
           estimatedItemSize={200}
-          renderItem={({ item: { coolingUnit, items } }) => {
-            const heading = unitsMap.get(Number(coolingUnit))?.name ?? '';
+          renderItem={({ item: coolingUnitGroup }) => {
+            const heading = coolingUnitGroup.coolingUnit.name;
+            const cropsBreakdown = coolingUnitGroup.crops.map((cropGroup) => {
+              const crop = cropsMap.get(cropGroup.cropId);
+              const cropName = crop?.name ?? getDefaultCropValues(t).name;
+              return {
+                cropName,
+                weight: cropGroup.totalWeight,
+                amount: cropGroup.totalAmount,
+              };
+            });
 
             return (
               <View tw="mb-4">
                 <OrderDetailsCard
                   heading={heading}
                   totalLabel={t('Dashboard.ShoppingCart.total')}
-                  produceWeight={items?.reduce(
-                    (acc, curr) => (acc += curr.orderedProduceWeight),
-                    0
-                  )}
+                  crops={cropsBreakdown}
                   currency={cartData?.currency ?? DEFAULT_CURRENCY_CODE}
-                  subtotal={items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
-                  discount={items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
-                  total={items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
+                  subtotal={coolingUnitGroup.subtotal}
+                  discount={coolingUnitGroup.discount}
+                  total={coolingUnitGroup.total}
                 />
               </View>
             );

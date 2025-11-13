@@ -1,4 +1,3 @@
-import Clipboard from '@react-native-clipboard/clipboard';
 import { useIsFocused } from '@react-navigation/native';
 import { CurrencyStandardization } from 'currency-format-utils';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
@@ -11,10 +10,8 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import colors from 'tailwindcss/colors';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
@@ -31,13 +28,11 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
-import { API_BASE_URL } from '#constants/environment';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
 import ColdtivateService from '#services/ColdtivateService';
-import DataloaderService from '#services/DataloaderService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
@@ -48,6 +43,7 @@ import { CoolingUnit, EOrderStatus } from '#types/global';
 import DeliveryInformationBottomSheet from '../ShoppingCart/components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from '../ShoppingCart/components/OrderDetailsCard';
 import { PickupDetailsCard } from '../ShoppingCart/components/PickupDetailsCard';
+import { groupCartItemsByCoolingUnitAndCrop } from '../ShoppingCart/utils/groupCartItems';
 import PaymentPendingBottomSheet from './components/PaymentPendingBottomSheet';
 
 const HORIZONTAL_SPACING = Platform.select({
@@ -105,27 +101,8 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   }, [crops, companyCountry, farmerCountry, locale]);
 
   const orderDataByCoolingUnit = useMemo(() => {
-    if (!order?.items) return [];
-
-    const groupedData = order.items.reduce(
-      (acc, item) => {
-        const coolingUnit = coolingUnits?.find((c) => c.id === item.relCoolingUnitId);
-        if (!coolingUnit) return acc;
-
-        if (!acc[coolingUnit.id]) {
-          acc[coolingUnit.id] = [];
-        }
-        acc[coolingUnit.id].push(item);
-        return acc;
-      },
-      {} as Record<string, typeof order.items>
-    );
-
-    return Object.entries(groupedData).map(([coolingUnit, items]) => ({
-      coolingUnit,
-      items,
-    }));
-  }, [order, coolingUnits]);
+    return groupCartItemsByCoolingUnitAndCrop(order?.items, coolingUnits);
+  }, [order?.items, coolingUnits]);
 
   const unitsMap = useMemo(
     () => new Map(coolingUnits?.map((coolingUnit) => [coolingUnit.id, coolingUnit])),
@@ -235,24 +212,31 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
           <Text tw="text-base text-green-primary font-bold">{t('Dashboard.MyOrders.title')}</Text>
           <FlatList
             data={orderDataByCoolingUnit}
-            keyExtractor={(_, itemIdx) => `order-cooling-unit-${itemIdx}`}
+            keyExtractor={(item) => `order-cooling-unit-${item.coolingUnit.id}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item: { coolingUnit, items } }) => {
-              const heading = unitsMap.get(Number(coolingUnit))?.name ?? '';
+            renderItem={({ item: coolingUnitGroup }) => {
+              const heading = coolingUnitGroup.coolingUnit.name;
+              const cropsBreakdown = coolingUnitGroup.crops.map((cropGroup) => {
+                const crop = cropDatums.get(cropGroup.cropId);
+                const cropName = crop?.name ?? getDefaultCropValues(t).name;
+                return {
+                  cropName,
+                  weight: cropGroup.totalWeight,
+                  amount: cropGroup.totalAmount,
+                };
+              });
+
               return (
                 <View tw="mb-4">
                   <OrderDetailsCard
                     heading={heading}
                     totalLabel={t('Dashboard.ShoppingCart.total')}
-                    produceWeight={items?.reduce(
-                      (acc, curr) => (acc += curr.orderedProduceWeight),
-                      0
-                    )}
+                    crops={cropsBreakdown}
                     currency={order?.currency ?? DEFAULT_CURRENCY_CODE}
-                    subtotal={items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
-                    discount={items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
-                    total={items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
+                    subtotal={coolingUnitGroup.subtotal}
+                    discount={coolingUnitGroup.discount}
+                    total={coolingUnitGroup.total}
                   />
                 </View>
               );
@@ -309,34 +293,6 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 }}
               />
             ) : null}
-          </View>
-
-          <View tw="space-y-5">
-            <Text tw="text-base text-green-primary font-bold">
-              {t('Dashboard.ShoppingCart.produce')}
-            </Text>
-            <FlatList
-              data={order.items}
-              keyExtractor={(_, itemIdx) => `order-item-${itemIdx}`}
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => {
-                const crop = cropDatums.get(item.relCropId);
-                return (
-                  <ProduceCard
-                    crop={{
-                      name: crop?.name ?? getDefaultCropValues(t).name,
-                      image: crop?.image ?? getDefaultCropValues(t).imageUri,
-                    }}
-                    currency={order.currency ?? DEFAULT_CURRENCY_CODE}
-                    producePricePerKg={item.producePricePerKg}
-                    weight={item.orderedProduceWeight}
-                    ownedByUserId={!order.ownedOnBehalfOfCompanyId ? item.ownedByUserId : null}
-                    ownedOnBehalfOfCompanyId={order.ownedOnBehalfOfCompanyId ?? null}
-                  />
-                );
-              }}
-            />
           </View>
 
           <View>
@@ -403,117 +359,6 @@ function _PortalsWrapper() {
       <DeliveryInformationBottomSheet />
       <PaymentPendingBottomSheet />
     </React.Fragment>
-  );
-}
-
-function ProduceCard(props: {
-  ownedOnBehalfOfCompanyId: number | null;
-  ownedByUserId: number | null;
-  currency: string;
-  crop: { name: string; image: string };
-  weight: number;
-  producePricePerKg: number;
-}) {
-  const { t } = useTranslationUtils();
-
-  const { data: ownerCompany } = useApiCall(
-    'getMarketplaceCompanyById',
-    DataloaderService.marketplaceCompanies.getById,
-    props.ownedOnBehalfOfCompanyId!,
-    {
-      defaultData: undefined,
-      skip: !props.ownedOnBehalfOfCompanyId,
-    }
-  );
-
-  const { data: companyContacts } = useApiCall(
-    'listDeliveryContacts',
-    MarketplaceService.listDeliveryContacts,
-    ownerCompany.id,
-    {
-      skip: !ownerCompany.id,
-      defaultData: [],
-    }
-  );
-
-  const { data: owner } = useApiCall(
-    'getFarmerByUserId',
-    ColdtivateService.getFarmerByUserId,
-    props.ownedByUserId!,
-    {
-      defaultData: undefined,
-      skip: !props.ownedByUserId,
-    }
-  );
-
-  return (
-    <View tw="border border-solid border-zinc-300 rounded-md p-3 mb-2">
-      <View tw="flex-row items-start justify-between">
-        <View tw="flex-col items-start">
-          <Text tw="text-lg font-bold">{props.crop?.name ?? getDefaultCropValues(t).name}</Text>
-          <Text tw="text-zinc-500">
-            {t('Dashboard.Marketplace.owner')}:{' '}
-            {owner?.[0]
-              ? `${owner[0].user.firstName} ${owner[0].user.lastName}`
-              : (ownerCompany?.name ?? '')}
-          </Text>
-          {owner?.[0] && owner[0].user.isPhonePublic ? (
-            <Touchable
-              tw="flex-row items-center justify-center space-x-1.5 mt-2"
-              rippleColor={colors.zinc[200]}
-              onPress={(evt) => {
-                evt.stopPropagation();
-                Clipboard.setString(owner?.[0].user.phone);
-              }}
-            >
-              <Text tw="text-zinc-500">{owner?.[0].user.phone}</Text>
-              <MaterialCommunityIcon
-                name="content-copy"
-                size={16}
-                color={paperTheme.colors.primary}
-              />
-            </Touchable>
-          ) : ownerCompany && companyContacts?.[0]?.phone ? (
-            <Touchable
-              tw="flex-row items-center justify-center space-x-1.5 mt-2"
-              rippleColor={colors.zinc[200]}
-              onPress={(evt) => {
-                evt.stopPropagation();
-                Clipboard.setString(companyContacts?.[0]?.phone);
-              }}
-            >
-              <Text tw="text-zinc-500">{companyContacts?.[0]?.phone}</Text>
-              <MaterialCommunityIcon
-                name="content-copy"
-                size={16}
-                color={paperTheme.colors.primary}
-              />
-            </Touchable>
-          ) : null}
-        </View>
-        <FastImage
-          tw="w-24 h-20"
-          resizeMode="contain"
-          source={{
-            uri: `${API_BASE_URL}media/${props.crop?.image ?? getDefaultCropValues(t).imageUri}`,
-          }}
-        />
-      </View>
-      <Divider tw="bg-gray-400 my-2" />
-      <View tw="flex-row items-center justify-between py-1.5">
-        <Text tw="font-bold">
-          {props.weight}
-          {t('Dashboard.ProduceDetails.kilogram')}
-        </Text>
-        <Text tw="font-bold">
-          {CurrencyStandardization.currencyCode({
-            code: props.currency ?? DEFAULT_CURRENCY_CODE,
-            value: props.producePricePerKg.toFixed(2),
-          }).getValueFormated()}{' '}
-          {t('Dashboard.ShoppingCart.perKg')}
-        </Text>
-      </View>
-    </View>
   );
 }
 
