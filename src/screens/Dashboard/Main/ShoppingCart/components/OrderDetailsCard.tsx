@@ -11,9 +11,16 @@ import { paperTheme } from '#ui/lib/theme';
 import { useTranslationUtils } from '#i18n/utils';
 import { formatCurrencyWithSymbol } from '../../Dashboard/CheckIn/utils';
 
+type CropBreakdown = {
+  cropName: string;
+  weight: number;
+  amount: number;
+};
+
 type OrderDetailsCardProps = {
   currency: string;
-  produceWeight: number;
+  produceWeight?: number;
+  crops?: CropBreakdown[];
   subtotal: number;
   discount: number;
   total: number;
@@ -29,13 +36,35 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
       <View tw="flex-col space-y-1">
         <Text tw="text-base">{props.heading}</Text>
         <View tw="flex-col border border-solid border-zinc-300 rounded-xl px-4 py-2.5 space-y-1">
-          <View tw="flex-row items-center justify-between h-8">
-            <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.produce')}</Text>
-            <Text tw="text-base">
-              {props.produceWeight}
-              {t('Dashboard.ProduceDetails.kilogram').toUpperCase()}
-            </Text>
-          </View>
+          {props.crops && props.crops.length > 0 ? (
+            props.crops.map((crop, index) => (
+              <React.Fragment key={`crop-${index}`}>
+                {index > 0 && <Divider tw="bg-gray-400 my-1" />}
+                <View
+                  tw={`flex-row items-center justify-between py-2 ${index % 2 === 0 ? '' : 'bg-gray-50/50'}`}
+                >
+                  <Text tw="text-base font-semibold text-gray-700">{crop.cropName}</Text>
+                  <View tw="flex-row items-center space-x-4">
+                    <Text tw="text-sm text-gray-500">
+                      {crop.weight.toFixed(2)}
+                      {t('Dashboard.ProduceDetails.kilogram').toUpperCase()}
+                    </Text>
+                    <Text tw="text-base font-bold text-gray-800">
+                      {formatCurrencyWithSymbol(props.currency, crop.amount)}
+                    </Text>
+                  </View>
+                </View>
+              </React.Fragment>
+            ))
+          ) : (
+            <View tw="flex-row items-center justify-between h-8">
+              <Text tw="text-base text-zinc-500">{t('Dashboard.ShoppingCart.produce')}</Text>
+              <Text tw="text-base">
+                {props.produceWeight}
+                {t('Dashboard.ProduceDetails.kilogram').toUpperCase()}
+              </Text>
+            </View>
+          )}
 
           {props.discount ? (
             <View>
@@ -78,10 +107,10 @@ export default function OrderDetailsCard(props: OrderDetailsCardProps) {
           <Divider tw="bg-gray-400 my-0.5" />
 
           <View tw="flex-row items-center justify-between h-8">
-            <Text variant="TextMedium" tw="text-lg text-zinc-500">
+            <Text variant="TextMedium" tw="text-lg text-zinc-500 font-bold">
               {props.totalLabel}
             </Text>
-            <Text variant="TextMedium" tw="text-lg">
+            <Text variant="TextMedium" tw="text-lg font-bold">
               {formatCurrencyWithSymbol(props.currency, props.total)}
             </Text>
           </View>

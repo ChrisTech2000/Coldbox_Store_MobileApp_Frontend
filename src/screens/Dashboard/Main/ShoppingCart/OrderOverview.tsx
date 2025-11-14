@@ -1,7 +1,6 @@
-import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import React, { useMemo } from 'react';
 import { Platform, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,7 +14,6 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { cn } from '#ui/lib/cn';
 
-import { API_BASE_URL } from '#constants/environment';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { useTranslationUtils } from '#i18n/utils';
@@ -30,6 +28,7 @@ import { CoolingUnit } from '#types/global';
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
 import OrderDetailsCard from './components/OrderDetailsCard';
 import { PickupDetailsCard } from './components/PickupDetailsCard';
+import { groupCartItemsByCoolingUnitAndCrop } from './utils/groupCartItems';
 
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 
@@ -40,8 +39,6 @@ const HORIZONTAL_SPACING = Platform.select({
 
 function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   const { t } = useTranslationUtils();
-  // eslint-disable-next-line
-  const navigation = useNavigation<NavigationProp<any>>();
   const [fetchCart, coolingUnits] = useCartStore((store) => [
     store.fetchCart,
     store.allCoolingUnits,
@@ -64,33 +61,15 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   const crops = useTranslatedCrops(cropsResult);
 
   const orderDataByCoolingUnit = useMemo(() => {
-    if (!order?.items) return [];
-
-    const groupedData = order.items.reduce(
-      (acc, item) => {
-        const coolingUnit = coolingUnits?.find((c) => c.id === item.relCoolingUnitId);
-        if (!coolingUnit) return acc;
-
-        if (!acc[coolingUnit.id]) {
-          acc[coolingUnit.id] = [];
-        }
-
-        acc[coolingUnit.id].push(item);
-        return acc;
-      },
-      {} as Record<string, typeof order.items>
-    );
-
-    return Object.entries(groupedData).map(([coolingUnit, items]) => ({
-      coolingUnit,
-      items,
-    }));
-  }, [order, coolingUnits]);
+    return groupCartItemsByCoolingUnitAndCrop(order?.items, coolingUnits);
+  }, [order?.items, coolingUnits]);
 
   const unitsMap = useMemo(
     () => new Map(coolingUnits?.map((coolingUnit) => [coolingUnit.id, coolingUnit])),
     [coolingUnits]
   );
+
+  const cropsMap = useMemo(() => new Map(crops?.map((crop) => [crop.id, crop])), [crops]);
 
   if (isLoading || isLoadingCrops || !order.items?.length) {
     return (
@@ -125,26 +104,32 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
 
             <FlashList
               data={orderDataByCoolingUnit}
-              keyExtractor={(item) => `overview-cooling-unit-${item.coolingUnit}`}
+              keyExtractor={(item) => `overview-cooling-unit-${item.coolingUnit.id}`}
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
               estimatedItemSize={200}
-              renderItem={({ item: { coolingUnit, items } }) => {
-                const heading = unitsMap.get(Number(coolingUnit))?.name ?? '';
+              renderItem={({ item: coolingUnitGroup }) => {
+                const heading = coolingUnitGroup.coolingUnit.name;
+                const cropsBreakdown = coolingUnitGroup.crops.map((cropGroup) => {
+                  const crop = cropsMap.get(cropGroup.cropId);
+                  const cropName = crop?.name ?? getDefaultCropValues(t).name;
+                  return {
+                    cropName,
+                    weight: cropGroup.totalWeight,
+                    amount: cropGroup.totalAmount,
+                  };
+                });
 
                 return (
                   <View tw="mb-4">
                     <OrderDetailsCard
                       heading={heading}
                       totalLabel={t('Dashboard.ShoppingCart.total')}
-                      produceWeight={items?.reduce(
-                        (acc, curr) => (acc += curr.orderedProduceWeight),
-                        0
-                      )}
+                      crops={cropsBreakdown}
                       currency={order?.currency ?? DEFAULT_CURRENCY_CODE}
-                      subtotal={items?.reduce((acc, curr) => (acc += curr.produceAmount), 0)}
-                      discount={items?.reduce((acc, curr) => (acc += curr.discountAmount), 0)}
-                      total={items?.reduce((acc, curr) => (acc += curr.totalAmount), 0)}
+                      subtotal={coolingUnitGroup.subtotal}
+                      discount={coolingUnitGroup.discount}
+                      total={coolingUnitGroup.total}
                     />
                   </View>
                 );
@@ -180,55 +165,6 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                   }}
                 />
               ) : null}
-            </View>
-
-            <View tw="space-y-5">
-              <Text tw="text-base text-green-primary font-bold">
-                {t('Dashboard.ShoppingCart.produce')}
-              </Text>
-              <FlashList
-                data={order.items}
-                keyExtractor={(item) => `overview-item-${item.relCheckinMovementCode}`}
-                scrollEnabled={false}
-                showsVerticalScrollIndicator={false}
-                estimatedItemSize={100}
-                renderItem={({ item }) => {
-                  const crop = crops?.find((c) => c.id === item.relCropId);
-                  return (
-                    <View tw="border border-solid border-zinc-300 rounded-md p-3 mb-2">
-                      <View tw="flex-row items-start justify-between">
-                        <View tw="flex-col items-start">
-                          <Text tw="text-lg font-bold">
-                            {crop?.name ?? getDefaultCropValues(t).name}
-                          </Text>
-                          <Text tw="text-zinc-500">{item.relCheckinMovementCode}</Text>
-                        </View>
-                        <FastImage
-                          tw="w-24 h-20"
-                          resizeMode="contain"
-                          source={{
-                            uri: `${API_BASE_URL}media/${crop?.image ?? getDefaultCropValues(t).imageUri}`,
-                          }}
-                        />
-                      </View>
-                      <Divider tw="bg-gray-400 my-2" />
-                      <View tw="flex-row items-center justify-between py-1.5">
-                        <Text tw="font-bold">
-                          {item.orderedProduceWeight}
-                          {t('Dashboard.ProduceDetails.kilogram')}
-                        </Text>
-                        <Text tw="font-bold">
-                          {formatCurrencyWithSymbol(
-                            order.currency ?? DEFAULT_CURRENCY_CODE,
-                            item.producePricePerKg.toFixed(2)
-                          )}
-                          {t('Dashboard.ShoppingCart.perKg')}
-                        </Text>
-                      </View>
-                    </View>
-                  );
-                }}
-              />
             </View>
           </View>
           <View>
@@ -281,8 +217,8 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
           tw="w-10/12"
           onPress={(evt) => {
             evt.stopPropagation();
-            navigation.navigate('MarketplaceRoot');
             fetchCart();
+            props.navigation.popToTop();
           }}
         >
           {t('Dashboard.ShoppingCart.gotItButton')}
