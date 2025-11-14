@@ -125,7 +125,7 @@ export default {
     },
     history: {
       EditCheckIn: '{{code}}',
-      MarketSurvey: 'Enquête de marché pour {{farmer}}',
+      MarketSurvey: 'Enquête post-stockage pour {{farmer}}',
       BaseSurvey: 'Enquête sur les Utilisateurs de chambre froide',
     },
     analytics: { methodology: 'Méthodologie' },
@@ -1167,7 +1167,8 @@ export default {
         errorMessage: "Échec de la mise à jour de l'enregistrement d'entrée. Veuillez réessayer.",
       },
       survey: {
-        fillMessage: "Veuillez remplir l'enquête de base pour {{crop}} !",
+        fillMessage:
+          "Veuillez remplir l'enquête utilisateur de la chambre froide (enquête de référence) pour {{crop}}!",
         baseSurvey: {
           occupationQuestion: 'Quelle est la meilleure description de votre occupation?',
           occupationFarmer: 'Un agriculteur',
@@ -1446,7 +1447,7 @@ export default {
       sensorError:
         "Le capteur pour la chambre froide {{unitName}} n'a pas envoyé de données au cours des 12 dernières heures. Veuillez entrer les données manuellement en attendant que le problème soit résolu.",
       survey:
-        "Veuillez remplir l'enquête de marché pour {{farmer}}, pour le mouvement, {{movementCode}}.",
+        'Veuillez remplir l’enquête post-stockage pour {{farmer}}, relative à la culture de {{crop}}',
       link: 'Veuillez aller ici pour le compléter.',
       coolingUserSurvey:
         "Vous avez enregistré {{crop}} mais vous n'avez pas complété l'enquête pour cette culture.",

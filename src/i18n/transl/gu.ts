@@ -128,7 +128,7 @@ export default {
     },
     history: {
       EditCheckIn: '{{code}}',
-      MarketSurvey: '{{farmer}} માટેનો બજાર સર્વે',
+      MarketSurvey: '{{farmer}} માટે સંગ્રહ પછીનો સર્વે',
       BaseSurvey: 'કૂલિંગ યુઝર સર્વે',
     },
     analytics: {
@@ -1219,7 +1219,7 @@ export default {
         errorMessage: 'ચેક-ઇન અપડેટ કરવામાં નિષ્ફળ. કૃપા કરીને ફરીથી પ્રયાસ કરો.',
       },
       survey: {
-        fillMessage: 'કૃપા કરીને {{crop}} માટે મૂળ સર્વે પૂર્ણ કરો!',
+        fillMessage: 'કૃપા કરીને {{crop}} માટે કૂલિંગ યુઝર સર્વે (બેઝલાઇન સર્વે) પૂર્ણ કરો!',
         baseSurvey: {
           occupationQuestion: 'તમને કઈ રીતે વ્યાખ્યાયિત કરી શકાય?',
           occupationFarmer: 'એક ખેડૂત',
@@ -1496,7 +1496,7 @@ export default {
       },
       sensorError:
         'ઠંડા કમરા {{unitName}} માટેનો સેન્સર છેલ્લા 12 કલાકથી કોઇ ડેટા મોકલતા નથી. કૃપા કરીને આ ઠીક થાય ત્યાં સુધી માહિતી મેન્યુઅલી દાખલ કરો.',
-      survey: '{{farmer}} માટે બજાર સર્વે પૂરું કરો, પ્રવાહ, {{movementCode}}.',
+      survey: 'કૃપા કરીને {{farmer}} માટે {{crop}} માટેનું સંગ્રહ પછીનું સર્વે પૂરું કરો.',
       link: 'કૃપા કરીને તેને પૂર્ણ કરવા માટે અહીં જાઓ.',
       coolingUserSurvey: 'તમે {{crop}} ચેક-ઇન કર્યું છે પરંતુ આ ફસલ માટે સર્વે પૂર્ણ કર્યું નથી.',
       operatorSurvey:

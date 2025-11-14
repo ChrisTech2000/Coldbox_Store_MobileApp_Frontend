@@ -124,7 +124,7 @@ export default {
     },
     history: {
       EditCheckIn: '{{code}}',
-      MarketSurvey: 'Binciken kasuwa na {{farmer}}',
+      MarketSurvey: 'Binciken bayan adana na {{farmer}}',
       BaseSurvey: 'Sanyaya binciken mai amfani',
     },
     analytics: { methodology: 'Hanya' },
@@ -1157,7 +1157,8 @@ export default {
         errorMessage: 'An kasa sabunta rajistan shiga. Da fatan za a sake gwadawa.',
       },
       survey: {
-        fillMessage: 'Da fatan za a cika binciken tushe don {{crop}}!',
+        fillMessage:
+          'Da fatan za a cika binciken mai amfani da sanyaya (binciken tushe) don {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'Me yafi bayyana Ka/Ki?',
           occupationFarmer: 'Manomi',
@@ -1437,7 +1438,7 @@ export default {
       text: { notifications: 'Sanarwa' },
       sensorError:
         "Na'urar firikwensin dakin sanyi {{unitName}} bai aika da komai ba a cikin awanni 12 da suka gabata. Da fatan za a shigar da bayanai da hannu har sai an gyara shi.",
-      survey: 'Da fatan za a cika binciken kasuwa don {{farmer}}, don motsi, {{movementCode}}.',
+      survey: 'Don Allah, cika binciken bayan adana na {{farmer}} dangane da {{crop}}.',
       link: 'Da fatan za a je nan don kammala shi',
       coolingUserSurvey:
         'Kun duba shiga {{crop}} amma ba ku kammala binciken wannan amfanin gona ba.',

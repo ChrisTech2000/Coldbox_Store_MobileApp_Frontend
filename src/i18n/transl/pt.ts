@@ -128,7 +128,7 @@ export default {
     },
     history: {
       EditCheckIn: '{{code}}',
-      MarketSurvey: 'Questionário de Mercado para {{farmer}}',
+      MarketSurvey: 'Questionário pós-armazenamento para {{farmer}}',
       BaseSurvey: 'Questionário do Utilizador de Refrigeração',
     },
     analytics: {
@@ -1232,7 +1232,8 @@ export default {
         errorMessage: 'Falha ao atualizar o check-in. Por favor, tente novamente.',
       },
       survey: {
-        fillMessage: 'Por favor, preencha o inquérito base para {{crop}}!',
+        fillMessage:
+          'Por favor, preencha o questionário do utilizador de refrigeração (inquérito de referência) para {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'O que melhor o define?',
           occupationFarmer: 'Um agricultor',
@@ -1517,7 +1518,7 @@ export default {
       sensorError:
         'O sensor da sala fria {{unitName}} não enviou dados nas últimas 12 horas. Por favor, insira os dados manualmente até que o problema seja resolvido.',
       survey:
-        'Por favor, preencha o inquérito de mercado para {{farmer}}, referente à movimentação {{movementCode}}.',
+        'Por favor, preencha o questionário pós-armazenamento para {{farmer}} relativo a {{crop}}.',
       link: 'Por favor, acesse aqui para completá-lo.',
       coolingUserSurvey:
         'Fez check-in de {{crop}}, mas não completou o inquérito para este produto.',
