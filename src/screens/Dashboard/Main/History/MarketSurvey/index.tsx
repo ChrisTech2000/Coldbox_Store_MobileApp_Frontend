@@ -133,11 +133,11 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
             {!item.hasSurvey ? (
               <View>
                 <TouchableOpacity
-                  tw="flex flex-row space-y-2 space-x-4 items-center w-full my-1 h-6"
+                  tw="flex flex-row space-x-4 items-start w-full my-1 py-1"
                   onPress={() => props.navigation.navigate('BaseSurvey', { companyCurrency })}
                 >
-                  <Danger tw="w-7 h-7" />
-                  <Text variant="TextMedium" tw="">
+                  <Danger tw="w-7 h-7 flex-shrink-0" />
+                  <Text variant="TextMedium" tw="flex-1 flex-wrap">
                     {t('Dashboard.History.survey.fillMessage', {
                       crop: item.name || getDefaultCropValues(t).name,
                     })}

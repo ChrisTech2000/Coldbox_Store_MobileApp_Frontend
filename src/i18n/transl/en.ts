@@ -126,7 +126,7 @@ const en = {
     },
     history: {
       EditCheckIn: '{{code}}',
-      MarketSurvey: 'Market Survey for {{farmer}}',
+      MarketSurvey: 'After-storage survey for {{farmer}}',
       BaseSurvey: 'Cooling user survey',
     },
     analytics: {
@@ -1219,7 +1219,7 @@ const en = {
         errorMessage: 'Failed to update check-in. Please try again.',
       },
       survey: {
-        fillMessage: 'Please fill in the base survey for {{crop}}!',
+        fillMessage: 'Please fill in the Cooling user survey (baseline survey) for {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'What defines you best?',
           occupationFarmer: 'A farmer',
@@ -1497,8 +1497,7 @@ const en = {
       },
       sensorError:
         'The sensor for cold room {{unitName}} has not sent any data in the last 12 hours. Please enter data manually until it is fixed.',
-      survey:
-        'Please fill in the market survey for {{farmer}}, for the movement, {{movementCode}}.',
+      survey: 'Please fill in the after-storage survey for {{farmer}} regarding {{crop}}.',
       link: 'Please go here to complete it.',
       coolingUserSurvey:
         'You have checked in {{crop}} but you have not completed the survey for this crop.',

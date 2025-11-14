@@ -124,7 +124,7 @@ export default {
     },
     history: {
       EditCheckIn: '{{code}}',
-      MarketSurvey: 'دراسة السوق لـ {{farmer}}',
+      MarketSurvey: 'استبيان ما بعد التخزين لـ {{farmer}}',
       BaseSurvey: 'استطلاع رأي مستخدمي غرفة التبريد',
     },
     analytics: { methodology: 'المنهجية' },
@@ -1103,7 +1103,7 @@ export default {
         errorMessage: 'فشل تحديث تسجيل الوصول. يرجى المحاولة مرة أخرى.',
       },
       survey: {
-        fillMessage: 'يرجى ملء الاستبيان الأساسي لـ {{crop}}!',
+        fillMessage: 'يرجى إكمال استبيان مستخدم التبريد (الاستبيان الأساسي) لـ {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'ما الذي يحددك بشكل أفضل؟',
           occupationFarmer: 'مزارع',
@@ -1376,7 +1376,7 @@ export default {
       text: { notifications: 'إشعارات' },
       sensorError:
         'لم يرسل مستشعر الغرفة الباردة {{unitName}} أي بيانات خلال الـ 12 ساعة الماضية. يرجى إدخال البيانات يدويًا حتى يتم إصلاحها.',
-      survey: 'يرجى ملء استبيان السوق لـ {{farmer}}، للحركة، {{movementCode}}.',
+      survey: 'رجاءً، أكمل استبيان ما بعد التخزين لـ {{farmer}} بخصوص {{crop}}.',
       link: 'يرجى الذهاب إلى هنا لاستكماله.',
       coolingUserSurvey: 'لقد قمت بتسجيل الدخول إلى {{crop}} ولكنك لم تكمل الاستطلاع لهذا المحصول.',
       operatorSurvey:

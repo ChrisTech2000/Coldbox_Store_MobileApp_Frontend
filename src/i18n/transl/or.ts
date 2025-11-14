@@ -128,7 +128,7 @@ export default {
     },
     history: {
       EditCheckIn: '{{code}}',
-      MarketSurvey: '{{farmer}} ପାଇଁ ବଜାର ସର୍ବେ',
+      MarketSurvey: '{{farmer}} ପାଇଁ ସଂରକ୍ଷଣ ପରେ ସର୍ବେକ୍ଷଣ',
       BaseSurvey: 'କୁଲିଂ ୟୁଜର୍ ସର୍ବେ',
     },
     analytics: {
@@ -1223,7 +1223,7 @@ export default {
         errorMessage: 'ଚେକ୍-ଇନ୍ ଅଦ୍ୟତନ କରିବାରେ ବିଫଳ। ଦୟାକରି ପୁନଃଚେଷ୍ଟା କରନ୍ତୁ।',
       },
       survey: {
-        fillMessage: 'ଦୟାକରି {{crop}} ପାଇଁ ବେସ୍ ସର୍ବେ ପୂରଣ କରନ୍ତୁ!',
+        fillMessage: 'ଦୟାକରି {{crop}} ପାଇଁ କୁଲିଂ ୟୁଜର୍ ସର୍ବେ (ବେସ୍‌ଲାଇନ୍ ସର୍ବେ) ପୂରଣ କରନ୍ତୁ!',
         baseSurvey: {
           occupationQuestion: 'ଆପଣକୁ କିପରି ଚିହ୍ନଟ କରିବେ?',
           occupationFarmer: 'ଏକ କୃଷକ',
@@ -1499,7 +1499,7 @@ export default {
       },
       sensorError:
         'କୁଲିଂ ରୁମ୍ {{unitName}} ପାଇଁ ସେନ୍ସର ଗତ 12 ଘଣ୍ଟାରେ କୌଣସି ତଥ୍ୟ ପଠାଇନାହିଁ। ଦୟାକରି ଏହା ସୁଧାରିବା ପର୍ଯ୍ୟନ୍ତ ହସ୍ତଚାର ତଥ୍ୟ ପ୍ରବେଶ କରନ୍ତୁ।',
-      survey: '{{farmer}} ପାଇଁ ବଜାର ସର୍ବେ ଭରନ୍ତୁ, ଆନ୍ତର୍ଗତ, {{movementCode}}।',
+      survey: 'ଦୟାକରି {{farmer}} ପାଇଁ {{crop}} ପାଇଁ ସଂରକ୍ଷଣ ପରେ ସର୍ବେକ୍ଷଣ ପୁରା କରନ୍ତୁ।',
       link: 'ଏଠାକୁ ଯାଇ ସମ୍ପୂର୍ଣ୍ଣ କରନ୍ତୁ।',
       coolingUserSurvey: 'ଆପଣ {{crop}} ଚେକ୍-ଇନ୍ କରିଛନ୍ତି କିନ୍ତୁ ଏହି ଫସଲ ପାଇଁ ସର୍ବେ ଭରିନାହିଁ।',
       operatorSurvey:

@@ -124,7 +124,7 @@ export default {
     },
     history: {
       EditCheckIn: '{{code}}',
-      MarketSurvey: 'Iwadi ọja fun {{farmer}}',
+      MarketSurvey: 'Iwadi lẹhin iṣura ti {{farmer}}',
       BaseSurvey: 'iwadi olumulo Itutu',
     },
     analytics: { methodology: 'Ilana' },
@@ -1129,7 +1129,7 @@ export default {
         errorMessage: 'Kuna lati mu imudojuiwọn wọle. Jọwọ gbiyanju lẹẹkansi.',
       },
       survey: {
-        fillMessage: 'Jọwọ fọwọsi iwadi ipilẹ fun {{crop}}!',
+        fillMessage: 'Jọwọ pari iwadi olumulo itutu (iwadi ipilẹ) fun {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'Ohun ti o se apejuwe re daada',
           occupationFarmer: 'agbe kan',
@@ -1404,7 +1404,7 @@ export default {
       text: { notifications: 'Awọn itani lolobo' },
       sensorError:
         'Sensọ fun yara tutu {{unitName}} ko ti fi data kankan ranṣẹ ni awọn wakati 12 sẹhin. Jọwọ tẹ data sii pẹlu ọwọ titi ti yoo fi wa titi.',
-      survey: 'Jọwọ fọwọsi iwadi ọja fun {{farmer}}, fun iṣipopada, {{movementCode}}.',
+      survey: 'Jọwọ pari iwadi lẹhin iṣura fun {{farmer}} nipa {{crop}}.',
       link: 'Jọwọ lọ si ibi lati pari rẹ',
       coolingUserSurvey: 'O ti ṣayẹwo ni {{crop}} ṣugbọn iwọ ko pari iwadi fun irugbin na.',
       operatorSurvey:

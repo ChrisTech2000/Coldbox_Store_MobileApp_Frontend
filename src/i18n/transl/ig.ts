@@ -124,7 +124,7 @@ export default {
     },
     history: {
       EditCheckIn: '{{code}}',
-      MarketSurvey: 'Nnyocha ahịa maka {{farmer}}',
+      MarketSurvey: 'Nnyocha mgbe echekwara maka {{farmer}}',
       BaseSurvey: 'Nyocha onye ọrụ jụrụ oyi',
     },
     analytics: { methodology: 'Usoro' },
@@ -1142,7 +1142,7 @@ export default {
         errorMessage: 'Imelite ndebanye aha adịghị. Biko nwaa ọzọ.',
       },
       survey: {
-        fillMessage: 'Biko dejupụta nyocha ntọala maka {{crop}}!',
+        fillMessage: 'Biko zuruoke nyocha onye ọrụ jụrụ oyi (nnyocha ntọala) maka {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'Kedu ihe kowatara gi ofuma?',
           occupationFarmer: 'Onye ọrụ ugbo',
@@ -1417,7 +1417,7 @@ export default {
       text: { notifications: 'ngosi' },
       sensorError:
         "Ihe mmetụta maka ụlọ oyi {{unitName}} ezitebeghị data ọ bụla n'ime awa 12 gara aga. Biko jiri aka tinye data ruo mgbe edoziri ya.",
-      survey: 'Biko dejupụta nyocha ahịa maka {{farmer}}, maka ngagharị, {{movementCode}}.',
+      survey: 'Biko zuruoke nnyocha mgbe a chebere maka {{farmer}} na {{crop}}.',
       link: 'Biko gaa ebe a ka emechaa ya',
       coolingUserSurvey: 'Ị banyela mana ị mechabeghị nyocha maka ihe ubi a {{crop}} ',
       operatorSurvey:
