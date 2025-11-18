@@ -1202,6 +1202,14 @@ export default {
     MyOrders: {
       coolingFees: 'Kuɗin sanyaya',
       soldFor: 'An sayar da shi akan',
+      amountReceived: 'Adadin da aka karɓa',
+      transactionDetails: "Cikakkun bayanai na ma'amala",
+      soldTo: 'An sayar wa {{buyerName}}',
+      soldForDescription: 'farashin sayar da kayayyaki',
+      coolingFeeDescription:
+        'farashin adana amfanin gonar ku a cikin injin sanyaya. Ana cire wannan adadin daga farashin sayarwa kafin a biya kuma ana tura shi zuwa kamfanin sanyaya don biyan kuɗin sanyaya ku. Babu wani aiki da ake bukata daga gare ku.',
+      amountReceivedDescription:
+        'wannan shine ainihin adadin da aka tura zuwa asusun banki ku bayan cire kuɗin sanyaya.',
       ownedBy: 'Mallakar',
       you: 'Kai',
       sort: {

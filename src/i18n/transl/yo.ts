@@ -1173,6 +1173,14 @@ export default {
     MyOrders: {
       coolingFees: 'Owó ìtútù',
       soldFor: 'Tà fún',
+      amountReceived: 'Owó tí a gbà',
+      transactionDetails: 'Àlàyé ìdúnàdúrà',
+      soldTo: 'Tà sí {{buyerName}}',
+      soldForDescription: 'iye owó tí a ta ọja náà',
+      coolingFeeDescription:
+        'owó tó jẹ́ fún títọ́jú àwọn irè oko rẹ nínú ìpamọ́ tútù. Owó yìí ni wọ́n máa ń yọ kúrò nínú owó tí a ta ọja náà kí wọ́n tó sanwó fún ẹ, wọ́n sì máa fi í fún ilé-iṣẹ́ tútù láti san owó ìtútù rẹ. Kò sí ìgbésẹ̀ míràn tó kù fún ẹ láti ṣe.',
+      amountReceivedDescription:
+        'èyí ni owó gidi tí wọ́n fi sínú àpamọ́wọ́ bank rẹ lẹ́yìn tí wọ́n ti yọ owó ìtútù kúrò.',
       ownedBy: 'Tí ẹnikan ní',
       you: 'Ìwọ',
       sort: {

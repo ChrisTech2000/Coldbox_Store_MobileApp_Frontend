@@ -472,7 +472,14 @@ export type GetAllSalesResponse = Array<{
     },
   ];
   paymentPaidAt: string;
+  buyerUserId: number;
+  buyerCompanyId: number | null;
+  totalAmountPaid: number;
+  platformCommission: number;
+  paymentFees: number;
+  sellerPayout: number;
   timestamp: number;
+  coolingUnitPayout: number;
 }>;
 
 export interface CheckoutWithPaystackResponse {

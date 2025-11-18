@@ -1264,6 +1264,14 @@ const en = {
     MyOrders: {
       coolingFees: 'Cooling fees',
       soldFor: 'Sold for',
+      amountReceived: 'Amount Received',
+      transactionDetails: 'Transaction details',
+      soldTo: 'Sold to {{buyerName}}',
+      soldForDescription: 'the selling price of the goods',
+      coolingFeeDescription:
+        'the cost of storing your crops in the cooling unit. This amount is deducted from the selling price before payout and is being transferred to the cooling company to cover your cooling fee. No other action is required from your side.',
+      amountReceivedDescription:
+        'this is the actual amount transferred to your bank account after cooling fees.',
       ownedBy: 'Owned by',
       you: 'You',
       sort: {

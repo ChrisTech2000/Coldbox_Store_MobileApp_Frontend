@@ -1186,6 +1186,14 @@ export default {
     MyOrders: {
       coolingFees: 'Ụgwọ oyi',
       soldFor: 'Ere maka',
+      amountReceived: 'Ego natara',
+      transactionDetails: 'Nkọwa azụmahịa',
+      soldTo: 'Erere {{buyerName}}',
+      soldForDescription: 'ọnụ ahịa ire ngwaahịa',
+      coolingFeeDescription:
+        "ọnụ ahịa ịchekwa ihe ọkụkụ gị n'ebe a na-echekwa oyi. A na-ewepụ ego a n'ọnụ ahịa ire tupu akwụọ ụgwọ ma na-ebufe ya na ụlọ ọrụ oyi iji kwụọ ụgwọ oyi gị. Achọghị ihe ọzọ ị ga-eme.",
+      amountReceivedDescription:
+        "nke a bụ ụgwọ n'ezie e bufere n'akaụntụ gị mgbe e wepụrụ ụgwọ oyi.",
       ownedBy: 'Nke onye',
       you: 'Ị',
       sort: {

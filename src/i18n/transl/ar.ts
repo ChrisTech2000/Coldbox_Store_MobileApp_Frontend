@@ -1147,6 +1147,13 @@ export default {
     MyOrders: {
       coolingFees: 'رسوم التبريد',
       soldFor: 'تم بيعه مقابل',
+      amountReceived: 'المبلغ المستلم',
+      transactionDetails: 'تفاصيل المعاملة',
+      soldTo: 'تم البيع لـ {{buyerName}}',
+      soldForDescription: 'سعر بيع البضائع',
+      coolingFeeDescription:
+        'تكلفة تخزين محاصيلك في وحدة التبريد. يتم خصم هذا المبلغ من سعر البيع قبل الدفع ويتم تحويله إلى شركة التبريد لتغطية رسوم التبريد الخاصة بك. لا يلزم اتخاذ أي إجراء آخر من جانبك.',
+      amountReceivedDescription: 'هذا هو المبلغ الفعلي المحول إلى حسابك المصرفي بعد رسوم التبريد.',
       ownedBy: 'مملوكة لـ',
       you: 'أنت',
       sort: { mostRecent: 'الأحدث', oldest: 'الأقدم', date: 'تاريخ' },
