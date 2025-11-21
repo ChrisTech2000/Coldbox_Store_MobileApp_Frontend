@@ -201,7 +201,9 @@ function _useSyncLocalFormPricing(
   const _effectCallback = useDebouncedCallback(() => {
     const keys = new Set<string>([
       ...Object.keys(formValues.pricing),
-      ...cropSpecificPricing.map((cropPricing) => cropPricing.id.toString()),
+      ...(cropSpecificPricing || [])
+        .map((cropPricing) => cropPricing?.id?.toString())
+        .filter(Boolean),
     ]);
 
     const _previousPrice = previousPrice.current;

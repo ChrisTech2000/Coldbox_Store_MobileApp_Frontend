@@ -15,10 +15,12 @@ export class CropPricingManager {
     priceType: FormValues['priceType'];
     commonPrice: FormValues['price'];
     previous?: CropSpecificPricing;
+    previousCommonPrice?: FormValues['price'];
   }): CropSpecificPricing {
-    const { formCrops, priceType, commonPrice, previous = [] } = args;
+    const { formCrops, priceType, commonPrice, previous = [], previousCommonPrice } = args;
 
     const defaultPrice = Number(commonPrice);
+    const oldDefaultPrice = previousCommonPrice ? Number(previousCommonPrice) : defaultPrice;
     const datums: CropSpecificPricing = [];
 
     for (const cropId of formCrops) {
@@ -27,7 +29,10 @@ export class CropPricingManager {
 
       const previousPricing = previous.find((pricing) => pricing.id === cropId);
       if (typeof previousPricing !== 'undefined') {
-        price = previousPricing.dailyRate || previousPricing.fixedRate || defaultPrice;
+        const oldPrice = previousPricing.dailyRate || previousPricing.fixedRate || oldDefaultPrice;
+        // If the old price matched the old default, update to new default
+        // Otherwise, preserve the custom price
+        price = oldPrice === oldDefaultPrice ? defaultPrice : oldPrice;
       }
 
       if (priceType === PRICING_TYPE.PER_DAY) {
