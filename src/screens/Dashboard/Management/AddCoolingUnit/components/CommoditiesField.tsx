@@ -16,7 +16,7 @@ import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 
 import DataAggregator from '../contexts/DataAggregator';
-import FormManager from '../contexts/FormManager';
+import FormManager, { type FormValues } from '../contexts/FormManager';
 import { CropPricingManager } from '../utils';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -195,6 +195,7 @@ function _useCropPricingPatcher() {
   const { companyCrops } = DataAggregator.useDataAggregator();
 
   const [selectedCrops, priceType, commonPrice] = watch(['crops', 'priceType', 'price']);
+  const previousCommonPriceRef = React.useRef<FormValues['price']>(commonPrice);
 
   const _callback = useDebouncedCallback(() => {
     const prevCropPricing = getValues('cropSpecificPricing');
@@ -212,11 +213,15 @@ function _useCropPricingPatcher() {
       previous: prevCropPricing,
       priceType,
       commonPrice,
+      previousCommonPrice: previousCommonPriceRef.current,
     });
 
     if (JSON.stringify(prevCropPricing) !== JSON.stringify(newCropPricing)) {
       setValue('cropSpecificPricing', newCropPricing);
     }
+
+    // Update the ref after patching
+    previousCommonPriceRef.current = commonPrice;
   }, 480);
 
   useEffect(_callback, [selectedCrops.length, priceType, commonPrice]);

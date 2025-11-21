@@ -171,6 +171,11 @@ export default function ScreenContainer(props: Props) {
         refetch(),
         refetchSensorData(),
         mutate(getQueryKey('getLocations', props.companyId)),
+        mutate(
+          (key) => typeof key === 'string' && key.startsWith('getDashboardProduces:'),
+          undefined,
+          { revalidate: true }
+        ),
         ...(typeof user?.id !== 'undefined' && typeof props.companyId !== 'undefined'
           ? [
               mutate(
