@@ -42,6 +42,7 @@ import { useManagementStore } from '#stores/management';
 import { formatCurrencyWithSymbol } from '../Dashboard/CheckIn/utils';
 import CropsBottomSheet from '../Orders/components/CropsBottomSheet';
 import { ESortingOptions, SortingMenu, useSortingStore } from '../Orders/Sorting';
+import FeeBreakdownBottomSheet from './components/FeeBreakdownBottomSheet';
 
 const HORIZONTAL_SPACING = Platform.select({
   android: 'px-4',
@@ -173,10 +174,10 @@ function SalesRoot() {
               ).filter(Boolean);
 
               return (
-                <View tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-3 my-2">
+                <View tw="flex-row items-center border border-solid border-zinc-300 rounded-md p-4 my-2">
                   <View tw="w-[90%] space-y-2">
-                    <View tw="flex-row items-center">
-                      <Text variant="TextMedium" tw="text-base w-[50%]">
+                    <View tw="flex-row items-center justify-between">
+                      <Text variant="TextMedium" tw="text-base">
                         {t('Dashboard.MyOrders.sort.date')}
                       </Text>
                       <Text tw="text-base text-zinc-500">
@@ -184,11 +185,11 @@ function SalesRoot() {
                       </Text>
                     </View>
 
-                    <View tw="flex-row items-center">
-                      <Touchable
-                        tw="flex flex-row w-[50%] items-center space-x-1"
-                        onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CROPS_BOTTOM_SHEET, item)}
-                      >
+                    <Touchable
+                      tw="flex-row items-center justify-between"
+                      onPress={() => emitter.emit(APP_EVENTS.DISPATCH_CROPS_BOTTOM_SHEET, item)}
+                    >
+                      <View tw="flex flex-row items-center space-x-1">
                         <Text variant="TextMedium" tw="text-base">
                           {t('Dashboard.MyOrders.cropType')}
                         </Text>
@@ -197,14 +198,14 @@ function SalesRoot() {
                           size={18}
                           color={colors.green.primary}
                         />
-                      </Touchable>
-                      <Text tw="text-base text-zinc-500 w-40" numberOfLines={1}>
+                      </View>
+                      <Text tw="text-base text-zinc-500 flex-shrink" numberOfLines={1}>
                         {contextualCropNames.join(', ')}
                       </Text>
-                    </View>
+                    </Touchable>
 
-                    <View tw="flex-row items-center">
-                      <Text variant="TextMedium" tw="text-base w-[50%]">
+                    <View tw="flex-row items-center justify-between">
+                      <Text variant="TextMedium" tw="text-base">
                         {t('Dashboard.CrateManagement.CheckOut.totalWeight')}
                       </Text>
                       <Text tw="text-base text-zinc-500">
@@ -216,29 +217,26 @@ function SalesRoot() {
                       </Text>
                     </View>
 
-                    <View tw="flex-row items-center">
-                      <Text variant="TextMedium" tw="text-base w-[50%]">
-                        {t('Dashboard.MyOrders.soldFor')}
-                      </Text>
+                    <Touchable
+                      tw="flex-row items-center justify-between"
+                      onPress={() =>
+                        emitter.emit(APP_EVENTS.DISPATCH_FEE_BREAKDOWN_BOTTOM_SHEET, item)
+                      }
+                    >
+                      <View tw="flex flex-row items-center space-x-1">
+                        <Text variant="TextMedium" tw="text-base">
+                          {t('Dashboard.MyOrders.amountReceived')}
+                        </Text>
+                        <MaterialCommunityIcon
+                          name="information-outline"
+                          size={18}
+                          color={colors.green.primary}
+                        />
+                      </View>
                       <Text tw="text-base text-zinc-500">
-                        {formatCurrencyWithSymbol(
-                          DEFAULT_CURRENCY_CODE,
-                          item.items.reduce((acc, current) => (acc += current.totalAmount), 0)
-                        )}
+                        {formatCurrencyWithSymbol(DEFAULT_CURRENCY_CODE, item.sellerPayout)}
                       </Text>
-                    </View>
-
-                    <View tw="flex-row items-center">
-                      <Text variant="TextMedium" tw="text-base w-[50%]">
-                        {t('Dashboard.MyOrders.coolingFees')}
-                      </Text>
-                      <Text tw="text-base text-zinc-500">
-                        {formatCurrencyWithSymbol(
-                          DEFAULT_CURRENCY_CODE,
-                          item.items.reduce((acc, current) => (acc += current.coolingFeesAmount), 0)
-                        )}
-                      </Text>
-                    </View>
+                    </Touchable>
                   </View>
                 </View>
               );
@@ -275,6 +273,7 @@ function _PortalsWrapper() {
   return (
     <React.Fragment>
       <CropsBottomSheet />
+      <FeeBreakdownBottomSheet />
     </React.Fragment>
   );
 }

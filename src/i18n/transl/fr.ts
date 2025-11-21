@@ -1213,6 +1213,14 @@ export default {
     MyOrders: {
       coolingFees: 'frais de conservation',
       soldFor: 'Vendu pour',
+      amountReceived: 'Montant Reçu',
+      transactionDetails: 'Détails de la transaction',
+      soldTo: 'Vendu à {{buyerName}}',
+      soldForDescription: 'le prix de vente des marchandises',
+      coolingFeeDescription:
+        "le coût de stockage de vos cultures dans l'unité de réfrigération. Ce montant est déduit du prix de vente avant le paiement et est transféré à l'entreprise de réfrigération pour couvrir vos frais de conservation. Aucune autre action n'est requise de votre part.",
+      amountReceivedDescription:
+        "il s'agit du montant réel transféré sur votre compte bancaire après déduction des frais de conservation.",
       ownedBy: 'Propriétaire',
       you: 'Vous',
       sort: { mostRecent: 'Le plus récent', oldest: 'Le plus ancien', date: 'Date' },

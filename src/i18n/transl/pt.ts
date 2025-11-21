@@ -1278,6 +1278,14 @@ export default {
     MyOrders: {
       coolingFees: 'Taxas de refrigeração',
       soldFor: 'Vendido por',
+      amountReceived: 'Valor Recebido',
+      transactionDetails: 'Detalhes da transação',
+      soldTo: 'Vendido para {{buyerName}}',
+      soldForDescription: 'o preço de venda dos produtos',
+      coolingFeeDescription:
+        'o custo de armazenamento das suas culturas na unidade de refrigeração. Este valor é deduzido do preço de venda antes do pagamento e está sendo transferido para a empresa de refrigeração para cobrir a sua taxa de refrigeração. Nenhuma outra ação é necessária da sua parte.',
+      amountReceivedDescription:
+        'este é o valor real transferido para a sua conta bancária após as taxas de refrigeração.',
       ownedBy: 'Pertence a',
       you: 'Você',
       sort: {
