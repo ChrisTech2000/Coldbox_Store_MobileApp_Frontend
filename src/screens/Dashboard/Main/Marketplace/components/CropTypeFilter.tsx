@@ -81,12 +81,19 @@ export default function CropTypeFilters() {
 
   const fieldError = !!formState.errors.crops;
 
-  const datums = useMemo(
+  const sortedData = useMemo(
     () =>
-      Array.from(data.values()).filter((crop) =>
-        crop.name.toLowerCase().includes(search.toLowerCase())
-      ),
-    [data, search]
+      Array.from(data.values()).sort((a, b) => {
+        const nameA = translatedCropNames[a.id] || a.name;
+        const nameB = translatedCropNames[b.id] || b.name;
+        return nameA.toLowerCase().localeCompare(nameB.toLowerCase());
+      }),
+    [data, translatedCropNames]
+  );
+
+  const datums = useMemo(
+    () => sortedData.filter((crop) => crop.name.toLowerCase().includes(search.toLowerCase())),
+    [sortedData, search]
   );
 
   return (

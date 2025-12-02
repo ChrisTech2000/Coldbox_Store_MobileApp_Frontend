@@ -52,12 +52,21 @@ export default function CropsBottomSheet() {
     return record;
   }, [crops, companyCountry, farmerCountry, locale]);
 
+  const sortedItems = useMemo(() => {
+    if (!data?.items) return [];
+    return [...data.items].sort((a, b) => {
+      const nameA = cropDatums[a.relCropId] || '';
+      const nameB = cropDatums[b.relCropId] || '';
+      return nameA.toLowerCase().localeCompare(nameB.toLowerCase());
+    });
+  }, [data?.items, cropDatums]);
+
   return (
     <BottomSheet.Root ref={modalRef} onClose={() => setData(undefined)}>
       <BottomSheet.Content tw="pt-2.5 space-y-3.5">
         <Text tw="text-xl">{t('Dashboard.MyOrders.cropType')}</Text>
         <FlatList
-          data={data?.items ?? []}
+          data={sortedItems}
           keyExtractor={(item) => `crop-${item.relCrateId ?? ''}-${item.relCropId ?? ''}`}
           scrollEnabled={false}
           showsVerticalScrollIndicator={false}

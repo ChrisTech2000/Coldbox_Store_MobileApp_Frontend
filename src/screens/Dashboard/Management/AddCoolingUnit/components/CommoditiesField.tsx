@@ -35,12 +35,17 @@ export default function CommoditiesField() {
 
   _useCropPricingPatcher();
 
-  const datums: Array<[number, string]> = useMemo(
+  const sortedData: Array<[number, string]> = useMemo(
     () =>
       Object.entries(companyCrops)
-        .filter(([, name]) => name.toLowerCase().includes(search.toLowerCase()))
-        .map(([id, name]) => [parseInt(id), name]),
-    [companyCrops, search]
+        .map(([id, name]): [number, string] => [parseInt(id), name])
+        .sort((a, b) => a[1].toLowerCase().localeCompare(b[1].toLowerCase())),
+    [companyCrops]
+  );
+
+  const datums: Array<[number, string]> = useMemo(
+    () => sortedData.filter(([, name]) => name.toLowerCase().includes(search.toLowerCase())),
+    [sortedData, search]
   );
 
   const displayValue: string = useMemo(() => {
