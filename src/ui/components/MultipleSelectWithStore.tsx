@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useState, type SetStateAction } from 'react';
-import { Dimensions, FlatList, type GestureResponderEvent, View } from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  type GestureResponderEvent,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Divider } from 'react-native-paper';
 import { create } from 'zustand';
@@ -163,8 +169,17 @@ export default function MultipleSelectWithStore<T>(props: SelectItemProps<T>) {
             enableScroll={enableScroll}
             header={modalHeader}
             FooterElement={
-              <View tw={isSmallScreen ? 'items-center' : 'flex flex-row items-center justify-end'}>
-                <View tw={cn('flex flex-row items-center', isSmallScreen && 'space-x-2')}>
+              <View
+                tw={
+                  isSmallScreen ? 'items-center' : 'w-full flex flex-row items-center justify-end'
+                }
+              >
+                <View
+                  tw={cn(
+                    'flex flex-row items-center justify-end w-1/2',
+                    isSmallScreen && 'space-x-2 w-full'
+                  )}
+                >
                   <Button mode="text" uppercase onPress={handleSelectAll}>
                     {t('actions.all')}
                   </Button>
@@ -172,7 +187,12 @@ export default function MultipleSelectWithStore<T>(props: SelectItemProps<T>) {
                     {t('actions.none')}
                   </Button>
                 </View>
-                <View tw={cn('flex flex-row items-center', isSmallScreen && 'space-x-2')}>
+                <View
+                  tw={cn(
+                    'flex flex-row items-center justify-end w-1/2',
+                    isSmallScreen && 'space-x-2 w-full'
+                  )}
+                >
                   <Button mode="text" uppercase onPress={handleCancel}>
                     {t('actions.cancel')}
                   </Button>
@@ -194,7 +214,11 @@ export default function MultipleSelectWithStore<T>(props: SelectItemProps<T>) {
               data={datums}
               keyExtractor={(item, index) => `${item}-${index}`}
               renderItem={({ item }) => (
-                <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                <TouchableOpacity
+                  tw="w-full flex flex-row items-center justify-between px-4 py-2"
+                  onPress={() => handleSelect(item)}
+                  activeOpacity={0.7}
+                >
                   <Text tw="text-base w-[70%]" numberOfLines={2}>
                     {rest.itemName(item)}
                   </Text>
@@ -207,9 +231,8 @@ export default function MultipleSelectWithStore<T>(props: SelectItemProps<T>) {
                         ? 'checked'
                         : 'unchecked'
                     }
-                    onPress={() => handleSelect(item)}
                   />
-                </View>
+                </TouchableOpacity>
               )}
               nestedScrollEnabled
             />

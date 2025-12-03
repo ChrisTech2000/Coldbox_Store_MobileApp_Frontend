@@ -192,12 +192,14 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
         <Text variant="TextMedium" tw="text-gray-400 text-base mt-2">
           {t('Dashboard.History.editCheckIn.contactLabel')}
         </Text>
-        <View tw="flex flex-row items-center space-x-3">
+        <TouchableOpacity
+          tw="flex flex-row items-center space-x-3"
+          onPress={() => copyToClipboard(farmer?.user.phone ?? '')}
+          activeOpacity={0.7}
+        >
           <Text variant="TextMedium">{farmer?.user.phone ?? ''}</Text>
-          <TouchableOpacity onPress={() => copyToClipboard(farmer?.user.phone ?? '')}>
-            <Icon source="content-copy" size={15} />
-          </TouchableOpacity>
-        </View>
+          <Icon source="content-copy" size={15} />
+        </TouchableOpacity>
       </View>
 
       <Carousel

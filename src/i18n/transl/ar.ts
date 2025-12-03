@@ -455,6 +455,10 @@ export default {
         },
         paid: 'مدفوع',
         lockedWithinPendingOrders: 'الصناديق المقفلة في الطلبات المعلقة لا يمكن تسجيل خروجها.',
+        transactionFeeDetails: 'تفاصيل رسوم المعاملة',
+        coolingFeesAlreadyPaid: 'رسوم التبريد المدفوعة مسبقًا',
+        coolingFeesAlreadyPaidTooltip:
+          'تم بيع صندوق واحد أو أكثر من هذه العملية في السوق الإلكتروني. وقد تم بالفعل خصم رسوم التبريد الخاصة بها من مدفوعاتك.',
       },
       CheckIn: {
         emptyState: 'لم يتم إضافة أي صناديق بعد',

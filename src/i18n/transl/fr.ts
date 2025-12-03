@@ -477,6 +477,10 @@ export default {
         paid: 'Payé',
         lockedWithinPendingOrders:
           'Les caisses bloquées dans des commandes en attente ne peuvent pas être validées.',
+        transactionFeeDetails: 'Détails des frais de transaction',
+        coolingFeesAlreadyPaid: 'Frais de refroidissement déjà payés',
+        coolingFeesAlreadyPaidTooltip:
+          'Une ou plusieurs caisses de cette opération ont été vendues sur la marketplace. Les frais de refroidissement correspondants ont déjà été déduits de votre paiement.',
       },
       CheckIn: {
         emptyState: 'Aucune boîte ajoutée pour le moment',

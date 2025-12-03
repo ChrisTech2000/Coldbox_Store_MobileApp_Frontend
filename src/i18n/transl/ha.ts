@@ -469,6 +469,10 @@ export default {
         paid: 'An biya',
         lockedWithinPendingOrders:
           'Akwatuna da ke kulle a cikin odar da ba a kammala ba ba za a iya cire su ba.',
+        transactionFeeDetails: "Cikakkun bayanan kuɗin ma'amala",
+        coolingFeesAlreadyPaid: 'Kudin sanyaya an riga an biya su',
+        coolingFeesAlreadyPaidTooltip:
+          'Aƙalla akwatin daya ko fiye da haka cikin wannan aikin an sayar da su a kasuwar yanar gizo. Ana iya cewa kudin sanyayarsu an riga an cire su daga biyan ku.',
       },
       CheckIn: {
         emptyState: 'Har yanzu ba a saka akwatuna ba',

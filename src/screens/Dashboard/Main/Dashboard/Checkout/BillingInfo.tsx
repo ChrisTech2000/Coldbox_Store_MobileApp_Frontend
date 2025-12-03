@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, Pressable, TouchableWithoutFeedback, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider, Icon, Switch } from 'react-native-paper';
@@ -34,12 +34,24 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import reportCrash from '#ui/lib/reportCrash';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
+import { CurrencyText } from '#ui/components/CurrencyText';
 
 import { useMarketplaceListing } from '../../Marketplace/utils';
 import { BankTransferModal } from './BankTransferDetailsModal';
+import { formatCurrencyWithSymbol } from '../CheckIn/utils';
 
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const BUTTON_WIDTH = (DEVICE_WIDTH - 42) / 2;
+const GREEN_PRIMARY = '#07857E';
+const CRATE_LIST_MAX_HEIGHT = 200;
+const CRATE_ROW_ESTIMATED_HEIGHT = 52;
+
+const getCurrencySymbol = (currencyCode: string): string => {
+  // Extract just the symbol from formatted currency
+  const formatted = formatCurrencyWithSymbol(currencyCode, 0);
+  const match = formatted.match(/^([^\d\s,.]+)/);
+  return match ? match[1] : currencyCode;
+};
 
 export const usePaymentTypeStore = createSelectStore<EPaymentMethod>();
 
@@ -51,6 +63,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const toast = InAppNotifications.useToast();
   const { guard } = RBAC.useRBAC();
 
+  console.log(datums);
   const company = useManagementStore((store) => store.company);
   const { refetch: refetchMarketplace } = useMarketplaceListing();
   const [paymentMethod, resetPaymentStore] = usePaymentTypeStore((store) => [
@@ -65,6 +78,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
   const [isBankTransferDetailsModalOpen, setIsBankTransferDetailsModalOpen] =
     useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>();
+  const [isTooltipVisible, setIsTooltipVisible] = useState<boolean>(false);
 
   useWalkthroughStep({
     number: EOperatorTutorialSteps.CHECK_OUT_STEP_3,
@@ -126,13 +140,20 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
   const cratePrices = useMemo(() => {
     return (crates ?? []).map((crate) => {
-      return crate.calculatedTotalPrice || 0;
+      return Number(crate.cmpTotalInCoolingFees) || 0;
     });
   }, [crates]);
 
   const total = useMemo(() => {
     return cratePrices?.reduce((acc: number, current) => (acc += current ?? 0), 0) ?? 0;
   }, [cratePrices]);
+
+  const totalPaidCoolingFeesFromMarketplace = useMemo(() => {
+    if (company?.country !== 'NG') return 0;
+    return (crates ?? []).reduce((acc, crate) => {
+      return acc + (crate.paidCoolingFeesFromMarketplace || 0);
+    }, 0);
+  }, [crates, company?.country]);
 
   const paymentMethodLabel = useMemo(() => {
     if (!paymentMethod) return '';
@@ -189,7 +210,17 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
     return () => resetPaymentStore();
   }, []);
 
-  const finalPrice = total - (isNaN(Number(discount)) ? 0 : Math.min(Number(discount), total));
+  const finalPrice =
+    total -
+    (isNaN(Number(discount)) ? 0 : Math.min(Number(discount), total)) -
+    totalPaidCoolingFeesFromMarketplace;
+
+  const crateListHeight = useMemo(() => {
+    const count = crates?.length ?? 0;
+    const desired = count * CRATE_ROW_ESTIMATED_HEIGHT;
+    if (desired === 0) return CRATE_LIST_MAX_HEIGHT;
+    return Math.min(CRATE_LIST_MAX_HEIGHT, desired);
+  }, [crates]);
 
   return (
     <View tw="flex-1">
@@ -248,7 +279,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
         </View>
         <Divider tw="bg-gray-400 my-2" />
 
-        <View style={{ height: 200 }}>
+        <View style={{ maxHeight: CRATE_LIST_MAX_HEIGHT, height: crateListHeight }}>
           <FlashList
             data={crates}
             showsVerticalScrollIndicator={false}
@@ -272,61 +303,117 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
                 </Text>
               </View>
             )}
-            estimatedItemSize={50}
+            estimatedItemSize={CRATE_ROW_ESTIMATED_HEIGHT}
           />
         </View>
-        <Divider tw="bg-gray-400 my-2" />
+        <Divider tw="bg-gray-400 mb-6" />
 
-        <View tw="flex flex-row w-full justify-between items-center">
-          <Text variant="TextMedium" tw="text-lg">
-            {t('Dashboard.CrateManagement.CheckOut.calculatedPrice')}
-          </Text>
-          <Text variant="TextMedium" tw="text-lg">
-            {total.toLocaleString('en-US', {
-              style: 'currency',
-              currency: company?.currency,
-            })}
-          </Text>
-        </View>
-        <Divider tw="bg-gray-400 mt-2" />
+        <Text variant="TextMedium" tw="text-lg font-semibold mb-4">
+          {t('Dashboard.CrateManagement.CheckOut.transactionFeeDetails')}
+        </Text>
 
-        <View tw="flex flex-row w-full justify-between items-center">
-          <Text variant="TextMedium" tw="text-lg">
-            {t('Dashboard.CrateManagement.CheckOut.discount')}
-          </Text>
-          <View tw="flex flex-row items-center space-x-1">
-            <Input
-              tw="bg-gray-100 rounded-sm mt-2 mb-3 h-7 w-24"
-              keyboardType="numeric"
-              onChangeText={(value) => {
-                const int = Number(value);
-                if (isNaN(int)) return;
-                if (int > total) setDiscount(total.toString());
-                else setDiscount(value);
-              }}
-              value={discount}
-            />
+        <View tw="bg-green-50 rounded-xl py-3 px-2">
+          <View tw="flex-row items-center justify-between">
             <Text variant="TextMedium" tw="text-lg">
-              {currency}
+              {t('Dashboard.CrateManagement.CheckOut.calculatedPrice')}
             </Text>
+            <CurrencyText
+              currency={company?.currency || ''}
+              amount={total}
+              symbolTw="text-gray-500"
+              amountTw="text-gray-700"
+              containerTw="text-lg"
+            />
+          </View>
+
+          <View tw="flex-row items-center justify-between rounded-lg mt-2 py-2">
+            <Text variant="TextMedium" tw="text-lg">
+              {t('Dashboard.CrateManagement.CheckOut.discount')}
+            </Text>
+            <View tw="flex-row items-center">
+              <Input
+                tw="bg-green-transparency h-8 w-24 pr-2"
+                style={{ textAlign: 'right' }}
+                keyboardType="numeric"
+                onChangeText={(value) => {
+                  const numericValue = value.replace(/[^0-9]/g, '');
+                  const int = Number(numericValue);
+                  if (isNaN(int)) return;
+                  const maxDiscount = total - totalPaidCoolingFeesFromMarketplace;
+                  if (int > maxDiscount) setDiscount(maxDiscount.toString());
+                  else setDiscount(numericValue);
+                }}
+                value={discount ? `-${getCurrencySymbol(currency)}${discount}` : ''}
+              />
+            </View>
+          </View>
+
+          {totalPaidCoolingFeesFromMarketplace > 0 && (
+            <View style={{ marginTop: 10 }}>
+              <View tw="flex-row justify-between" style={{ alignItems: 'flex-start' }}>
+                <Pressable onPress={() => setIsTooltipVisible(true)}>
+                  <View tw="flex-row items-center">
+                    <Icon source="information-outline" size={20} color={GREEN_PRIMARY} />
+                    <Text variant="TextMedium" tw="text-lg ml-1">
+                      {t('Dashboard.CrateManagement.CheckOut.coolingFeesAlreadyPaid')}
+                    </Text>
+                  </View>
+                </Pressable>
+                <Text variant="TextMedium" tw="text-lg">
+                  <Text tw="text-red-600">- </Text>
+                  <CurrencyText
+                    currency={company?.currency || ''}
+                    amount={totalPaidCoolingFeesFromMarketplace}
+                    symbolTw="text-gray-500"
+                    amountTw="text-red-600"
+                  />
+                </Text>
+              </View>
+
+              {isTooltipVisible && (
+                <>
+                  <TouchableWithoutFeedback onPress={() => setIsTooltipVisible(false)}>
+                    <View
+                      style={{
+                        position: 'absolute',
+                        top: -500,
+                        left: -500,
+                        right: -500,
+                        bottom: -500,
+                      }}
+                    />
+                  </TouchableWithoutFeedback>
+                  <View
+                    tw="bg-[#162B3B] z-10 rounded-lg p-3 shadow-lg mx-4 mb-2"
+                    style={{ position: 'absolute', bottom: '100%' }}
+                  >
+                    <Text tw="text-white text-sm">
+                      {t('Dashboard.CrateManagement.CheckOut.coolingFeesAlreadyPaidTooltip')}
+                    </Text>
+                  </View>
+                </>
+              )}
+            </View>
+          )}
+
+          <View
+            tw="flex-row items-center justify-between mt-2 pt-2 border-green-primary"
+            style={{ borderTopWidth: 1 }}
+          >
+            <Text variant="TextMedium" tw="text-lg font-semibold">
+              {t('Dashboard.CrateManagement.CheckOut.priceWithDiscount')}
+            </Text>
+            <CurrencyText
+              currency={company?.currency || ''}
+              amount={finalPrice}
+              symbolTw="text-gray-500"
+              amountTw="text-green-primary font-semibold"
+              containerTw="text-lg"
+            />
           </View>
         </View>
-        <Divider tw="bg-gray-400 mb-2" />
 
-        <View tw="flex flex-row w-full justify-between items-center">
-          <Text variant="TextMedium" tw="text-lg">
-            {t('Dashboard.CrateManagement.CheckOut.priceWithDiscount')}
-          </Text>
-          <Text variant="TextMedium" tw="text-lg">
-            {finalPrice.toLocaleString('en-US', {
-              style: 'currency',
-              currency: company?.currency,
-            })}
-          </Text>
-        </View>
-        <Divider tw="bg-gray-400 my-2" />
-
-        <View tw="flex flex-row w-full justify-between items-center">
+        <View tw="flex flex-row w-full justify-between items-center mt-4">
           <View tw="flex flex-row items-center space-x-1">
             <Text variant="TextMedium" tw="text-lg">
               {`${t('Dashboard.CrateManagement.CheckOut.paymentType.label')}`}
@@ -362,13 +449,12 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           />
         </View>
         <Divider tw="bg-gray-400 my-2" />
-        <View tw="flex flex-row w-full justify-between items-center">
+        <View tw="flex flex-row w-full justify-between items-center mb-4">
           <Text variant="TextMedium" tw="text-lg">
             {t('Dashboard.CrateManagement.CheckOut.paid')}
           </Text>
           <Switch value={isPaid} onChange={() => setIsPaid(!isPaid)} testID="checkout-paid" />
         </View>
-        <Divider tw="bg-gray-400 my-2" />
       </KeyboardAwareScrollView>
 
       <HideWithKeyboardView tw="w-full flex-row items-center justify-between px-4 pb-16 pt-4 absolute bottom-[-5%] left-0 right-0 bg-white border-t-0.5 border-gray-600 border-solid">

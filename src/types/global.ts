@@ -80,9 +80,11 @@ export type Crate = {
 
   // Backend-calculated pricing fields
   calculatedTotalPrice?: number;
+  paidCoolingFeesFromMarketplace?: number;
   calculatedDailyRate?: number;
   calculatedFixedRate?: number;
   effectivePricingType?: EPricingType;
+  cmpTotalInCoolingFees?: number;
 };
 
 export type DashboardProduce = {
@@ -604,9 +606,11 @@ export type MovementCrate = {
 
   // Backend-calculated pricing fields
   calculatedTotalPrice?: number;
+  paidCoolingFeesFromMarketplace?: number;
   calculatedDailyRate?: number;
   calculatedFixedRate?: number;
   effectivePricingType?: EPricingType;
+  cmpTotalInCoolingFees?: number;
 };
 
 //////////////////////// ENUMS

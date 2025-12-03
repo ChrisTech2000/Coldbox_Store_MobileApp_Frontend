@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, TouchableOpacity, View } from 'react-native';
 import { Controller } from 'react-hook-form';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import { FlashList } from '@shopify/flash-list';
@@ -106,14 +106,14 @@ export default function CoolingUnitFilters() {
                     <View
                       tw={
                         deviceHeight > SMALL_SCREEN_THRESHOLD
-                          ? 'flex flex-row items-center justify-end'
+                          ? 'w-full flex flex-row items-center justify-end'
                           : 'items-center'
                       }
                     >
                       <View
                         tw={cn(
-                          'flex flex-row items-center',
-                          deviceHeight <= SMALL_SCREEN_THRESHOLD && 'space-x-2'
+                          'flex flex-row items-center justify-end w-1/2',
+                          deviceHeight <= SMALL_SCREEN_THRESHOLD && 'space-x-2 w-full'
                         )}
                       >
                         <Button
@@ -139,8 +139,8 @@ export default function CoolingUnitFilters() {
                       </View>
                       <View
                         tw={cn(
-                          'flex flex-row items-center',
-                          deviceHeight <= SMALL_SCREEN_THRESHOLD && 'space-x-2'
+                          'flex flex-row items-center justify-end w-1/2',
+                          deviceHeight <= SMALL_SCREEN_THRESHOLD && 'space-x-2 w-full'
                         )}
                       >
                         <Button
@@ -197,21 +197,24 @@ export default function CoolingUnitFilters() {
                         `cooling-unit-list-item-${item.id}-#${itemIdx}`
                       }
                       renderItem={({ item }) => (
-                        <View tw="w-full flex flex-row items-center justify-between px-4 py-2">
+                        <TouchableOpacity
+                          tw="w-full flex flex-row items-center justify-between px-4 py-2"
+                          onPress={() => {
+                            setInternalSelection((prev) =>
+                              prev.includes(item.id)
+                                ? prev.filter((id) => id !== item.id)
+                                : [...prev, item.id]
+                            );
+                          }}
+                          activeOpacity={0.7}
+                        >
                           <Text tw="text-base w-[70%]" numberOfLines={2}>
                             {item.name}
                           </Text>
                           <Checkbox
                             status={internalSelection.includes(item.id) ? 'checked' : 'unchecked'}
-                            onPress={() => {
-                              setInternalSelection((prev) =>
-                                prev.includes(item.id)
-                                  ? prev.filter((id) => id !== item.id)
-                                  : [...prev, item.id]
-                              );
-                            }}
                           />
-                        </View>
+                        </TouchableOpacity>
                       )}
                       ItemSeparatorComponent={Divider}
                       estimatedItemSize={40}

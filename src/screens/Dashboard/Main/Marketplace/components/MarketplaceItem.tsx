@@ -102,20 +102,20 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
             </Text>
           ) : null}
           {props.owner.contact && props.owner.isPhonePublic ? (
-            <View tw="flex flex-row space-x-1 items-center">
+            <TouchableOpacity
+              tw="flex flex-row space-x-1 items-center"
+              onPress={() => {
+                Clipboard.setString(props.owner.contact);
+                toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'md_success' });
+              }}
+              activeOpacity={0.7}
+            >
               <Icon name="cellphone" size={20} color={colors.gray[600]} />
               <Text variant="TextMedium" tw="text-sm text-gray-600">
                 {props.owner.contact}
               </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  Clipboard.setString(props.owner.contact);
-                  toast.show(t('Dashboard.ProduceDetails.contactCopied'), { type: 'md_success' });
-                }}
-              >
-                <Icon name="content-copy" size={15} color={paperTheme.colors.primary} />
-              </TouchableOpacity>
-            </View>
+              <Icon name="content-copy" size={15} color={paperTheme.colors.primary} />
+            </TouchableOpacity>
           ) : null}
         </View>
       </View>
@@ -211,24 +211,20 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
 
       <View tw="flex-row items-center py-1 justify-between w-[98%]">
         <View tw={cn('flex-row items-center justify-between pr-2', hasAction ? 'w-2/3' : 'w-full')}>
-          <View tw="flex flex-row items-center space-x-1">
+          <TouchableOpacity
+            tw="flex flex-row items-center space-x-1"
+            onPress={() => {
+              emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS);
+              setIsTooltipShowing(!isTooltipShowing);
+            }}
+            activeOpacity={0.7}
+          >
             <Text variant="TextMedium" tw="text-sm">
               {props.crateWeight}
               {t('Dashboard.ShoppingCart.weight')}
             </Text>
-            <TouchableOpacity
-              onPress={() => {
-                emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS);
-                setIsTooltipShowing(!isTooltipShowing);
-              }}
-            >
-              <MaterialCommunityIcon
-                name="information-outline"
-                size={15}
-                color={colors.gray[700]}
-              />
-            </TouchableOpacity>
-          </View>
+            <MaterialCommunityIcon name="information-outline" size={15} color={colors.gray[700]} />
+          </TouchableOpacity>
 
           <Text variant="TextMedium" tw="text-sm">
             {props.currencyValue} {t('Dashboard.ShoppingCart.perKg')}

@@ -464,6 +464,10 @@ export default {
         paid: 'Akwụ ụgw',
         lockedWithinPendingOrders:
           'Crati nke edoziri na arịrịọ na-atụgharị na-anaghị enwe ike ị nweta ya.',
+        transactionFeeDetails: 'Nkọwa ụgwọ azụmahịa',
+        coolingFeesAlreadyPaid: 'Ụgwọ oyi e kwụpụtala',
+        coolingFeesAlreadyPaidTooltip:
+          'Otu ma ọ bụ karịa n’ime igbe dị na ọrụ a e rere ha n’ahịa. Ụgwọ oyi metụtara ha ewepụtala ya n’ụgwọ ị natara.',
       },
       CheckIn: {
         emptyState: 'Ọnweghị igbe agbakwunyere',

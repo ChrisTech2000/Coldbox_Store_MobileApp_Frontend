@@ -1,5 +1,5 @@
 import startCase from 'lodash/startCase';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import {
   Keyboard,
@@ -8,6 +8,7 @@ import {
   View,
   Dimensions,
   Platform,
+  TextInput as RNTextInput,
 } from 'react-native';
 import { Dialog, Divider, Icon, Portal, TextInput } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
@@ -133,6 +134,10 @@ export function FarmersSurveyModal({
       }),
     };
   }, [cropSelectionAvailable?.crops, companyCountry, farmerCountry, locale, crop]);
+
+  const selfConsumedInputRef = useRef<RNTextInput>(null);
+  const soldInputRef = useRef<RNTextInput>(null);
+  const lostInputRef = useRef<RNTextInput>(null);
 
   const [isUnitModalVisible, setIsUnitModalVisible] = useState<boolean>(false);
   const [isCropModalVisible, setIsCropModalVisible] = useState<boolean>(false);
@@ -324,7 +329,13 @@ export function FarmersSurveyModal({
                 2. {t('Dashboard.CrateManagement.FarmerSurvey.modal.quantityDistributionQuestion')}
               </Text>
               <View tw="flex flex-row space-between space-x-2 w-[90%] mb-2">
-                <View tw="w-1/3 justify-between">
+                <TouchableOpacity
+                  tw="w-1/3 justify-between"
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    selfConsumedInputRef.current?.focus();
+                  }}
+                >
                   <Text variant="TextMedium" tw="text-base">
                     {t('Dashboard.CrateManagement.FarmerSurvey.modal.selfConsumed', {
                       unit: measureUnit,
@@ -334,6 +345,7 @@ export function FarmersSurveyModal({
                     control={control}
                     render={({ field: { onChange, value, onBlur } }) => (
                       <TextInput
+                        ref={selfConsumedInputRef}
                         tw="h-10 bg-transparent"
                         keyboardType="decimal-pad"
                         value={value?.toString()}
@@ -344,9 +356,15 @@ export function FarmersSurveyModal({
                     )}
                     name="weightDistribution.quantitySelfConsumed"
                   />
-                </View>
+                </TouchableOpacity>
                 <Divider tw="h-full w-[0.25%] bg-gray-400" />
-                <View tw="w-1/3 flex flex-col justify-between">
+                <TouchableOpacity
+                  tw="w-1/3 flex flex-col justify-between"
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    soldInputRef.current?.focus();
+                  }}
+                >
                   <Text variant="TextMedium" tw="text-base">
                     {t('Dashboard.CrateManagement.FarmerSurvey.modal.sold', { unit: measureUnit })}
                   </Text>
@@ -354,6 +372,7 @@ export function FarmersSurveyModal({
                     control={control}
                     render={({ field: { onChange, value, onBlur } }) => (
                       <TextInput
+                        ref={soldInputRef}
                         tw="h-10 bg-transparent"
                         keyboardType="decimal-pad"
                         value={value?.toString()}
@@ -364,9 +383,15 @@ export function FarmersSurveyModal({
                     )}
                     name="weightDistribution.quantitySold"
                   />
-                </View>
+                </TouchableOpacity>
                 <Divider tw="h-full w-[0.25%] bg-gray-400" />
-                <View tw="w-1/3 justify-between">
+                <TouchableOpacity
+                  tw="w-1/3 justify-between"
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    lostInputRef.current?.focus();
+                  }}
+                >
                   <Text variant="TextMedium" tw="text-base">
                     {t('Dashboard.CrateManagement.FarmerSurvey.modal.lost', { unit: measureUnit })}
                   </Text>
@@ -374,6 +399,7 @@ export function FarmersSurveyModal({
                     control={control}
                     render={({ field: { onChange, value, onBlur } }) => (
                       <TextInput
+                        ref={lostInputRef}
                         tw="h-10 bg-transparent"
                         value={value?.toString()}
                         keyboardType="decimal-pad"
@@ -384,7 +410,7 @@ export function FarmersSurveyModal({
                     )}
                     name="weightDistribution.quantityLost"
                   />
-                </View>
+                </TouchableOpacity>
               </View>
               {errors.weightDistribution?.quantitySelfConsumed ? (
                 <Text tw="text-xs text-red-600 mb-2 pl-3 w-[95%]">
