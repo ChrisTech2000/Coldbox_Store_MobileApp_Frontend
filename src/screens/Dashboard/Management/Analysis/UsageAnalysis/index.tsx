@@ -86,12 +86,15 @@ function UsageAnalysis(props: ManagementRouteProps<'UsageAnalysis'>) {
     selectedUnits ?? []
   );
 
-  const sortedMovements = useMemo(
-    () => cloneDeep(usageData || []).sort((a, b) => sortMovements(a, b, sorting, t)),
-    [usageData, sorting]
-  );
-
   const language = LanguageManager.read();
+
+  const sortedMovements = useMemo(
+    () =>
+      cloneDeep(usageData || []).sort((a, b) =>
+        sortMovements(a, b, sorting, t, company?.country, language)
+      ),
+    [usageData, sorting, company?.country, language]
+  );
 
   const filteredMovements = useMemo(() => {
     if (!sortedMovements.length) return [];

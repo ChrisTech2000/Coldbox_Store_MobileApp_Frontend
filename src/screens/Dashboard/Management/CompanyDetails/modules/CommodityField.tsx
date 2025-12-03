@@ -37,9 +37,14 @@ export default function CommodityField(props: Props) {
 
   const [internalSelection, setInternalSelection] = useState<Array<number>>(field.value);
 
+  const sortedData = useMemo(
+    () => crops.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())),
+    [crops]
+  );
+
   const datums = useMemo(
-    () => crops.filter(({ name }) => name.toLowerCase().includes(search.toLowerCase())),
-    [crops, search]
+    () => sortedData.filter(({ name }) => name.toLowerCase().includes(search.toLowerCase())),
+    [sortedData, search]
   );
 
   const displayValue = useMemo(() => {

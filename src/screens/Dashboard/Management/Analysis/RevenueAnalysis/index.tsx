@@ -95,9 +95,14 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
     paymentMethods
   );
 
+  const locale = LanguageManager.read();
+
   const sortedMovements = useMemo(
-    () => cloneDeep(revenueData || []).sort((a, b) => sortMovements(a, b, sorting, t)),
-    [revenueData, sorting]
+    () =>
+      cloneDeep(revenueData || []).sort((a, b) =>
+        sortMovements(a, b, sorting, t, company?.country, locale)
+      ),
+    [revenueData, sorting, company?.country, locale]
   );
 
   const filteredMovements = useMemo(() => {

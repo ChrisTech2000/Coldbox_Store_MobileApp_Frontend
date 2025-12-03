@@ -76,12 +76,22 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
     return translatedCropNames;
   }, [data, companyCountry, locale]);
 
+  const sortedData = useMemo(
+    () =>
+      (data || []).sort((a, b) => {
+        const nameA = translatedCropNames[a.fullCrop.id] || a.fullCrop.name;
+        const nameB = translatedCropNames[b.fullCrop.id] || b.fullCrop.name;
+        return nameA.toLowerCase().localeCompare(nameB.toLowerCase());
+      }),
+    [data, translatedCropNames]
+  );
+
   const filteredData = useMemo(
     () =>
-      (data || []).filter((item) =>
+      sortedData.filter((item) =>
         item.fullCrop.name.toLowerCase().includes(searchTerm.toLowerCase())
       ),
-    [data, searchTerm]
+    [sortedData, searchTerm]
   );
 
   if (isLoading) {

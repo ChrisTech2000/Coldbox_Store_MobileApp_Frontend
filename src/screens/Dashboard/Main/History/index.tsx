@@ -78,8 +78,11 @@ function History(props: HistoryTabStackRouteProps<'RootHistoryTabStack'>) {
   } = useMovementsHistory(farmerId, user as User, coolingUnit);
 
   const sortedMovements = useMemo(
-    () => cloneDeep(movements).sort((a, b) => sortMovements(a, b, sorting, t)),
-    [movements, sorting]
+    () =>
+      cloneDeep(movements).sort((a, b) =>
+        sortMovements(a, b, sorting, t, company?.country || farmerCountry || undefined, locale)
+      ),
+    [movements, sorting, company?.country, farmerCountry, locale]
   );
 
   const filteredMovements = useMemo(() => {

@@ -1,4 +1,5 @@
 import { Translator } from '#i18n/utils';
+import { TranslationLocales } from '#i18n/constants';
 import { ESortingOptions } from '#screens/Dashboard/Main/History/components/SortMenu';
 import { sortMovementCrops } from '#screens/Dashboard/Main/History/utils/sortMovements';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
@@ -10,10 +11,12 @@ export function sortMovements(
   a: Movement,
   b: Movement,
   sorting: ESortingOptions,
-  t: Translator
+  t: Translator,
+  country?: string,
+  locale?: TranslationLocales
 ): number {
-  const movementACrops = sortMovementCrops(a, t).join(', ');
-  const movementBCrops = sortMovementCrops(b, t).join(', ');
+  const movementACrops = sortMovementCrops(a, t, country, locale).join(', ');
+  const movementBCrops = sortMovementCrops(b, t, country, locale).join(', ');
   const movementAOwners = sortMovementOwners(a).join(', ');
   const movementBOwners = sortMovementOwners(b).join(', ');
 

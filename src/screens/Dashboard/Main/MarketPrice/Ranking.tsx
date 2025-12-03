@@ -86,6 +86,15 @@ function MarketPriceRanking() {
     return record;
   }, [predictionParams?.availableCrops, companyCountry, farmerCountry, locale]);
 
+  const sortedCrops = useMemo(() => {
+    const crops = predictionParams?.availableCrops ?? [];
+    return [...crops].sort((a, b) => {
+      const nameA = cropTranslations[a.id] || a.name;
+      const nameB = cropTranslations[b.id] || b.name;
+      return nameA.toLowerCase().localeCompare(nameB.toLowerCase());
+    });
+  }, [predictionParams?.availableCrops, cropTranslations]);
+
   const { months, days } = useMemo(
     () => ({
       months: Array.from({ length: 12 }, (_, idx) => {
@@ -161,7 +170,7 @@ function MarketPriceRanking() {
         </View>
 
         <SelectWithStore<PredictionCrop>
-          datums={predictionParams?.availableCrops ?? []}
+          datums={sortedCrops}
           isModalVisible={isCommoditiesModalOpen}
           setIsModalVisible={setIsCommoditiesModalOpen}
           itemName={(item) => cropTranslations[item.id]}

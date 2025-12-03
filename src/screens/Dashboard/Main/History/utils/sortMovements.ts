@@ -1,7 +1,8 @@
 import { EInitiatedFor } from '#types/global';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
-import { getDefaultCropValues } from '#i18n/transl/misc/crops';
+import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { Translator } from '#i18n/utils';
+import { TranslationLocales } from '#i18n/constants';
 
 import { ESortingOptions } from '../components/SortMenu';
 
@@ -15,10 +16,12 @@ export function sortMovements(
   a: Movement,
   b: Movement,
   sorting: ESortingOptions,
-  t: Translator
+  t: Translator,
+  country?: string,
+  locale?: TranslationLocales
 ): number {
-  const movementACrops = sortMovementCrops(a, t).join(', ');
-  const movementBCrops = sortMovementCrops(b, t).join(', ');
+  const movementACrops = sortMovementCrops(a, t, country, locale).join(', ');
+  const movementBCrops = sortMovementCrops(b, t, country, locale).join(', ');
 
   switch (sorting) {
     case ESortingOptions.CROP_TYPE:
@@ -47,17 +50,25 @@ export function sortMovements(
       return 0;
   }
 }
-export function sortMovementCrops(movement: Movement, t: Translator): Array<string> {
+export function sortMovementCrops(
+  movement: Movement,
+  t: Translator,
+  country?: string,
+  locale?: TranslationLocales
+): Array<string> {
   let crops: string[];
   switch (movement.initiatedFor) {
     case EInitiatedFor.CHECK_IN:
-      crops = _getCropNames(movement.checkin, t);
+      crops = _getCropNames(movement.checkin, t, country, locale);
       break;
     case EInitiatedFor.CHECK_OUT:
-      crops = _getCropNames(movement.checkout, t);
+      crops = _getCropNames(movement.checkout, t, country, locale);
       break;
     default:
-      crops = [..._getCropNames(movement.checkin, t), ..._getCropNames(movement.checkout, t)];
+      crops = [
+        ..._getCropNames(movement.checkin, t, country, locale),
+        ..._getCropNames(movement.checkout, t, country, locale),
+      ];
   }
 
   return Array.from(new Set(crops)).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
@@ -65,8 +76,24 @@ export function sortMovementCrops(movement: Movement, t: Translator): Array<stri
 
 function _getCropNames(
   data: Movement['checkin'] | Movement['checkout'],
-  t: Translator
+  t: Translator,
+  country?: string,
+  locale?: TranslationLocales
 ): Array<string> {
   if (!data?.crates) return [];
-  return data.crates.flatMap((crate) => crate.crop?.name || getDefaultCropValues(t).name);
+
+  const { buildMap, find } = cropTranslationLookup();
+  const translationMap = buildMap();
+
+  return data.crates.flatMap((crate) => {
+    const cropName = crate.crop?.name || getDefaultCropValues(t).name;
+
+    if (!locale) return cropName;
+
+    return find(translationMap, {
+      name: cropName,
+      country,
+      locale,
+    });
+  });
 }
