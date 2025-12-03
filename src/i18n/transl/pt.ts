@@ -490,6 +490,10 @@ export default {
         paid: 'Pago',
         lockedWithinPendingOrders:
           'As caixas que estão bloqueadas em encomendas pendentes não podem ser retiradas.',
+        transactionFeeDetails: 'Detalhes das taxas relativas à transação',
+        coolingFeesAlreadyPaid: 'Taxas de refrigeração já pagas',
+        coolingFeesAlreadyPaidTooltip:
+          'Uma ou mais caixas desta operação foram vendidas no marketplace. As respetivas taxas de refrigeração já foram deduzidas do seu pagamento.',
       },
       CheckIn: {
         emptyState: 'Nenhuma caixa adicionada ainda',

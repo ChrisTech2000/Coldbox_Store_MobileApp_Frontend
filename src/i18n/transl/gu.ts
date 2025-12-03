@@ -484,6 +484,10 @@ export default {
         },
         paid: 'ચુકવવામાં આવ્યું',
         lockedWithinPendingOrders: 'બાકી રહેલા ઓર્ડરમાં લોક કરેલી ટોકરીઓ ચેકઆઉટ કરી શકાતી નથી.',
+        transactionFeeDetails: 'ટ્રાન્ઝેક્શન ફી વિગતો',
+        coolingFeesAlreadyPaid: 'કૂલિંગ ફી પહેલાથી ચૂકવવામાં આવી છે',
+        coolingFeesAlreadyPaidTooltip:
+          'આ ઑપરેશનમાંના એક કે વધુ ક્રેટ્સ માર્કેટપ્લેસ પર વેચાયા હતા. તેમના સંબંધિત કૂલિંગ ફી તમારા પેઆઉટમાંથી પહેલેથી જ કાપી દેવામાં આવી છે.',
       },
       CheckIn: {
         emptyState: 'અજેમ બોક્સ્સ ઉમેરવામાં નથી આવ્યા',

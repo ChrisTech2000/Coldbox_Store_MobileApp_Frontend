@@ -204,12 +204,14 @@ function ProduceDetails(props: ProduceDetailsStackRouteProps<'Root'>) {
         </View>
         <View>
           <Text tw="text-gray-400">{t('Dashboard.ProduceDetails.contact')}</Text>
-          <View tw="flex flex-row items-center space-x-2">
+          <TouchableOpacity
+            tw="flex flex-row items-center space-x-2"
+            onPress={() => copyToClipboard(contactPhone)}
+            activeOpacity={0.7}
+          >
             <Text>{contactPhone}</Text>
-            <TouchableOpacity onPress={() => copyToClipboard(contactPhone)}>
-              <Icon source="content-copy" size={20} />
-            </TouchableOpacity>
-          </View>
+            <Icon source="content-copy" size={20} />
+          </TouchableOpacity>
         </View>
       </View>
     );

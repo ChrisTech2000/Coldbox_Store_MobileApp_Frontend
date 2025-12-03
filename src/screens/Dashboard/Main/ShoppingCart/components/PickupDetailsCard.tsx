@@ -62,15 +62,17 @@ export function PickupDetailsCard({
       <View tw="flex flex-row items-center space-x-1 mt-1 mb-2 ml-1">
         <MaterialIcon name="location-pin" size={18} color={paperTheme.colors.primary} />
         {address ? (
-          <Text>{address}</Text>
+          <TouchableOpacity
+            tw="flex flex-row items-center space-x-1"
+            onPress={() => copyToClipboard(address)}
+            activeOpacity={0.7}
+          >
+            <Text>{address}</Text>
+            <Icon source="content-copy" size={15} color={paperTheme.colors.primary} />
+          </TouchableOpacity>
         ) : (
           <ActivityIndicator animating color={paperTheme.colors.primary} size={12} />
         )}
-        {address ? (
-          <TouchableOpacity onPress={() => copyToClipboard(address)}>
-            <Icon source="content-copy" size={15} color={paperTheme.colors.primary} />
-          </TouchableOpacity>
-        ) : null}
       </View>
       <View tw="p-4 border border-gray-300 rounded-xl">
         <View tw="flex flex-row items-center justify-between">

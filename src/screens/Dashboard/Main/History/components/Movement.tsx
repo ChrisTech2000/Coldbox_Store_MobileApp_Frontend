@@ -233,8 +233,12 @@ export function Movement({
 
   return (
     <View tw="w-full">
-      <View tw="w-full flex flex-row items-center">
-        <View tw="w-[96%] flex flex-row items-center justify-between my-2 space-x-1">
+      <TouchableOpacity
+        tw="w-full flex flex-row items-center"
+        onPress={() => setIsOptionsModalOpen(true)}
+        activeOpacity={0.7}
+      >
+        <View tw="w-[98%] flex flex-row items-center justify-between my-2 space-x-1">
           <_IconByMovementType movementType={movement.initiatedFor} />
 
           <View tw="h-full w-[80%] space-y-1">
@@ -277,12 +281,12 @@ export function Movement({
             </View>
           </View>
 
-          <TouchableOpacity tw="w-5" onPress={() => setIsOptionsModalOpen(true)}>
+          <View tw="w-5">
             <Icon source="dots-vertical" size={20} />
-          </TouchableOpacity>
+          </View>
         </View>
         {movement.checkout?.marketSurveyDelay ? <View tw="w-2 h-2 bg-red-700 rounded-xl" /> : null}
-      </View>
+      </TouchableOpacity>
       <Divider tw="w-full bg-gray-400" />
       <Portal>
         {isOptionsModalOpen ? (

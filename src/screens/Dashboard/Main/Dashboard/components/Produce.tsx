@@ -92,7 +92,12 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
       : produce.ownerContact;
 
   return (
-    <View tw="flex flex-row w-[90%] mr-2 self-center mt-3" onLayout={onLayout}>
+    <TouchableOpacity
+      tw="flex flex-row w-[90%] mr-2 self-center mt-3"
+      onLayout={onLayout}
+      onPress={onNavigate}
+      activeOpacity={0.7}
+    >
       <View
         tw={cn(
           'bg-green-400 w-2 rounded-l-lg border-green-400',
@@ -208,9 +213,9 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
         </View>
       </View>
 
-      <TouchableOpacity tw="absolute right-[-3] top-[40%]" onPress={onNavigate}>
+      <View tw="absolute right-[-3] top-[40%]">
         <Icon source={LanguageManager.isRTL ? 'chevron-left' : 'chevron-right'} size={30} />
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 }

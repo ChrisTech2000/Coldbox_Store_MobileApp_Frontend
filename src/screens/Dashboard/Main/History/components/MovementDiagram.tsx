@@ -224,8 +224,8 @@ function MovementDiagramMarketplaceOrder(props: MovementDiagramProps) {
                 {cropName}
               </Text>
 
-              <View tw="flex flex-row items-center justify-between">
-                <View>
+              <View tw="flex flex-row items-center justify-between space-x-6">
+                <View tw="flex-1">
                   {crates.map((crate, index) => (
                     <View
                       key={`${crate.crop?.name}—${index}-crate`}
@@ -292,8 +292,8 @@ function MovementDiagramMarketplaceOrder(props: MovementDiagramProps) {
                   ) : null}
                 </View>
 
-                <View tw="self-center justify-center">
-                  <Text tw="text-base w-40" numberOfLines={2}>
+                <View tw="self-center justify-center w-[40%] pl-4">
+                  <Text tw="text-base" numberOfLines={2}>
                     {movement?.checkin?.ownerName}
                   </Text>
                   <Text tw="text-base text-green-500">

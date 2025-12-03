@@ -468,6 +468,10 @@ const en = {
         pricePerProduct: 'Price per product:',
         calculatedPrice: 'Calculated price',
         discount: 'Discount',
+        transactionFeeDetails: 'Transaction fee details',
+        coolingFeesAlreadyPaid: 'Cooling fees already paid',
+        coolingFeesAlreadyPaidTooltip:
+          'Part of one or more crates in this operation were sold on the marketplace. The corresponding cooling fees were already deducted from your payout.',
         priceWithDiscount: 'Total price',
         paymentType: {
           label: 'Payment type',

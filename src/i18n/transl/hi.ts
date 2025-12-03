@@ -487,6 +487,10 @@ export default {
         paid: 'भुगतान किया गया',
         lockedWithinPendingOrders:
           'लंबित ऑर्डरों में लॉक की गई क्रेट्स को चेक आउट नहीं किया जा सकता।',
+        transactionFeeDetails: 'लेनदेन शुल्क विवरण',
+        coolingFeesAlreadyPaid: 'कूलिंग शुल्क पहले ही भुगतान किए गए',
+        coolingFeesAlreadyPaidTooltip:
+          'इस ऑपरेशन में शामिल एक या अधिक क्रेट्स मार्केटप्लेस पर बेचे गए थे। उनके संबंधित कूलिंग शुल्क पहले ही आपके भुगतान से काटे जा चुके हैं।',
       },
       CheckIn: {
         emptyState: 'अभी तक कोई बॉक्स नहीं जोड़ा गया',

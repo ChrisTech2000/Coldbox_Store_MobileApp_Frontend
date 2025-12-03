@@ -458,6 +458,10 @@ export default {
         },
         paid: 'ti sanwo',
         lockedWithinPendingOrders: 'Àwọ̀n apoti tí ó wà nínú àṣẹ tí kò tíì pé kò le yọ̀ síta.',
+        transactionFeeDetails: 'Alaye owo-ori ìbámu',
+        coolingFeesAlreadyPaid: 'Owo itura ti san tẹlẹ',
+        coolingFeesAlreadyPaidTooltip:
+          'A ti ta apoti kan tabi diẹ sii ninu iṣẹ yii lori ọjà ayelujara. Owo itura ti wọn jọ jẹ ti gba silẹ lati owo ìsanwọ rẹ tẹlẹ.',
       },
       CheckIn: {
         emptyState: 'Ko si awọn apoti ti a ṣafikun sibẹsibẹ',

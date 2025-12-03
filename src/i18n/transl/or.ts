@@ -485,6 +485,10 @@ export default {
         },
         paid: 'ପେଇଡ୍',
         lockedWithinPendingOrders: 'ବିଲମ୍ବିତ ଅର୍ଡରରେ ଅଟକିଥିବା କ୍ରେଟ୍‌ଗୁଡିକୁ ବାହାର କରିହେବ ନାହିଁ।',
+        transactionFeeDetails: 'ଲେନଦେନ ଶୁଳ୍କର ବିବରଣୀ',
+        coolingFeesAlreadyPaid: 'କୁଲିଙ୍ଗ ଶୁଳ୍କ ପୂର୍ବରୁ ଦେଇଦିଆଗଲା',
+        coolingFeesAlreadyPaidTooltip:
+          'ଏହି କାର୍ଯ୍ୟରେ ଥିବା ଗୋଟିଏ କିମ୍ବା ଅଧିକ କ୍ରେଟ୍ ମାର୍କେଟପ୍ଲେସରେ ବିକ୍ରୟ ହୋଇଛି। ସମ୍ବନ୍ଧିତ କୁଲିଙ୍ଗ ଶୁଳ୍କ ଆପଣଙ୍କ ଦେୟ ରାଶିରୁ ପୂର୍ବରୁ କଟିଯାଇଛି।',
       },
       CheckIn: {
         emptyState: 'ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ବକ୍ସ ଯୋଡାଯାଇନି',

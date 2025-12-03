@@ -64,11 +64,11 @@ function DialogFooter(props: {
 }) {
   const { onCancel, onConfirm, t } = props;
   return (
-    <View tw="flex flex-row items-center justify-end">
-      <Button mode="text" uppercase onPress={onCancel}>
+    <View tw="flex flex-row items-center justify-end w-full gap-2 px-2">
+      <Button mode="text" uppercase onPress={onCancel} tw="shrink-0">
         {t('actions.cancel')}
       </Button>
-      <Button mode="text" uppercase onPress={onConfirm}>
+      <Button mode="text" uppercase onPress={onConfirm} tw="shrink-0">
         {t('actions.ok')}
       </Button>
     </View>
