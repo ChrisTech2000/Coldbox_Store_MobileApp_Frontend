@@ -61,6 +61,7 @@ const en = {
       AddRegisteredEmployee: 'Add Registered Employee',
       RegisteredEmployeeDetails: 'Registered Employee Details',
       DeliveryContacts: 'Delivery Contacts',
+      LegacyContacts: 'Legacy Contacts',
       AddUserBankAccount: '{{user}} Bank Account',
     },
     bottomTabs: {
@@ -163,6 +164,7 @@ const en = {
     update: 'update',
     clearAll: 'Clear all',
     apply: 'Apply',
+    assign: 'Assign',
   },
   components: {
     datePicker: {
@@ -674,6 +676,50 @@ const en = {
         deleteContactMessage: 'Are you sure you want to delete this contact?',
         noAvailableContacts: 'There are no available contacts for this particular cooling unit.',
         contactedAddedSuccessfully: 'Contact added successfully.',
+        contactUpdatedSuccessfully: 'Contact updated successfully',
+        contactStatusChangedSuccessfully: 'Contact status changed successfully',
+        show: 'Show',
+        hide: 'Hide',
+        unassigned: 'Unassigned',
+        roomContacts: 'Room Contacts',
+        rooms: 'Rooms',
+        addContact: 'Add Contact',
+        editContact: 'Edit Contact',
+        selectRoom: 'Select Room',
+        legacyContactsModal: {
+          title: 'Update room-specific contacts',
+          description:
+            "We've updated the delivery contacts system to be room-specific. You have {{count}} existing contacts that need to be assigned to a room.",
+          descriptionPrefix: "We've updated the delivery contacts system to be room-specific. ",
+          descriptionBold: 'You have {{count}} existing contact{{plural}}',
+          descriptionSuffix: ' that need to be assigned to a room.',
+          important: 'Important',
+          importantMessage:
+            'This ensures accurate delivery information for each cooling unit in your company.',
+          remindMeLater: 'Remind me later',
+          assignNow: 'Assign Now',
+        },
+        legacyContactsBanner: {
+          title: '{{count}} Unassigned Legacy Contacts',
+          title_one: '{{count}} Unassigned Legacy Contact',
+          title_other: '{{count}} Unassigned Legacy Contacts',
+          description: 'These contacts need to be assigned to specific rooms.',
+          link: 'Assign Contacts to Rooms →',
+        },
+        legacyContactsScreen: {
+          warningTitle: 'Assign {{count}} Contacts to Rooms',
+          warningTitle_one: 'Assign {{count}} Contact to Room',
+          warningTitle_other: 'Assign {{count}} Contacts to Rooms',
+          warningMessage:
+            'Select a room for each contact, then click "Assign Selected" or assign them one by one.',
+          assignToRoom: 'Assign to room',
+          allRooms: 'All Rooms',
+          contactAssignedSuccessfully: 'Contact assigned successfully',
+          contactDeletedSuccessfully: 'Contact deleted successfully',
+          allAssignedMessage: 'All legacy contacts have been assigned!',
+          roomLocation: 'Room Location',
+          assignSelected: 'Assign Selected',
+        },
       },
       Location: {
         emptyState: 'No locations added yet. Click on the + sign to add one.',
@@ -1318,6 +1364,9 @@ const en = {
       coolingFees: 'Cooling fee',
       viewContacts: 'View contact(s)',
       contactsForDelivery: 'Contact(s) for delivery information',
+      contacts: 'Contacts',
+      legacyContactsWarning:
+        "{{companyName}} has not assigned delivery contacts to this room. This is a list of all of {{companyName}}'s delivery contacts.",
       gotItButton: 'Got it!',
       pickupMethods: 'Pickup method',
       selectPickupMethod: 'Select a pickup method',

@@ -3,6 +3,7 @@ import { Platform, ScrollView, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Divider, List } from 'react-native-paper';
 import { useShallow } from 'zustand/react/shallow';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Text } from '#ui/components/Text';
 import { useTailwindColors } from '#ui/hooks/useTailwindColors';
@@ -253,12 +254,25 @@ function ManagementMain(props: ManagementRouteProps<'Root'>) {
               tw="px-0 py-2"
               title={undefined}
               left={() => (
-                <Text tw="text-base w-[80%]">{t('navigation.management.DeliveryContacts')}</Text>
+                <View tw="flex-row items-center w-[80%]">
+                  <Text tw="text-base">{t('navigation.management.DeliveryContacts')}</Text>
+                  {company?.hasLegacyContacts && (
+                    <Icon
+                      name="alert-circle-outline"
+                      size={20}
+                      color="#E7000B"
+                      style={{ marginLeft: 8 }}
+                    />
+                  )}
+                </View>
               )}
               right={ListItemArrow}
               onPress={(evt) => {
                 evt.stopPropagation();
-                props.navigation.navigate('DeliveryContacts');
+                props.navigation.reset({
+                  index: 1,
+                  routes: [{ name: 'Root' }, { name: 'DeliveryContacts' }],
+                });
               }}
             />
             <Divider tw="bg-gray-400" />

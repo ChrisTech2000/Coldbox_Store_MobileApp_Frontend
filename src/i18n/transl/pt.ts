@@ -64,6 +64,7 @@ export default {
       RegisteredEmployeeDetails: 'Detalhes do Empregado Registrado',
       DeliveryContacts: 'Contatos de Entrega',
       AddUserBankAccount: 'Conta bancária de {{user}}',
+      LegacyContacts: 'Contactos antigos',
     },
     bottomTabs: {
       RootMainTabStack: 'Coldtivate de {{firstName}}',
@@ -165,6 +166,7 @@ export default {
     update: 'atualizar',
     clearAll: 'Limpar',
     apply: 'Aplicar',
+    assign: 'Atribuir',
   },
   components: {
     datePicker: {
@@ -681,6 +683,51 @@ export default {
         noAvailableContacts:
           'Não há contatos disponíveis para esta unidade de refrigeração específica.',
         contactedAddedSuccessfully: 'Contato adicionado com sucesso.',
+        contactUpdatedSuccessfully: 'Contacto atualizado com sucesso',
+        contactStatusChangedSuccessfully: 'Estado do contacto alterado com sucesso',
+        show: 'Mostrar',
+        hide: 'Ocultar',
+        unassigned: 'Não atribuído',
+        roomContacts: 'Contactos por sala',
+        rooms: 'Salas',
+        addContact: 'Adicionar contacto',
+        editContact: 'Editar contacto',
+        selectRoom: 'Selecionar sala',
+        legacyContactsModal: {
+          title: 'Atualizar contactos específicos por sala',
+          description:
+            'Atualizámos o sistema de contactos de entrega para ser específico por sala. Tem {{count}} contactos existentes que precisam de ser atribuídos a uma sala.',
+          descriptionPrefix:
+            'Atualizámos os contactos de entrega para serem específicos por sala. ',
+          descriptionBold: 'Tem {{count}} contacto{{plural}} existente{{plural}}',
+          descriptionSuffix: ' que precisam de ser atribuídos a uma sala.',
+          important: 'Importante',
+          importantMessage:
+            'Isto garante informação de entrega correta para cada sala da sua empresa.',
+          remindMeLater: 'Lembrar mais tarde',
+          assignNow: 'Atribuir agora',
+        },
+        legacyContactsBanner: {
+          title: '{{count}} Contactos legados não atribuídos',
+          title_one: '{{count}} Contacto legado não atribuído',
+          title_other: '{{count}} Contactos legados não atribuídos',
+          description: 'Estes contactos precisam de ser atribuídos a salas específicas.',
+          link: 'Atribuir contactos a salas →',
+        },
+        legacyContactsScreen: {
+          warningTitle: 'Atribuir {{count}} contactos a salas',
+          warningTitle_one: 'Atribuir {{count}} contacto a uma sala',
+          warningTitle_other: 'Atribuir {{count}} contactos a salas',
+          warningMessage:
+            'Selecione uma sala para cada contacto e clique em «Atribuir selecionados» ou atribua um a um.',
+          assignToRoom: 'Atribuir a sala',
+          allRooms: 'Todas as salas',
+          contactAssignedSuccessfully: 'Contacto atribuído com sucesso',
+          contactDeletedSuccessfully: 'Contacto eliminado com sucesso',
+          allAssignedMessage: 'Todos os contactos legados foram atribuídos!',
+          roomLocation: 'Sala',
+          assignSelected: 'Atribuir selecionados',
+        },
       },
       Location: {
         emptyState:
@@ -1374,6 +1421,9 @@ export default {
       keepInStorageInfo: 'A taxa de refrigeração será aplicada quando levantar a sua encomenda.',
       orderOverviewSubtitle:
         "Pode revisitar esta informação em 'Meus Pedidos', no ecrã do Marketplace.",
+      legacyContactsWarning:
+        '{{companyName}} não atribuiu contactos de entrega a esta sala. Esta é a lista de todos os contactos de entrega de {{companyName}}.',
+      contacts: 'Contactos',
     },
     Analytics: {
       emptyState: 'Sem dados para exibir',

@@ -87,6 +87,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
         currency: result.currency,
         name: result.name,
         hasDigitalTwin: result.digitalTwin,
+        hasLegacyContacts: result.hasLegacyContacts,
       });
       navigation.goBack();
     } catch (exception) {

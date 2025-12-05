@@ -24,6 +24,7 @@ import CompanyDetails from '#screens/Dashboard/Management/CompanyDetails';
 import CoolingUnits from '#screens/Dashboard/Management/CoolingUnits';
 import CoolingUsers from '#screens/Dashboard/Management/CoolingUsers';
 import DeliveryContacts from '#screens/Dashboard/Management/DeliveryContacts';
+import LegacyContacts from '#screens/Dashboard/Management/DeliveryContacts/LegacyContacts';
 import EditCoolingUnit from '#screens/Dashboard/Management/EditCoolingUnit';
 import EditLocation from '#screens/Dashboard/Management/EditLocation';
 import EditOperator from '#screens/Dashboard/Management/EditOperator';
@@ -102,6 +103,7 @@ export type ManagementRoutes = {
       }
     | undefined;
   DeliveryContacts: undefined;
+  LegacyContacts: undefined;
 };
 
 export type ManagementRoutePaths = keyof ManagementRoutes;
@@ -140,6 +142,7 @@ const NAVIGATOR_HEADERS: Record<ManagementRoutePaths, TranslationPaths | undefin
   CouponStack: undefined,
   PayoutSettings: 'navigation.dashboard.PayoutOptions',
   DeliveryContacts: 'navigation.management.DeliveryContacts',
+  LegacyContacts: 'navigation.management.LegacyContacts',
 };
 
 const Stack = createNativeStackNavigator<ManagementRoutes>();
@@ -208,6 +211,7 @@ export default function ManagementStack() {
         initialParams={{ source: 'Management' }}
       />
       <Stack.Screen name="DeliveryContacts" component={DeliveryContacts} />
+      <Stack.Screen name="LegacyContacts" component={LegacyContacts} />
       <Stack.Screen
         name="PayoutSettings"
         // eslint-disable-next-line
@@ -259,7 +263,7 @@ function _rightContentFactory(
             onPress={() => navigation.navigate('AddLocation')}
           />
         ),
-        leftContent: <Appbar.BackAction size={22} onPress={() => navigation.navigate('Root')} />,
+        leftContent: <Appbar.BackAction size={22} onPress={() => navigation.goBack()} />,
       };
     case 'CoolingUnits':
       return {

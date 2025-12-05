@@ -11,12 +11,14 @@ import type {
   GetAvailableListingParams,
   ListedCratesBaseParams,
   SetPickUpDetailsParams,
+  UpdateDeliveryContactParams,
   UpdateListedCrateParams,
 } from '#types/api.params';
 import type {
   ApplyCouponResponse,
   CheckMarketplaceEligibilityResponse,
   CheckoutWithPaystackResponse,
+  DeliveryContact,
   GetAllOrdersResponse,
   GetAllSalesResponse,
   GetAvailableBanksResponse,
@@ -242,11 +244,12 @@ class MarketplaceService extends HttpClient {
 
   public createDeliveryContact = async (
     params: CreateDeliveryContactParams
-  ): Promise<GetDeliveryContactsResponse> => {
+  ): Promise<DeliveryContact> => {
     try {
-      const { data } = await this.post<GetDeliveryContactsResponse>(
+      const { coolingUnitIds, ...rest } = params;
+      const { data } = await this.post<DeliveryContact>(
         EMarketplaceEndpoints.COMPANY_DELIVERY_CONTACTS,
-        { ...params }
+        { ...rest, cooling_unit_ids: coolingUnitIds }
       );
       return data;
     } catch (error) {
@@ -256,9 +259,23 @@ class MarketplaceService extends HttpClient {
     }
   };
 
-  public listDeliveryContacts = async (companyId: number): Promise<GetDeliveryContactsResponse> => {
+  public listDeliveryContacts = async (
+    companyId: number,
+    coolingUnitId?: number,
+    isActive?: boolean
+  ): Promise<GetDeliveryContactsResponse> => {
     try {
-      const url = subs(EMarketplaceEndpoints.LIST_COMPANY_DELIVERY_CONTACTS, { companyId });
+      let url = subs(EMarketplaceEndpoints.LIST_COMPANY_DELIVERY_CONTACTS, { companyId });
+      const params = new URLSearchParams();
+      if (coolingUnitId !== undefined) {
+        params.append('cooling_unit', coolingUnitId.toString());
+      }
+      if (isActive !== undefined) {
+        params.append('is_active', isActive.toString());
+      }
+      if (params.toString()) {
+        url += `&${params.toString()}`;
+      }
       const { data } = await this.get<GetDeliveryContactsResponse>(url);
       return data;
     } catch (error) {
@@ -274,9 +291,40 @@ class MarketplaceService extends HttpClient {
     try {
       const url = subs(EMarketplaceEndpoints.DELETE_DELIVERY_CONTACT, {
         contactId: params.contactId,
-        companyId: params.companyId,
       });
       const { data } = await this.delete<unknown>(url);
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public updateDeliveryContact = async (
+    params: UpdateDeliveryContactParams
+  ): Promise<DeliveryContact> => {
+    try {
+      const { contactId, coolingUnitIds, ...body } = params;
+      const url = subs(EMarketplaceEndpoints.UPDATE_DELIVERY_CONTACT, {
+        contactId,
+      });
+      const { data } = await this.patch<DeliveryContact>(url, {
+        ...body,
+        cooling_unit_ids: coolingUnitIds,
+      });
+      return data;
+    } catch (error) {
+      const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
+      console.log(JSON.stringify(customError));
+      throw customError;
+    }
+  };
+
+  public getLegacyContacts = async (companyId: number): Promise<GetDeliveryContactsResponse> => {
+    try {
+      const url = subs(EMarketplaceEndpoints.GET_LEGACY_CONTACTS, { companyId });
+      const { data } = await this.get<GetDeliveryContactsResponse>(url);
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);

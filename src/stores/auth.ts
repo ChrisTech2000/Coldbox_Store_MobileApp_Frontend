@@ -13,6 +13,7 @@ import type { User } from '#types/global';
 import AuthService from '#services/AuthService';
 import { useInterval } from '#ui/hooks/useInterval';
 import storage from './lib/storage';
+import { useManagementStore } from './management';
 
 export type JwtPayload = {
   exp: number;
@@ -85,6 +86,9 @@ export const useAuthStore = create(
 
         // Clear local state first to immediately revoke access
         set({ tokens: null, isAuthenticated: false, user: null });
+
+        // Reset management store (company data and UI flags)
+        useManagementStore.getState().reset();
 
         // Then notify backend to blacklist the token (fire and forget)
         // Even if this fails, the local session is already cleared

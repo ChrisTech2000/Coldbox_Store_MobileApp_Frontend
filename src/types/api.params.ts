@@ -464,11 +464,21 @@ export interface CreateDeliveryContactParams extends JsonObject {
   contactName: string;
   phone: string;
   deliveryCompanyName: string;
+  coolingUnitIds?: number[];
+  isActive?: boolean;
+}
+
+export interface UpdateDeliveryContactParams extends JsonObject {
+  contactId: number;
+  contactName?: string;
+  phone?: string;
+  deliveryCompanyName?: string;
+  coolingUnitIds?: number[];
+  isActive?: boolean;
 }
 
 export interface DeleteDeliveryContactParams extends JsonObject {
   contactId: number;
-  companyId: number;
 }
 
 export interface CheckMarketplaceEligibilityParams extends JsonObject {

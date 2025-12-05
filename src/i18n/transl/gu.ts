@@ -64,6 +64,7 @@ export default {
       RegisteredEmployeeDetails: 'નોંધાયેલ કર્મચારીની વિગત',
       DeliveryContacts: 'વિતરણ સંપર્કો',
       AddUserBankAccount: '{{user}}નું બેંક ખાતું',
+      LegacyContacts: 'જૂના સંપર્કો',
     },
     bottomTabs: {
       RootMainTabStack: '{{firstName}}નું Coldtivate',
@@ -165,6 +166,7 @@ export default {
     update: 'સુધારો',
     clearAll: 'બધું સાફ કરો',
     apply: 'લાગૂ કરો',
+    assign: 'સોંપો',
   },
   components: {
     datePicker: {
@@ -674,6 +676,49 @@ export default {
         deleteContactMessage: 'શું તમે ખરેખર આ સંપર્કને મિટાવા માંગો છો?',
         noAvailableContacts: 'આ ખાસ ઠંડા એકક માટે ઉપલબ્ધ કોઇ સંપર્કો નથી.',
         contactedAddedSuccessfully: 'સંપર્ક સફળતાપૂર્વક ઉમેરાયેલ.',
+        contactStatusChangedSuccessfully: 'સંપર્ક સ્થિતિ સફળતાપૂર્વક બદલાઈ',
+        contactUpdatedSuccessfully: 'સંપર્ક સફળતાપૂર્વક અપડેટ થયો',
+        show: 'બતાવો',
+        hide: 'છુપાવો',
+        unassigned: 'અસાઇન નથી',
+        roomContacts: 'રૂમ સંપર્કો',
+        rooms: 'રૂમ',
+        addContact: 'સંપર્ક ઉમેરો',
+        editContact: 'સંપર્ક સંપાદિત કરો',
+        selectRoom: 'રૂમ પસંદ કરો',
+        legacyContactsModal: {
+          title: 'રૂમ-વિશિષ્ટ સંપર્ક અપડેટ કરો',
+          description:
+            'અમે ડિલિવરી સંપર્કોને રૂમ-સ્પેસિફિક બનાવી છે. તમારા પાસે {{count}} અસ્તિત્વમાં સંપર્કો છે જેને રૂમમાં સોંપવાની જરૂર છે.',
+          descriptionPrefix: 'અમે ડિલિવરી સંપર્કોને રૂમ-સ્પેસિફિક બનાવ્યા છે. ',
+          descriptionBold: 'તમારું {{count}} અસ્તિત્વમાં સંપર્ક{{plural}} છે',
+          descriptionSuffix: ' જેમને રૂમમાં સોંપવાની જરૂર છે.',
+          important: 'મહત્વપૂર્ણ',
+          importantMessage: 'આ તમારી કંપનીના દરેક રૂમ માટે ચોક્કસ ડિલિવરી માહિતી સુનિશ્ચિત કરે છે.',
+          remindMeLater: 'પછી યાદ કરાવો',
+          assignNow: 'હવે સોંપો',
+        },
+        legacyContactsBanner: {
+          title: '{{count}} અસાઇન થયેલા જૂના સંપર્કો',
+          title_one: '{{count}} અસાઇન થયો જૂનો સંપર્ક',
+          title_other: '{{count}} અસાઇન થયેલા જૂના સંપર્કો',
+          description: 'આ સંપર્કોને ચોક્કસ રૂમમાં સોંપવાની જરૂર છે.',
+          link: 'રૂમને સંપર્કો સોંપો →',
+        },
+        legacyContactsScreen: {
+          warningTitle: '{{count}} સંપર્કો રૂમમાં સોંપો',
+          warningTitle_one: '{{count}} સંપર્ક રૂમમાં સોંપો',
+          warningTitle_other: '{{count}} સંપર્કો રૂમમાં સોંપો',
+          warningMessage:
+            'દરેક સંપર્ક માટે રૂમ પસંદ કરો, પછી "Assign Selected" ક્લિક કરો અથવા એક-એક કરીને સોંપો.',
+          assignToRoom: 'રૂમમાં સોંપો',
+          allRooms: 'બધા રૂમ',
+          contactAssignedSuccessfully: 'સંપર્ક સફળતાપૂર્વક સોંપાયો',
+          contactDeletedSuccessfully: 'સંપર્ક સફળતાપૂર્વક કાઢી નાખ્યો',
+          allAssignedMessage: 'બધા જૂના સંપર્કો સોંપી દેવામાં આવ્યા!',
+          roomLocation: 'રૂમ સ્થાન',
+          assignSelected: 'ચયન સોંપો',
+        },
       },
       Location: {
         emptyState: 'હજી સુધી કોઈ સ્થળ ઉમેરવામાં આવ્યું નથી. ઉમેરવા માટે + ચિહ્ન પર ક્લિક કરો.',
@@ -1356,6 +1401,9 @@ export default {
         invalid: 'અમાન્ય મૂલ્ય',
         minimumCartValue: 'ઓર્ડર ઓછામાં ઓછા ₦100 હોવું જોઈએ.',
       },
+      legacyContactsWarning:
+        '{{companyName}} એ આ રૂમ માટે ડિલિવરી સંપર્કો સોંપ્યા નથી. આ {{companyName}} ના બધાં ડિલિવરી સંપર્કોની સૂચિ છે.',
+      contacts: 'સંપર્કો',
     },
     Analytics: {
       emptyState: 'પ્રદર્શિત કરવા માટે કોઈ ડેટા નથી',

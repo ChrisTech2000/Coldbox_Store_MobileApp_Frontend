@@ -18,6 +18,7 @@ import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
 import { useTutorialStore } from '#stores/tutorial';
 import { DashboardProduce, ERoles, Farmer, type Company, type CoolingUnit } from '#types/global';
+import LegacyContactsModal from '#screens/Dashboard/Main/Marketplace/components/LegacyContactsModal';
 
 import { CoolingUnitsOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitsOverlay';
 import {
@@ -388,6 +389,8 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
           </Dialog>
         </Portal>
       </RBAC.ProtectedResource>
+
+      <LegacyContactsModal />
     </View>
   );
 }

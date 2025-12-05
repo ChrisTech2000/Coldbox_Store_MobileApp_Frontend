@@ -9,14 +9,17 @@ export type ManagementCompany = {
   currency?: string;
   name?: string;
   hasDigitalTwin?: boolean;
+  hasLegacyContacts?: boolean;
 } | null;
 
 type State = {
   company: ManagementCompany;
+  legacyContactsModalShown: boolean;
 };
 
 type Actions = {
   setCompany: (company: ManagementCompany) => void;
+  setLegacyContactsModalShown: (shown: boolean) => void;
   reset: () => void;
 };
 
@@ -24,8 +27,10 @@ export const useManagementStore = create(
   persist<State & Actions>(
     (set) => ({
       company: null,
+      legacyContactsModalShown: false,
       setCompany: (company) => set({ company }),
-      reset: () => set({ company: null }),
+      setLegacyContactsModalShown: (shown) => set({ legacyContactsModalShown: shown }),
+      reset: () => set({ company: null, legacyContactsModalShown: false }),
     }),
     {
       name: 'management',

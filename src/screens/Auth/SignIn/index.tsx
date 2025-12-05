@@ -151,6 +151,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
             currency: result.company.currency,
             name: result.company.name,
             hasDigitalTwin: result.company.digitalTwin,
+            hasLegacyContacts: result.company.hasLegacyContacts,
           });
         }
         setSession({

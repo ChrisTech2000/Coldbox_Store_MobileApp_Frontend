@@ -101,11 +101,14 @@ export function PickupDetailsCard({
 
           {pickupMethod === EPickUpMethod.DELIVERY ? (
             <Touchable
+              tw="py-2 px-1"
+              hitSlop={{ top: 20, bottom: 20, left: 10, right: 10 }}
               onPress={(evt) => {
                 evt.stopPropagation();
                 emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, {
                   orderId: orderId,
                   coolingUnitId: coolingUnit.id,
+                  companyId,
                 });
               }}
             >

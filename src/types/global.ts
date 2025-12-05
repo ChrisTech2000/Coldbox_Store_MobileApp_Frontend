@@ -27,6 +27,7 @@ export type Farmer = {
 export type Company = {
   id: number;
   hasCoolingUnits?: boolean;
+  hasLegacyContacts?: boolean;
   name: string;
   country?: string;
   currency: string;

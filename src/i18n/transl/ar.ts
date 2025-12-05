@@ -60,6 +60,7 @@ export default {
       RegisteredEmployeeDetails: 'تفاصيل الموظف المسجل',
       DeliveryContacts: 'جهات الاتصال للتسليم',
       AddUserBankAccount: 'حساب بنكي {{user}}',
+      LegacyContacts: 'جهات الاتصال القديمة',
     },
     bottomTabs: {
       RootMainTabStack: 'كولد تيفيت لـ {{firstName}}',
@@ -159,6 +160,7 @@ export default {
     update: 'تحديث',
     clearAll: 'مسح الكل',
     apply: 'تقديم طلب',
+    assign: 'تعيين',
   },
   components: {
     datePicker: {
@@ -633,6 +635,49 @@ export default {
         deleteContactMessage: 'هل أنت متأكد أنك تريد حذف جهة الاتصال هذه؟',
         noAvailableContacts: 'لا توجد جهات اتصال متاحة لوحدة التبريد هذه على وجه الخصوص.',
         contactedAddedSuccessfully: 'تمت إضافة جهة الاتصال بنجاح.',
+        contactStatusChangedSuccessfully: 'تم تغيير حالة جهة الاتصال بنجاح',
+        contactUpdatedSuccessfully: 'تم تحديث جهة الاتصال بنجاح',
+        show: 'إظهار',
+        hide: 'إخفاء',
+        unassigned: 'غير مُعيَّن',
+        roomContacts: 'جهات الاتصال حسب الغرفة',
+        rooms: 'الغرف',
+        addContact: 'إضافة جهة اتصال',
+        editContact: 'تعديل جهة الاتصال',
+        selectRoom: 'اختر غرفة',
+        legacyContactsModal: {
+          title: 'تحديث جهات الاتصال الخاصة بالغرف',
+          description:
+            'لقد حدّثنا نظام جهات اتصال التوصيل ليكون خاصًا بالغرف. لديك {{count}} جهة اتصال موجودة تحتاج إلى تعيينها لغرفة.',
+          descriptionPrefix: 'لقد جعلنا جهات اتصال التوصيل خاصة بكل غرفة. ',
+          descriptionBold: 'لديك {{count}} جهة اتصال قديمة',
+          descriptionSuffix: ' تحتاج إلى تعيينها لغرفة.',
+          important: 'مهم',
+          importantMessage: 'هذا يضمن معلومات توصيل دقيقة لكل غرفة في شركتك.',
+          remindMeLater: 'ذكرني لاحقًا',
+          assignNow: 'تعيين الآن',
+        },
+        legacyContactsBanner: {
+          title: '{{count}} من جهات الاتصال القديمة غير المعينة',
+          title_one: '{{count}} جهة اتصال قديمة غير معينة',
+          title_other: '{{count}} جهات اتصال قديمة غير معينة',
+          description: 'يجب تعيين هذه الجهات لغرف محددة.',
+          link: '← تعيين جهات الاتصال للغرف',
+        },
+        legacyContactsScreen: {
+          warningTitle: 'عيّن {{count}} جهة اتصال للغرف',
+          warningTitle_one: 'عيّن جهة اتصال واحدة للغرفة',
+          warningTitle_other: 'عيّن {{count}} جهات اتصال للغرف',
+          warningMessage:
+            'اختر غرفة لكل جهة، ثم اضغط «تعيين المحدد» أو قم بالتعيين واحدًا تلو الآخر.',
+          assignToRoom: 'تعيين لغرفة',
+          allRooms: 'كل الغرف',
+          contactAssignedSuccessfully: 'تم تعيين جهة الاتصال بنجاح',
+          contactDeletedSuccessfully: 'تم حذف جهة الاتصال بنجاح',
+          allAssignedMessage: 'تم تعيين جميع جهات الاتصال القديمة!',
+          roomLocation: 'موقع الغرفة',
+          assignSelected: 'تعيين المحدد',
+        },
       },
       Location: {
         emptyState: 'لم تتم إضافة أي مواقع بعد. انقر فوق علامة + لإضافة موقع.',
@@ -1235,6 +1280,9 @@ export default {
         invalid: 'قيمة غير صالحة',
         minimumCartValue: 'يجب أن يكون الطلب بقيمة ₦100 على الأقل.',
       },
+      legacyContactsWarning:
+        '{{companyName}} لم يعيّن جهات توصيل لهذه الغرفة. هذه قائمة بكل جهات توصيل {{companyName}}.',
+      contacts: 'جهات الاتصال',
     },
     Analytics: {
       emptyState: 'لا توجد بيانات لعرضها',
