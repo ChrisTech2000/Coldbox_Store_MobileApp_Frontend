@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import { CurrencyStandardization } from 'currency-format-utils';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
   GestureResponderEvent,
@@ -55,9 +55,17 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
   const scrollRef = useRef<ScrollView>(null);
-  const coolingUnits = useCartStore((store) => store.allCoolingUnits);
   const colors = useTailwindColors();
   const refreshDataFunctions = useDashboardStore((store) => store.refreshData);
+
+  const [coolingUnits, isCoolingUnitsLoading, coolingUnitsError, fetchCoolingUnits] = useCartStore(
+    (store) => [
+      store.allCoolingUnits,
+      store.isCoolingUnitsLoading,
+      store.coolingUnitsError,
+      store.fetchCoolingUnits,
+    ]
+  );
 
   const [showButton, setShowButton] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -82,6 +90,12 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
     { defaultData: [] }
   );
 
+  useEffect(() => {
+    if (!coolingUnits && !isCoolingUnitsLoading) {
+      fetchCoolingUnits();
+    }
+  }, [coolingUnits, isCoolingUnitsLoading, fetchCoolingUnits]);
+
   const cropDatums = useMemo(() => {
     const { buildMap, find } = cropTranslationLookup();
     const translationMap = buildMap();
@@ -101,13 +115,14 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
   }, [crops, companyCountry, farmerCountry, locale]);
 
   const orderDataByCoolingUnit = useMemo(() => {
+    if (!coolingUnits?.length) return [];
     return groupCartItemsByCoolingUnitAndCrop(order?.items, coolingUnits);
   }, [order?.items, coolingUnits]);
 
-  const unitsMap = useMemo(
-    () => new Map(coolingUnits?.map((coolingUnit) => [coolingUnit.id, coolingUnit])),
-    [coolingUnits]
-  );
+  const unitsMap = useMemo(() => {
+    if (!coolingUnits?.length) return new Map();
+    return new Map(coolingUnits.map((coolingUnit) => [coolingUnit.id, coolingUnit]));
+  }, [coolingUnits]);
 
   const onPay = useCallback(
     async (evt: GestureResponderEvent) => {
@@ -177,10 +192,18 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
     [scrollRef.current]
   );
 
-  if (isLoading || isLoadingCrops) {
+  if (isLoading || isLoadingCrops || isCoolingUnitsLoading) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
+
+  if (coolingUnitsError || !coolingUnits?.length) {
+    return (
+      <View tw="flex-1 items-center justify-center mt-4 px-6 space-y-4">
+        <GenericError retry={fetchCoolingUnits} />
       </View>
     );
   }

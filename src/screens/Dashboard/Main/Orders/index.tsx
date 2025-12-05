@@ -83,7 +83,12 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
     store.allCrops ?? [],
     store.addRefreshDataFn,
   ]);
-  const allUnits = useCartStore((store) => store.allCoolingUnits);
+
+  const [allUnits, isCoolingUnitsLoading, fetchCoolingUnits] = useCartStore((store) => [
+    store.allCoolingUnits,
+    store.isCoolingUnitsLoading,
+    store.fetchCoolingUnits,
+  ]);
 
   const companyCountry = useManagementStore(useShallow((store) => store.company?.country));
   const [farmerCountry] = useDashboardStore(useShallow((store) => [store.farmerCountry]));
@@ -93,6 +98,12 @@ function OrdersRoot(props: OrdersRouteProps<'OrdersRoot'>) {
 
   const [isSortingModalOpen, setIsSortingModalOpen] = useState<boolean>(false);
   const [showButton, setShowButton] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!allUnits && !isCoolingUnitsLoading) {
+      fetchCoolingUnits();
+    }
+  }, [allUnits, isCoolingUnitsLoading, fetchCoolingUnits]);
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getOrders',

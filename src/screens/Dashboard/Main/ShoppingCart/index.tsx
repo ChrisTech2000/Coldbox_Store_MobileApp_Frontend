@@ -53,10 +53,22 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
   const { t } = useTranslationUtils();
   const [isTutorialActive] = useTutorialStore((store) => [store.isTutorialActive]);
 
-  const { recomputeCart, cartData, isLoading } = useCartStore((store) => ({
+  const {
+    recomputeCart,
+    cartData,
+    isLoading,
+    allCoolingUnits,
+    isCoolingUnitsLoading,
+    coolingUnitsError,
+    fetchCoolingUnits,
+  } = useCartStore((store) => ({
     recomputeCart: store.recomputeCart,
     cartData: store.cartData,
     isLoading: store.isLoading,
+    allCoolingUnits: store.allCoolingUnits,
+    isCoolingUnitsLoading: store.isCoolingUnitsLoading,
+    coolingUnitsError: store.coolingUnitsError,
+    fetchCoolingUnits: store.fetchCoolingUnits,
   }));
 
   const contextualCartData = isTutorialActive ? MOCKED_SHOPPING_CART_DATA : cartData;
@@ -121,6 +133,9 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
       contextualCartData.totalCoolingFeesAmount <
     CART_MINIMUM_VALUE;
 
+  const cannotProceedWithoutUnits =
+    isCoolingUnitsLoading || coolingUnitsError || !allCoolingUnits?.length;
+
   return (
     <React.Fragment>
       <ScrollView
@@ -175,9 +190,14 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
                   tw="w-5/6 self-center my-4"
                   mode="contained"
                   uppercase
-                  disabled={orderDisabled}
+                  disabled={orderDisabled || !!cannotProceedWithoutUnits}
                   onPress={(evt) => {
                     evt.stopPropagation();
+                    if (cannotProceedWithoutUnits) {
+                      fetchCoolingUnits();
+                      toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+                      return;
+                    }
                     props.navigation.navigate('OrderDetails');
                   }}
                 >
