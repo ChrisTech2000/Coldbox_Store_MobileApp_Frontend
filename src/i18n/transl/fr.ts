@@ -61,6 +61,7 @@ export default {
       RegisteredEmployeeDetails: "Détails de l'employé enregistré",
       DeliveryContacts: 'Contacts de livraison',
       AddUserBankAccount: 'Compte bancaire {{user}}',
+      LegacyContacts: 'Contacts hérités',
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -160,6 +161,7 @@ export default {
     update: 'mise à jour',
     clearAll: 'Effacer tout',
     apply: 'Appliquer',
+    assign: 'Attribuer',
   },
   components: {
     datePicker: {
@@ -662,6 +664,50 @@ export default {
         noAvailableContacts:
           "Il n'y a aucun contact disponible pour cette unité de réfrigération en particulier.",
         contactedAddedSuccessfully: 'Contact ajouté avec succès.',
+        contactUpdatedSuccessfully: 'Contact mis à jour avec succès',
+        contactStatusChangedSuccessfully: 'Statut du contact modifié avec succès',
+        show: 'Afficher',
+        hide: 'Masquer',
+        unassigned: 'Non attribué',
+        roomContacts: 'Contacts par salle',
+        rooms: 'Salles',
+        addContact: 'Ajouter un contact',
+        editContact: 'Modifier le contact',
+        selectRoom: 'Choisir une salle',
+        legacyContactsModal: {
+          title: 'Mettre à jour les contacts par salle',
+          description:
+            'Nous avons rendu les contacts de livraison spécifiques aux salles. Vous avez {{count}} contacts existants à attribuer à une salle.',
+          descriptionPrefix: 'Nous avons rendu les contacts de livraison spécifiques aux salles. ',
+          descriptionBold: 'Vous avez {{count}} contact{{plural}} existant{{plural}}',
+          descriptionSuffix: ' à attribuer à une salle.',
+          important: 'Important',
+          importantMessage:
+            'Cela garantit des informations de livraison exactes pour chaque salle de votre entreprise.',
+          remindMeLater: 'Me le rappeler plus tard',
+          assignNow: 'Attribuer maintenant',
+        },
+        legacyContactsBanner: {
+          title: '{{count}} contacts hérités non attribués',
+          title_one: '{{count}} contact hérité non attribué',
+          title_other: '{{count}} contacts hérités non attribués',
+          description: 'Ces contacts doivent être attribués à des salles spécifiques.',
+          link: 'Attribuer les contacts aux salles →',
+        },
+        legacyContactsScreen: {
+          warningTitle: 'Attribuez {{count}} contacts aux salles',
+          warningTitle_one: 'Attribuez {{count}} contact à une salle',
+          warningTitle_other: 'Attribuez {{count}} contacts aux salles',
+          warningMessage:
+            'Sélectionnez une salle pour chaque contact, puis cliquez sur « Attribuer la sélection » ou attribuez-les un par un.',
+          assignToRoom: 'Attribuer à une salle',
+          allRooms: 'Toutes les salles',
+          contactAssignedSuccessfully: 'Contact attribué avec succès',
+          contactDeletedSuccessfully: 'Contact supprimé avec succès',
+          allAssignedMessage: 'Tous les contacts hérités ont été attribués !',
+          roomLocation: 'Salle',
+          assignSelected: 'Attribuer sélection',
+        },
       },
       Location: {
         emptyState: "Aucun lieu ajouté pour l'instant. Cliquez sur le signe + pour en ajouter un.",
@@ -1306,6 +1352,9 @@ export default {
         invalid: 'Valeur invalide',
         minimumCartValue: "La commande doit être d'au moins ₦100.",
       },
+      legacyContactsWarning:
+        '{{companyName}} n’a pas attribué de contacts de livraison à cette salle. Voici la liste de tous les contacts de livraison de {{companyName}}.',
+      contacts: 'Contacts',
     },
     Analytics: {
       emptyState: 'Aucune donnée à afficher',

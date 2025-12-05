@@ -60,6 +60,7 @@ export default {
       RegisteredEmployeeDetails: 'Akosile awọn osise ti o forukọsilẹ',
       DeliveryContacts: 'Awọn olubasọrọ Ifijiṣẹ',
       AddUserBankAccount: 'Akọọlẹ Banki {{user}}',
+      LegacyContacts: 'Àwọn kọ́ńtàkì àtijọ́',
     },
     bottomTabs: {
       RootMainTabStack: 'Coldtivate ti {{firstName}}',
@@ -159,6 +160,7 @@ export default {
     update: 'imudojuiwọn',
     clearAll: 'Nu gbogbo rẹ',
     apply: 'Lo',
+    assign: 'Yàn sí',
   },
   components: {
     datePicker: {
@@ -636,6 +638,50 @@ export default {
         deleteContactMessage: 'Ṣé ó dájú pé o fẹ́ pa olubasọrọ yìí rẹ́?',
         noAvailableContacts: 'Kò sí olubasọrọ tí ó wà fún ẹ̀ka ìtútù yìí pátápátá.',
         contactedAddedSuccessfully: 'Olubasọrọ ti fi kun láìsí ìṣòro.',
+        contactStatusChangedSuccessfully: 'Ipò kọ́ńtàkì ti yí padà láìsí ìṣòro',
+        contactUpdatedSuccessfully: 'A ṣe àtúnṣe kọ́ńtàkì náà láìsí ìṣòro',
+        show: 'Ṣafihan',
+        hide: 'Fipamọ́',
+        unassigned: 'Kò tíì yàn',
+        roomContacts: 'Àwọn kọ́ńtàkì yàrá',
+        rooms: 'Àwọn yàrá',
+        addContact: 'Ṣàfikún kọ́ńtàkì',
+        editContact: 'Ṣàtúnṣe kọ́ńtàkì',
+        selectRoom: 'Yan yàrá',
+        legacyContactsModal: {
+          title: 'Ṣàtúnṣe kọ́ńtàkì kọọkan fún yàrá',
+          description:
+            'A ti ṣe àtúnṣe eto kọ́ńtàkì ìfiránṣẹ́ kí ó jẹ́ ti yàrá kọọkan. O ní kọ́ńtàkì àtijọ́ {{count}} tí ó nílò yíyan sí yàrá.',
+          descriptionPrefix: 'A ti mú kí àwọn kọ́ńtàkì ìfiránṣẹ́ jẹ́ ti yàrá kọọkan. ',
+          descriptionBold: 'O ní kọ́ńtàkì àtijọ́ {{count}}',
+          descriptionSuffix: ' tí ó nílò yíyan sí yàrá kan.',
+          important: 'Pataki',
+          importantMessage:
+            'Èyí ń jẹ́ kó rí dájú pé ìtànná ìfiránṣẹ́ tó péye fún gbogbo yàrá ní ilé-iṣẹ́ rẹ.',
+          remindMeLater: 'Rántí mi lẹ́yìnna',
+          assignNow: 'Yan báyìí',
+        },
+        legacyContactsBanner: {
+          title: '{{count}} Kọ́ńtàkì àtijọ́ tí a kò yàn',
+          title_one: '{{count}} Kọ́ńtàkì àtijọ́ tí a kò yàn',
+          title_other: '{{count}} Kọ́ńtàkì àtijọ́ tí a kò yàn',
+          description: 'A nílò láti yàn àwọn kọ́ńtàkì wọ̀nyí sí àwọn yàrá tó yẹ.',
+          link: 'Yan àwọn kọ́ńtàkì sí àwọn yàrá →',
+        },
+        legacyContactsScreen: {
+          warningTitle: 'Yan {{count}} kọ́ńtàkì sí àwọn yàrá',
+          warningTitle_one: 'Yan kọ́ńtàkì {{count}} sí yàrá',
+          warningTitle_other: 'Yan {{count}} kọ́ńtàkì sí àwọn yàrá',
+          warningMessage:
+            'Yan yàrá fún kọ́ńtàkì kọọkan, lẹ́yìnna tẹ "Assign Selected" tàbí yàn wọn lọ́kọ̀ọ̀kan.',
+          assignToRoom: 'Yan sí yàrá',
+          allRooms: 'Gbogbo yàrá',
+          contactAssignedSuccessfully: 'A yàn kọ́ńtàkì láìsí ìṣòro',
+          contactDeletedSuccessfully: 'A pa kọ́ńtàkì rẹ́ kọ́ láìsí ìṣòro',
+          allAssignedMessage: 'A ti yàn gbogbo kọ́ńtàkì àtijọ́!',
+          roomLocation: 'Àyè yàrá',
+          assignSelected: 'Yan àwọn yàn',
+        },
       },
       Location: {
         emptyState: 'Ko si awọn agbe gbe ti a ti se afikun rẹ. Tẹ ami + lati ṣafikun ọkan.',
@@ -1264,6 +1310,9 @@ export default {
       pickUpTodayInfo: 'Jọwọ rii dájú pé o gba ọjà rẹ kí ọjọ́ tó parí, láti yago fún owó ìtútù míì.',
       keepInStorageInfo: 'Owó ìtútù yóò kó bá a nígbà tí o bá gba àṣẹ rẹ.',
       orderOverviewSubtitle: 'O lè tún wo àlàyé yìí ní taabu "Àwọn Àṣẹ Mi" lórí iboju "Ọjà".',
+      legacyContactsWarning:
+        '{{companyName}} kò tíì yàn kọ́ńtàkì ìfiránṣẹ́ fún yàrá yìí. Èyí ni àtòjọ gbogbo kọ́ńtàkì ìfiránṣẹ́ {{companyName}}.',
+      contacts: 'Àwọn kọ́ńtàkì',
     },
     Analytics: {
       emptyState: 'Ko si data lati ṣafihan',

@@ -64,6 +64,7 @@ export default {
       RegisteredEmployeeDetails: 'पंजीकृत कर्मचारी विवरण',
       DeliveryContacts: 'डिलीवरी संपर्क',
       AddUserBankAccount: '{{user}} का बैंक खाता',
+      LegacyContacts: 'पुराने संपर्क',
     },
     bottomTabs: {
       RootMainTabStack: '{{firstName}} का Coldtivate',
@@ -165,6 +166,7 @@ export default {
     update: 'अपडेट करें',
     clearAll: 'सभी हटाएँ',
     apply: 'लागू करें',
+    assign: 'असाइन करें',
   },
   components: {
     datePicker: {
@@ -678,6 +680,50 @@ export default {
         deleteContactMessage: 'क्या आप सुनिश्चित हैं कि आप इस संपर्क को हटाना चाहते हैं?',
         noAvailableContacts: 'इस विशेष कूलिंग यूनिट के लिए कोई उपलब्ध संपर्क नहीं है।',
         contactedAddedSuccessfully: 'संपर्क सफलतापूर्वक जोड़ा गया।',
+        contactStatusChangedSuccessfully: 'संपर्क स्थिति सफलतापूर्वक बदल गई',
+        contactUpdatedSuccessfully: 'संपर्क सफलतापूर्वक अपडेट हुआ',
+        show: 'दिखाएँ',
+        hide: 'छुपाएँ',
+        unassigned: 'असाइन नहीं',
+        roomContacts: 'रूम संपर्क',
+        rooms: 'रूम',
+        addContact: 'संपर्क जोड़ें',
+        editContact: 'संपर्क संपादित करें',
+        selectRoom: 'रूम चुनें',
+        legacyContactsModal: {
+          title: 'रूम-विशिष्ट संपर्क अपडेट करें',
+          description:
+            'हमने डिलीवरी संपर्कों को रूम-विशिष्ट बना दिया है। आपके पास {{count}} पुराने संपर्क हैं जिन्हें किसी रूम में असाइन करना है।',
+          descriptionPrefix: 'हमने डिलीवरी संपर्कों को रूम-विशिष्ट बना दिया है। ',
+          descriptionBold: 'आपके पास {{count}} पुराने संपर्क हैं',
+          descriptionSuffix: ' जिन्हें किसी रूम में असाइन करना है।',
+          important: 'महत्वपूर्ण',
+          importantMessage:
+            'यह आपकी कंपनी के प्रत्येक रूम के लिए सही डिलीवरी जानकारी सुनिश्चित करता है।',
+          remindMeLater: 'मुझे बाद में याद दिलाएँ',
+          assignNow: 'अभी असाइन करें',
+        },
+        legacyContactsBanner: {
+          title: '{{count}} बिना असाइन किए पुराने संपर्क',
+          title_one: '{{count}} बिना असाइन किया पुराना संपर्क',
+          title_other: '{{count}} बिना असाइन किए पुराने संपर्क',
+          description: 'इन संपर्कों को विशिष्ट रूम में असाइन करना है।',
+          link: 'रूम में संपर्क असाइन करें →',
+        },
+        legacyContactsScreen: {
+          warningTitle: '{{count}} संपर्क रूम में असाइन करें',
+          warningTitle_one: '{{count}} संपर्क रूम में असाइन करें',
+          warningTitle_other: '{{count}} संपर्क रूम में असाइन करें',
+          warningMessage:
+            'प्रत्येक संपर्क के लिए रूम चुनें, फिर "Assign Selected" क्लिक करें या एक-एक करके असाइन करें।',
+          assignToRoom: 'रूम में असाइन करें',
+          allRooms: 'सभी रूम',
+          contactAssignedSuccessfully: 'संपर्क सफलतापूर्वक असाइन हुआ',
+          contactDeletedSuccessfully: 'संपर्क सफलतापूर्वक हटाया गया',
+          allAssignedMessage: 'सभी पुराने संपर्क असाइन हो चुके हैं!',
+          roomLocation: 'रूम लोकेशन',
+          assignSelected: 'चयनित असाइन करें',
+        },
       },
       Location: {
         emptyState: 'अभी तक कोई स्थान नहीं जोड़ा गया है। एक जोड़ने के लिए + चिह्न पर क्लिक करें।',
@@ -1358,6 +1404,9 @@ export default {
           "कृपया डिलीवरी की व्यवस्था के लिए उपलब्ध नंबरों से संपर्क करें। आप 'Order details' में डिलीवरी विकल्पों की सूची देख सकते हैं।",
       },
       errors: { invalid: 'अमान्य मूल्य', minimumCartValue: 'ऑर्डर कम से कम ₦100 होना चाहिए।' },
+      legacyContactsWarning:
+        '{{companyName}} ने इस रूम के लिए डिलीवरी संपर्क असाइन नहीं किए हैं। यह {{companyName}} के सभी डिलीवरी संपर्कों की सूची है।',
+      contacts: 'संपर्क',
     },
     Analytics: {
       emptyState: 'प्रदर्शित करने के लिए कोई डेटा नहीं',

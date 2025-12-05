@@ -60,6 +60,7 @@ export default {
       RegisteredEmployeeDetails: "Cikakkun Bayanan Ma'aikata",
       DeliveryContacts: 'Lambobin Tuntuɓa na Isarwa',
       AddUserBankAccount: 'Asusun Banki na {{user}}',
+      LegacyContacts: 'Tsoffin lambobi',
     },
     bottomTabs: {
       RootMainTabStack: "{{firstName}}'s Coldtivate",
@@ -159,6 +160,7 @@ export default {
     update: 'sabunta',
     clearAll: 'Goge duk',
     apply: 'Aiwatar',
+    assign: 'Nada',
   },
   components: {
     datePicker: {
@@ -649,8 +651,52 @@ export default {
         phoneNumberPlaceholder: 'Shigar da lambar waya',
         emptyMessage: 'Ba a ƙara kowane lamba ba tukuna',
         deleteContactMessage: 'Ka tabbata kana son goge wannan lambar?',
-        noAvailableContacts: 'Babu lambobin tuntuɓa da ake da su don wannan na’urar sanyaya.',
+        noAvailableContacts: "Babu lambobin tuntuɓa da ake da su don wannan na'urar sanyaya.",
         contactedAddedSuccessfully: 'An ƙara lambar tuntuɓa cikin nasara.',
+        contactStatusChangedSuccessfully: 'An canja matsayin lamba cikin nasara',
+        contactUpdatedSuccessfully: 'An sabunta lamba cikin nasara',
+        show: 'Nuna',
+        hide: 'ɓoye',
+        unassigned: 'Ba a nada ba',
+        roomContacts: 'Lambobin ɗaki',
+        rooms: 'Ɗakuna',
+        addContact: 'Ƙara lamba',
+        editContact: 'Gyara lamba',
+        selectRoom: 'Zaɓi ɗaki',
+        legacyContactsModal: {
+          title: 'Sabunta lambobin ɗaki',
+          description:
+            'Mun sabunta tsarin lambobin isarwa zuwa na musamman ga ɗaki. Kana da tsoffin lambobi {{count}} da ake buƙatar a nada wa ɗaki.',
+          descriptionPrefix: 'Mun sanya lambobin isarwa na musamman ga ɗaki. ',
+          descriptionBold: 'Kana da tsoffin lamba {{count}}',
+          descriptionSuffix: ' da ake buƙatar a nada wa ɗaki.',
+          important: 'Muhimmi',
+          importantMessage:
+            'Wannan yana tabbatar da sahihin bayanin isarwa ga kowane ɗaki a kamfanin ku.',
+          remindMeLater: 'Tuna min daga baya',
+          assignNow: 'Nada yanzu',
+        },
+        legacyContactsBanner: {
+          title: '{{count}} tsoffin lambobi ba a nada ba',
+          title_one: '{{count}} tsohon lamba ba a nada ba',
+          title_other: '{{count}} tsoffin lambobi ba a nada ba',
+          description: 'Waɗannan lambobin dole ne a nada su ga ɗakuna takamaimai.',
+          link: 'Nada lambobi zuwa ɗakuna →',
+        },
+        legacyContactsScreen: {
+          warningTitle: 'Nada lambobi {{count}} ga ɗakuna',
+          warningTitle_one: 'Nada lamba {{count}} ga ɗaki',
+          warningTitle_other: 'Nada lambobi {{count}} ga ɗakuna',
+          warningMessage:
+            'Zaɓi ɗaki ga kowane lamba, sannan danna "Assign Selected" ko ka nada su ɗaya bayan ɗaya.',
+          assignToRoom: 'Nada ga ɗaki',
+          allRooms: 'Dukkan ɗakuna',
+          contactAssignedSuccessfully: 'An nada lamba cikin nasara',
+          contactDeletedSuccessfully: 'An goge lamba cikin nasara',
+          allAssignedMessage: 'An gama nada duk tsoffin lambobin!',
+          roomLocation: 'Matsayin ɗaki',
+          assignSelected: 'Nada zaɓaɓɓu',
+        },
       },
       Location: {
         emptyState: 'Har yanzu ba a ƙara wasu wurare ba. Danna alamar + don ƙara ɗaya.',
@@ -1295,6 +1341,9 @@ export default {
         invalid: 'Bayanan da aka shigar ba daidai ba ne',
         minimumCartValue: 'Oda dole ne ya kai aƙalla ₦100.',
       },
+      legacyContactsWarning:
+        '{{companyName}} bai nada lambobin isarwa ga wannan ɗaki ba. Wannan jerin duk lambobin isarwar {{companyName}} ne.',
+      contacts: 'Lambobi',
     },
     Analytics: {
       emptyState: 'Babu bayanai don nunawa',

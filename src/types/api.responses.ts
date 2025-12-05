@@ -540,13 +540,17 @@ export interface ApplyCouponResponse {
 
 export interface SetPickUpDetailsResponse extends ApplyCouponResponse {}
 
-export type GetDeliveryContactsResponse = Array<{
+export type DeliveryContact = {
   id: number;
   deliveryCompanyName: string;
   phone: string;
   contactName: string;
-  coolingUnitId: number;
-}>;
+  coolingUnitId: number | null;
+  isActive: boolean;
+  companyId: number;
+};
+
+export type GetDeliveryContactsResponse = DeliveryContact[];
 
 export interface SellerListedCratesResponse {
   availableWeightInKg: number;

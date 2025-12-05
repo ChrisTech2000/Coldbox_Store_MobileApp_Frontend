@@ -230,10 +230,14 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
                       </Text>
                       {item.pickupMethod === EPickUpMethod.DELIVERY ? (
                         <Touchable
+                          hitSlop={{ top: 20, bottom: 20, left: 10, right: 10 }}
                           onPress={(evt) => {
                             evt.stopPropagation();
                             emitter.emit(APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION, {
                               coolingUnitId: coolingUnit?.id,
+                              companyId: cartData.items.find(
+                                (item) => item.relCoolingUnitId === coolingUnit?.id
+                              )?.relCompanyId as number,
                             });
                           }}
                         >

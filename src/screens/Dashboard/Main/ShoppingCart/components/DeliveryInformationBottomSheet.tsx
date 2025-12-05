@@ -1,9 +1,9 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import truncate from 'lodash/truncate';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { List } from 'react-native-paper';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
 
 import { Button } from '#ui/components/Button';
@@ -18,10 +18,13 @@ import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import MarketplaceService from '#services/MarketplaceService';
 import { useApiCall } from '#services/hooks/useAPiCall';
+import DataloaderService from '#services/DataloaderService';
 
 export type DeliveryInformationDatum = {
   orderId?: number;
   coolingUnitId: number;
+  companyId: number;
+  companyName?: string;
 };
 
 export default function DeliveryInformationBottomSheet() {
@@ -59,27 +62,115 @@ export default function DeliveryInformationBottomSheet() {
     }
   );
 
-  const data = datum?.orderId ? orderDeliveryContacts : cartDeliveryContacts;
+  const { data: company, refetch: refetchCompany } = useApiCall(
+    'getMarketplaceCompanyById',
+    DataloaderService.marketplaceCompanies.getById,
+    datum?.companyId as number,
+    { skip: !datum?.companyId || !isVisible }
+  );
 
-  useAppEventListener<[{ coolingUnitId: number; orderId?: number }]>(
+  const { data: coolingUnit, refetch: refetchCoolingUnit } = useApiCall(
+    'getCoolingUnitById',
+    DataloaderService.coolingUnits.getById,
+    datum?.coolingUnitId as number,
+    { skip: !datum?.coolingUnitId || !isVisible }
+  );
+
+  useEffect(() => {
+    if (!isVisible) return;
+    if (datum?.orderId) {
+      refetchOrderContacts();
+    } else {
+      refetchCartContacts();
+    }
+    if (datum?.companyId) {
+      refetchCompany();
+    }
+    if (datum?.coolingUnitId) {
+      refetchCoolingUnit();
+    }
+  }, [
+    datum?.orderId,
+    datum?.coolingUnitId,
+    datum?.companyId,
+    isVisible,
+    refetchCartContacts,
+    refetchOrderContacts,
+    refetchCompany,
+    refetchCoolingUnit,
+  ]);
+
+  const { filteredContacts, isShowingLegacyContacts } = useMemo(() => {
+    const source = datum?.orderId ? orderDeliveryContacts : cartDeliveryContacts;
+    if (!source?.length) return { filteredContacts: [], isShowingLegacyContacts: false };
+    const unitId = datum?.coolingUnitId;
+    if (!unitId) return { filteredContacts: source, isShowingLegacyContacts: false };
+
+    const unitContacts = source.filter((c) => {
+      const ids =
+        c.coolingUnitId == null
+          ? []
+          : Array.isArray(c.coolingUnitId)
+            ? c.coolingUnitId
+            : [c.coolingUnitId];
+      return ids.includes(unitId);
+    });
+
+    if (unitContacts.length) {
+      return { filteredContacts: unitContacts, isShowingLegacyContacts: false };
+    }
+
+    const legacyContactsOnly = source.filter((c) => {
+      const ids =
+        c.coolingUnitId == null
+          ? []
+          : Array.isArray(c.coolingUnitId)
+            ? c.coolingUnitId
+            : [c.coolingUnitId];
+      return ids.length === 0;
+    });
+
+    return {
+      filteredContacts: legacyContactsOnly,
+      isShowingLegacyContacts: legacyContactsOnly.length > 0,
+    };
+  }, [cartDeliveryContacts, datum?.coolingUnitId, datum?.orderId, orderDeliveryContacts]);
+
+  useAppEventListener<[{ coolingUnitId: number; orderId?: number; companyId: number }]>(
     APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION,
     (datum) => {
       setDatum(datum ?? null);
       setIsVisible(true);
-
-      if (datum.orderId) refetchOrderContacts();
-      else refetchCartContacts();
-
       modalActions.open();
     }
   );
 
   return (
-    <BottomSheet.Root ref={modalRef} isLoading={isLoadingCartContacts || isLoadingOrderContacts}>
+    <BottomSheet.Root
+      ref={modalRef}
+      isLoading={(datum?.orderId ? isLoadingOrderContacts : isLoadingCartContacts) || false}
+    >
       <BottomSheet.Content tw="pt-2.5 space-y-3.5">
-        <Text tw="text-2xl mb-1.5">{t('Dashboard.ShoppingCart.contactsForDelivery')}</Text>
+        <Text tw="text-md">{t('Dashboard.ShoppingCart.contactsForDelivery')}</Text>
+        <Text tw="text-xl mb-1.5">{coolingUnit?.name ?? ''}</Text>
+
+        {isShowingLegacyContacts && (
+          <View tw="bg-orange-50 border border-orange-200 rounded-lg p-3 flex-row items-start">
+            <Icon name="information-outline" size={20} color="#E17100" style={{ marginRight: 8 }} />
+            <View tw="flex-1">
+              <Text tw="text-sm font-semibold text-orange-900 mb-1">
+                {t('Dashboard.ShoppingCart.contacts')}
+              </Text>
+              <Text tw="text-sm text-[#BB4D00] leading-5">
+                {t('Dashboard.ShoppingCart.legacyContactsWarning', {
+                  companyName: company.name ?? '',
+                })}
+              </Text>
+            </View>
+          </View>
+        )}
         <FlatList
-          data={data?.filter((item) => item.coolingUnitId === datum?.coolingUnitId) ?? []}
+          data={filteredContacts ?? []}
           keyExtractor={(_, itemIdx) => `delivery-information-list-item-#${itemIdx}`}
           scrollEnabled={false}
           ListEmptyComponent={
@@ -169,11 +260,7 @@ function _Field(props: {
             {truncate(value, { length: 28 })}
           </Text>
           {mode === 'clipboard' ? (
-            <MaterialCommunityIcon
-              name="content-copy"
-              size={16}
-              color={paperTheme.colors.primary}
-            />
+            <Icon name="content-copy" size={16} color={paperTheme.colors.primary} />
           ) : null}
         </Touchable>
       )}

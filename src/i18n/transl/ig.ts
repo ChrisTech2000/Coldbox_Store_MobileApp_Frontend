@@ -60,6 +60,7 @@ export default {
       RegisteredEmployeeDetails: 'Nkọwa ndị ọrụ edebanyere aha',
       DeliveryContacts: 'Maka Ọrụ Nyefe',
       AddUserBankAccount: '{{user}} Akaụntụ akụ',
+      LegacyContacts: 'Kọntakt ndị ochie',
     },
     bottomTabs: {
       RootMainTabStack: 'Coldtivate  {{firstName}}',
@@ -159,6 +160,7 @@ export default {
     update: 'mepụta',
     clearAll: 'Hichapụ niile',
     apply: 'Tinye',
+    assign: 'Kekọrịta',
   },
   components: {
     datePicker: {
@@ -644,6 +646,49 @@ export default {
         deleteContactMessage: 'Ị bụ́rịrị echepụtara ma ị chọrọ ihichapụ kọntaktị a?',
         noAvailableContacts: 'Enweghị kọntaktị dị maka nke a kụrụ ụlọ oyi.',
         contactedAddedSuccessfully: 'Kọntaktị e tinyeere nke ọma.',
+        contactStatusChangedSuccessfully: 'Ọnọdụ kọntakt gbanwere nke ọma',
+        contactUpdatedSuccessfully: 'E melitere kọntakt nke ọma',
+        show: 'Gosi',
+        hide: 'Zoo',
+        unassigned: 'E kewapụghị',
+        roomContacts: 'Kọntakt ụlọ',
+        rooms: 'Ụlọ',
+        addContact: 'Tinye kọntakt',
+        editContact: 'Dezie kọntakt',
+        selectRoom: 'Họrọ ụlọ',
+        legacyContactsModal: {
+          title: 'Melite kọntakt n’okpuru ụlọ',
+          description:
+            'Anyị emelitere sistemụ kọntakt nnyefe ka ọ bụrụ nke ụlọ. Ị nwere kọntakt {{count}} ochie chọrọ ikesa n’ụlọ.',
+          descriptionPrefix: 'Anyị emeela ka kọntakt nnyefe bụrụ nke ụlọ kpọmkwem. ',
+          descriptionBold: 'Ị nwere kọntakt {{count}} ochie',
+          descriptionSuffix: ' ndị chọrọ ịkekọrịta n’ụlọ.',
+          important: 'Ọrụ dị mkpa',
+          importantMessage: 'Nke a na-eme ka ozi nnyefe dị mma maka ụlọ ọ bụla n’ụlọ ọrụ gị.',
+          remindMeLater: 'Cheta m mgbe e mesịrị',
+          assignNow: 'Kekọrịta ugbu a',
+        },
+        legacyContactsBanner: {
+          title: '{{count}} Kọntakt ochie e kekọghị',
+          title_one: '{{count}} kọntakt ochie e kekọghị',
+          title_other: '{{count}} kọntakt ochie e kekọghị',
+          description: 'A ga-ekekọrịta kọntakt ndị a na ụlọ kpọmkwem.',
+          link: 'Kekọrịta kọntakt na ụlọ →',
+        },
+        legacyContactsScreen: {
+          warningTitle: 'Kekọrịta kọntakt {{count}} n’ụlọ',
+          warningTitle_one: 'Kekọrịta kọntakt {{count}} n’ụlọ',
+          warningTitle_other: 'Kekọrịta kọntakt {{count}} n’ụlọ',
+          warningMessage:
+            'Họrọ ụlọ maka kọntakt ọ bụla, wee pịa "Assign Selected" ma ọ bụ kekọrịta otu otu.',
+          assignToRoom: 'Kekọrịta n’ụlọ',
+          allRooms: 'Ụlọ niile',
+          contactAssignedSuccessfully: 'E kekọrịta kọntakt nke ọma',
+          contactDeletedSuccessfully: 'E hichapụ kọntakt nke ọma',
+          allAssignedMessage: 'E kekọrịta kọntakt ochie niile!',
+          roomLocation: 'Ebe ụlọ',
+          assignSelected: 'Kekọrịta ahọpụtara',
+        },
       },
       Location: {
         emptyState: 'Enweghị ebe agbakwunyere. Pịa na akara + ka ịgbakwunye otu.',
@@ -1279,6 +1324,9 @@ export default {
         delivery:
           'Biko kpọtụrụ usoro nnyefe kwụsiri ike. Ị ga-ahụ ọbá akwụkwọ nyere gị Nnyefe ma ọ bụ gbasara Ụzọ',
       },
+      legacyContactsWarning:
+        '{{companyName}} akọrọghị kọntakt nnyefe na ụlọ a. Nke a bụ ndepụta kọntakt nnyefe niile nke {{companyName}}.',
+      contacts: 'Kọntakt',
     },
     Analytics: {
       emptyState: 'Enweghị data igosi',

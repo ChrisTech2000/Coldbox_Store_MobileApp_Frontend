@@ -64,6 +64,7 @@ export default {
       RegisteredEmployeeDetails: 'ପଞ୍ଜିକୃତ କର୍ମଚାରୀ ବିବରଣୀ',
       DeliveryContacts: 'ଡେଲିଭରୀ ସଂପର୍କ',
       AddUserBankAccount: '{{user}}ଙ୍କ ବ୍ୟାଙ୍କ ଖାତା',
+      LegacyContacts: 'ପୁରୁଣା ସଂପର୍କ',
     },
     bottomTabs: {
       RootMainTabStack: '{{firstName}}ଙ୍କ Coldtivate',
@@ -165,6 +166,7 @@ export default {
     update: 'ଅଦ୍ୟତନ କରନ୍ତୁ |',
     clearAll: 'ସବୁ ମିଛାନ୍ତୁ',
     apply: 'ଲାଗୁ କରନ୍ତୁ',
+    assign: 'ନିୟୋଜିତ କରନ୍ତୁ',
   },
   components: {
     datePicker: {
@@ -675,6 +677,50 @@ export default {
         deleteContactMessage: 'ଆପଣ ବାସ୍ତବରେ ଏହି ସଂପର୍କକୁ ମିଳାଇବାକୁ ଚାହାଁଛନ୍ତି କି?',
         noAvailableContacts: 'ଏହି ବିଶେଷ କୁଲିଂ ଇନିଟ୍‌ର ପାଇଁ କୌଣସି ଉପଲବ୍ଧ ସଂପର୍କ ନାହିଁ।',
         contactedAddedSuccessfully: 'ସଂପର୍କ ସଫଳତାର ସହିତ ଯୋଗ ହୋଇଛି।',
+        contactStatusChangedSuccessfully: 'ସଂପର୍କ ଅବସ୍ଥା ସଫଳତାର ସହ ପରିବର୍ତ୍ତିତ',
+        contactUpdatedSuccessfully: 'ସଂପର୍କ ସଫଳତାର ସହ ସଂଶୋଧିତ',
+        show: 'ଦେଖାନ୍ତୁ',
+        hide: 'ଲୁଚାନ୍ତୁ',
+        unassigned: 'ନିୟୋଜିତ ହୋଇନାହିଁ',
+        roomContacts: 'କକ୍ଷ ସଂପର୍କ',
+        rooms: 'କକ୍ଷ',
+        addContact: 'ସଂପର୍କ ଯୋଡନ୍ତୁ',
+        editContact: 'ସଂପର୍କ ସମ୍ପାଦନ କରନ୍ତୁ',
+        selectRoom: 'କକ୍ଷ ବାଛନ୍ତୁ',
+        legacyContactsModal: {
+          title: 'କକ୍ଷ-ନିର୍ଦ୍ଦିଷ୍ଟ ସଂପର୍କ ସଂଶୋଧନ',
+          description:
+            'ଆମେ ଡିଲିଭେରି ସଂପର୍କ ବ୍ୟବସ୍ଥାକୁ କକ୍ଷ-ନିର୍ଦ୍ଦିଷ୍ଟ କରିଛୁ। ଆପଣଙ୍କ ପାଖରେ {{count}} ଅବସ୍ଥାନାନ୍ତର ସଂପର୍କ ଅଛି ଯାହାକୁ କକ୍ଷରେ ନିୟୋଜିତ କରିବାକୁ ପଡିବ।',
+          descriptionPrefix: 'ଆମେ ଡିଲିଭେରି ସଂପର୍କକୁ କକ୍ଷ ନିର୍ଦ୍ଦିଷ୍ଟ କରିଛୁ। ',
+          descriptionBold: 'ଆପଣଙ୍କ ପାଖରେ {{count}} ପୁରୁଣା ସଂପର୍କ ଅଛି',
+          descriptionSuffix: ' ଯାହାକୁ କକ୍ଷରେ ନିୟୋଜିତ କରିବାକୁ ପଡିବ।',
+          important: 'ଗୁରୁତ୍ତ୍ୱପୂର୍ଣ୍ଣ',
+          importantMessage:
+            'ଏହା ଆପଣଙ୍କ କମ୍ପାନୀର ପ୍ରତ୍ୟେକ କକ୍ଷ ପାଇଁ ସଠିକ୍ ଡିଲିଭେରି ସୂଚନା ସୁନିଶ୍ଚିତ କରେ।',
+          remindMeLater: 'ପରେ ସ୍ମରଣ କରାନ୍ତୁ',
+          assignNow: 'ଏବେ ନିୟୋଜିତ କରନ୍ତୁ',
+        },
+        legacyContactsBanner: {
+          title: '{{count}} ଅନିୟୋଜିତ ପୁରୁଣା ସଂପର୍କ',
+          title_one: '{{count}} ଅନିୟୋଜିତ ପୁରୁଣା ସଂପର୍କ',
+          title_other: '{{count}} ଅନିୟୋଜିତ ପୁରୁଣା ସଂପର୍କ',
+          description: 'ଏହି ସଂପର୍କଗୁଡିକୁ ବିଶିଷ୍ଟ କକ୍ଷରେ ନିୟୋଜିତ କରିବାକୁ ହେବ।',
+          link: 'ସଂପର୍କଗୁଡିକୁ କକ୍ଷରେ ନିୟୋଜିତ କରନ୍ତୁ →',
+        },
+        legacyContactsScreen: {
+          warningTitle: '{{count}} ସଂପର୍କକୁ କକ୍ଷରେ ନିୟୋଜିତ କରନ୍ତୁ',
+          warningTitle_one: '{{count}} ସଂପର୍କକୁ କକ୍ଷରେ ନିୟୋଜିତ କରନ୍ତୁ',
+          warningTitle_other: '{{count}} ସଂପର୍କକୁ କକ୍ଷରେ ନିୟୋଜିତ କରନ୍ତୁ',
+          warningMessage:
+            'ପ୍ରତ୍ୟେକ ସଂପର୍କ ପାଇଁ କକ୍ଷ ବାଛନ୍ତୁ, ତାପରେ "Assign Selected" କିମ୍ବା ଏକେକ ନିୟୋଜନ କରନ୍ତୁ।',
+          assignToRoom: 'କକ୍ଷକୁ ନିୟୋଜନ କରନ୍ତୁ',
+          allRooms: 'ସମସ୍ତ କକ୍ଷ',
+          contactAssignedSuccessfully: 'ସଂପର୍କ ସଫଳତାର ସହ ନିୟୋଜିତ',
+          contactDeletedSuccessfully: 'ସଂପର୍କ ସଫଳତାର ସହ ବିଲୋପିତ',
+          allAssignedMessage: 'ସମସ୍ତ ପୁରୁଣା ସଂପର୍କକୁ ନିୟୋଜିତ କରାଯାଇଛି!',
+          roomLocation: 'କକ୍ଷ ସ୍ଥାନ',
+          assignSelected: 'ଚୟିତକୁ ନିୟୋଜନ',
+        },
       },
       Location: {
         emptyState: 'ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ସ୍ଥାନ ଯୋଗ କରାଯାଇନି। ଯୋଗ କରିବାକୁ + ସଙ୍କେତକୁ କ୍ଲିକ୍ କରନ୍ତୁ।',
@@ -1359,6 +1405,9 @@ export default {
       keepInStorageInfo: 'ଅପଣ ଅର୍ଡର ଉଠାଇବା ବେଳେ ଇମେ ଘର ଶୁଳ୍କ ଲାଗିବ।',
       orderOverviewSubtitle:
         'ଆପଣ "ମୋ ଅର୍ଡରଗୁଡିକ" ଟ୍ୟାବରେ, "ବଜାର" ସ୍କ୍ରିନ୍ ମାଧ୍ୟମରେ ଏହି ସୂଚନାକୁ ପୁଣି ଦେଖିପାରିବେ।',
+      legacyContactsWarning:
+        '{{companyName}} ଏହି କକ୍ଷ ପାଇଁ ଡିଲିଭେରି ସଂପର୍କ ନିୟୋଜନ କରିନାହାନ୍ତି। ଏହା {{companyName}} ର ସମସ୍ତ ଡିଲିଭେରି ସଂପର୍କର ତାଲିକା।',
+      contacts: 'ସଂପର୍କ',
     },
     Analytics: {
       emptyState: 'ଦେଖାଇବାକୁ କୌଣସି ତଥ୍ୟ ନାହିଁ',
