@@ -1,5 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Platform, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
@@ -19,10 +19,10 @@ import { getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { useTranslationUtils } from '#i18n/utils';
 import { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
-import ColdtivateService from '#services/ColdtivateService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
+import { useDashboardStore } from '#stores/dashboard';
 import { CoolingUnit } from '#types/global';
 
 import DeliveryInformationBottomSheet from './components/DeliveryInformationBottomSheet';
@@ -39,10 +39,14 @@ const HORIZONTAL_SPACING = Platform.select({
 
 function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
   const { t } = useTranslationUtils();
-  const [fetchCart, coolingUnits] = useCartStore((store) => [
-    store.fetchCart,
-    store.allCoolingUnits,
-  ]);
+  const [fetchCart, coolingUnits, isCoolingUnitsLoading, coolingUnitsError, fetchCoolingUnits] =
+    useCartStore((store) => [
+      store.fetchCart,
+      store.allCoolingUnits,
+      store.isCoolingUnitsLoading,
+      store.coolingUnitsError,
+      store.fetchCoolingUnits,
+    ]);
 
   const { data: order, isLoading } = useApiCall(
     'getOrder',
@@ -51,30 +55,40 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
     { defaultData: undefined }
   );
 
-  const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
-    'getAllCrops',
-    ColdtivateService.getAllCrops,
-    undefined,
-    { defaultData: [] }
-  );
+  useEffect(() => {
+    if (!coolingUnits && !isCoolingUnitsLoading) {
+      fetchCoolingUnits();
+    }
+  }, [coolingUnits, isCoolingUnitsLoading, fetchCoolingUnits]);
 
-  const crops = useTranslatedCrops(cropsResult);
+  const cropsResult = useDashboardStore((store) => store.allCrops);
+
+  const crops = useTranslatedCrops(cropsResult ?? []);
 
   const orderDataByCoolingUnit = useMemo(() => {
+    if (!coolingUnits?.length) return [];
     return groupCartItemsByCoolingUnitAndCrop(order?.items, coolingUnits);
   }, [order?.items, coolingUnits]);
 
-  const unitsMap = useMemo(
-    () => new Map(coolingUnits?.map((coolingUnit) => [coolingUnit.id, coolingUnit])),
-    [coolingUnits]
-  );
+  const unitsMap = useMemo(() => {
+    if (!coolingUnits?.length) return new Map();
+    return new Map(coolingUnits.map((coolingUnit) => [coolingUnit.id, coolingUnit]));
+  }, [coolingUnits]);
 
   const cropsMap = useMemo(() => new Map(crops?.map((crop) => [crop.id, crop])), [crops]);
 
-  if (isLoading || isLoadingCrops || !order.items?.length) {
+  if (isLoading || isCoolingUnitsLoading) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
+
+  if (coolingUnitsError || !coolingUnits?.length || !order.items?.length) {
+    return (
+      <View tw="flex-1 items-center justify-center mt-4 px-6 space-y-4">
+        <GenericError retry={fetchCoolingUnits} />
       </View>
     );
   }

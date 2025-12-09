@@ -17,7 +17,7 @@ export function groupCartItemsByCoolingUnitAndCrop(
   items: CartItem[] | undefined,
   coolingUnits: CoolingUnit[] | undefined
 ): GroupedCartItem[] {
-  if (!items || !coolingUnits) return [];
+  if (!items?.length || !coolingUnits?.length) return [];
 
   const groupedByCoolingUnit = items.reduce(
     (acc, item) => {
