@@ -1,5 +1,5 @@
 import { useIsFocused } from '@react-navigation/native';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { GestureResponderEvent, Platform, TouchableOpacity, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
@@ -21,12 +21,11 @@ import { getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
 import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
-import ColdtivateService from '#services/ColdtivateService';
-import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import useCartStore from '#stores/shoppingCart';
+import { useDashboardStore } from '#stores/dashboard';
 import { EPickUpMethod, EPricingType } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
 import { cn } from '#ui/lib/cn';
@@ -54,22 +53,33 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   const user = useAuthStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
 
-  const [cartData, coolingUnits, recomputeCart] = useCartStore((store) => [
+  const [
+    cartData,
+    coolingUnits,
+    isCoolingUnitsLoading,
+    coolingUnitsError,
+    fetchCoolingUnits,
+    recomputeCart,
+  ] = useCartStore((store) => [
     store.cartData,
     store.allCoolingUnits,
+    store.isCoolingUnitsLoading,
+    store.coolingUnitsError,
+    store.fetchCoolingUnits,
     store.recomputeCart,
   ]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { data: cropsResult } = useApiCall(
-    'getAllCrops',
-    ColdtivateService.getAllCrops,
-    undefined,
-    { defaultData: [] }
-  );
+  const cropsResult = useDashboardStore((store) => store.allCrops);
 
-  const crops = useTranslatedCrops(cropsResult);
+  const crops = useTranslatedCrops(cropsResult ?? []);
+
+  useEffect(() => {
+    if (!coolingUnits && !isCoolingUnitsLoading) {
+      fetchCoolingUnits();
+    }
+  }, [coolingUnits, isCoolingUnitsLoading, fetchCoolingUnits]);
 
   const onPay = useCallback(
     async (evt: GestureResponderEvent) => {
@@ -107,20 +117,29 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
   );
 
   const cartDataByCoolingUnit = useMemo(() => {
+    if (!coolingUnits?.length) return [];
     return groupCartItemsByCoolingUnitAndCrop(cartData?.items, coolingUnits);
   }, [cartData?.items, coolingUnits]);
 
-  const unitsMap = useMemo(
-    () => new Map(coolingUnits?.map((coolingUnit) => [coolingUnit.id, coolingUnit])),
-    [coolingUnits]
-  );
+  const unitsMap = useMemo(() => {
+    if (!coolingUnits?.length) return new Map();
+    return new Map(coolingUnits.map((coolingUnit) => [coolingUnit.id, coolingUnit]));
+  }, [coolingUnits]);
 
   const cropsMap = useMemo(() => new Map(crops?.map((crop) => [crop.id, crop])), [crops]);
 
-  if (!cartData) {
+  if (!cartData || isCoolingUnitsLoading) {
     return (
       <View tw="flex-1 items-center justify-center mt-4">
         <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
+      </View>
+    );
+  }
+
+  if (coolingUnitsError || !coolingUnits?.length) {
+    return (
+      <View tw="flex-1 items-center justify-center mt-4 px-6 space-y-4">
+        <GenericError retry={fetchCoolingUnits} />
       </View>
     );
   }

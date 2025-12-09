@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { type ReactElement, useEffect } from 'react';
 import { ToastOptions } from 'react-native-toast-notifications';
 import { create } from 'zustand';
 
 import { CustomToastOptions } from '#common/InAppNotifications';
-import ColdtivateService from '#services/ColdtivateService';
+import DataloaderService from '#services/DataloaderService';
 import MarketplaceService from '#services/MarketplaceService';
 import { GetCartResponse } from '#types/api.responses';
 import { CoolingUnit } from '#types/global';
@@ -13,10 +13,10 @@ import reportCrash from '#ui/lib/reportCrash';
 export const CART_MISMATCH_ERROR = 'Cart mismatch error';
 
 type Toast = {
-  show: (message: string | JSX.Element, opts?: CustomToastOptions) => string;
+  show: (message: string | ReactElement, opts?: CustomToastOptions) => string;
   update: (
     id: string,
-    message: string | JSX.Element,
+    message: string | ReactElement,
     toastOptions?: ToastOptions | undefined
   ) => void;
   hide: (id: string) => void;
@@ -28,7 +28,9 @@ interface CartStoreState {
   cartData: GetCartResponse['cart'] | undefined;
   allCoolingUnits: CoolingUnit[] | undefined;
   isLoading: boolean;
+  isCoolingUnitsLoading: boolean;
   error: Error | null;
+  coolingUnitsError: Error | null;
 
   fetchCart: () => Promise<void>;
   recomputeCart: (toast: Toast, t: Translator) => Promise<void>;
@@ -41,7 +43,9 @@ const useCartStore = create<CartStoreState>((set, get) => ({
   cartData: undefined,
   allCoolingUnits: undefined,
   isLoading: false,
+  isCoolingUnitsLoading: false,
   error: null,
+  coolingUnitsError: null,
 
   fetchCart: async () => {
     set({ isLoading: true, error: null });
@@ -72,28 +76,38 @@ const useCartStore = create<CartStoreState>((set, get) => ({
   },
 
   fetchCoolingUnits: async () => {
-    set({ isLoading: true, error: null });
+    set({ isCoolingUnitsLoading: true, coolingUnitsError: null });
     try {
-      const coolingUnits = await ColdtivateService.getCoolingUnits({});
-      set({ allCoolingUnits: coolingUnits, isLoading: false });
+      const coolingUnits = await DataloaderService.coolingUnits.getAll();
+      set({ allCoolingUnits: coolingUnits ?? [], isCoolingUnitsLoading: false });
     } catch (err) {
-      set({ error: err as Error, isLoading: false });
+      set({ coolingUnitsError: err as Error, isCoolingUnitsLoading: false });
       reportCrash(err as Error);
     }
   },
 
   setCart: (cartData: GetCartResponse['cart'] | undefined) => set({ cartData }),
   reset: () =>
-    set({ cartData: undefined, allCoolingUnits: undefined, isLoading: false, error: null }),
+    set({
+      cartData: undefined,
+      allCoolingUnits: undefined,
+      isLoading: false,
+      isCoolingUnitsLoading: false,
+      error: null,
+      coolingUnitsError: null,
+    }),
 }));
 
 export const useCartInformation = (isAuthenticated: boolean) => {
-  const { isLoading, fetchCart, fetchCoolingUnits, cartData } = useCartStore((state) => ({
-    isLoading: state.isLoading,
-    fetchCart: state.fetchCart,
-    fetchCoolingUnits: state.fetchCoolingUnits,
-    cartData: state.cartData,
-  }));
+  const { isLoading, isCoolingUnitsLoading, fetchCart, fetchCoolingUnits, cartData } = useCartStore(
+    (state) => ({
+      isLoading: state.isLoading,
+      isCoolingUnitsLoading: state.isCoolingUnitsLoading,
+      fetchCart: state.fetchCart,
+      fetchCoolingUnits: state.fetchCoolingUnits,
+      cartData: state.cartData,
+    })
+  );
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -101,7 +115,7 @@ export const useCartInformation = (isAuthenticated: boolean) => {
     fetchCoolingUnits();
   }, [isAuthenticated]);
 
-  return { isLoading, cartData };
+  return { isLoading: isLoading || isCoolingUnitsLoading, cartData };
 };
 
 export default useCartStore;

@@ -1,7 +1,7 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import truncate from 'lodash/truncate';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { FlatList, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
 import { List } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from 'tailwindcss/colors';
@@ -104,6 +104,7 @@ export default function DeliveryInformationBottomSheet() {
     const source = datum?.orderId ? orderDeliveryContacts : cartDeliveryContacts;
     if (!source?.length) return { filteredContacts: [], isShowingLegacyContacts: false };
     const unitId = datum?.coolingUnitId;
+    const companyId = datum?.companyId;
     if (!unitId) return { filteredContacts: source, isShowingLegacyContacts: false };
 
     const unitContacts = source.filter((c) => {
@@ -127,14 +128,20 @@ export default function DeliveryInformationBottomSheet() {
           : Array.isArray(c.coolingUnitId)
             ? c.coolingUnitId
             : [c.coolingUnitId];
-      return ids.length === 0;
+      return ids.length === 0 && c.companyId === companyId;
     });
 
     return {
       filteredContacts: legacyContactsOnly,
       isShowingLegacyContacts: legacyContactsOnly.length > 0,
     };
-  }, [cartDeliveryContacts, datum?.coolingUnitId, datum?.orderId, orderDeliveryContacts]);
+  }, [
+    cartDeliveryContacts,
+    datum?.coolingUnitId,
+    datum?.companyId,
+    datum?.orderId,
+    orderDeliveryContacts,
+  ]);
 
   useAppEventListener<[{ coolingUnitId: number; orderId?: number; companyId: number }]>(
     APP_EVENTS.DISPATCH_SHOPPING_CART_DELIVERY_INFORMATION,
@@ -172,13 +179,14 @@ export default function DeliveryInformationBottomSheet() {
         <FlatList
           data={filteredContacts ?? []}
           keyExtractor={(_, itemIdx) => `delivery-information-list-item-#${itemIdx}`}
-          scrollEnabled={false}
+          scrollEnabled={true}
+          style={{ maxHeight: Dimensions.get('window').height * 0.5 }}
           ListEmptyComponent={
             <View tw="py-4 px-0">
               <Text tw="text-lg">{t('Dashboard.Management.Delivery.noAvailableContacts')}</Text>
             </View>
           }
-          showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={true}
           renderItem={({ item }) => (
             <View tw="w-full border border-solid border-zinc-300 rounded-xl py-2 px-3 my-2">
               <_Field

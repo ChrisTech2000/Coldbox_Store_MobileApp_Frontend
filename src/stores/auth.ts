@@ -14,6 +14,8 @@ import AuthService from '#services/AuthService';
 import { useInterval } from '#ui/hooks/useInterval';
 import storage from './lib/storage';
 import { useManagementStore } from './management';
+import DataloaderService from '#services/DataloaderService';
+import useCartStore from './shoppingCart';
 
 export type JwtPayload = {
   exp: number;
@@ -89,6 +91,12 @@ export const useAuthStore = create(
 
         // Reset management store (company data and UI flags)
         useManagementStore.getState().reset();
+
+        // Clear cart store (cart data and cooling units)
+        useCartStore.getState().reset();
+
+        // Clear DataloaderService caches (users, companies, cooling units, etc.)
+        DataloaderService.clearAllCaches();
 
         // Then notify backend to blacklist the token (fire and forget)
         // Even if this fails, the local session is already cleared
