@@ -1,7 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Dimensions, Pressable, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Dimensions,
+  Pressable,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider, Icon, Switch } from 'react-native-paper';
@@ -413,7 +419,11 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
           </View>
         </View>
 
-        <View tw="flex flex-row w-full justify-between items-center mt-4">
+        <TouchableOpacity
+          activeOpacity={0.7}
+          tw="flex flex-row w-full justify-between items-center mt-4"
+          onPress={() => setIsPaymentTypeModalOpen(true)}
+        >
           <View tw="flex flex-row items-center space-x-1">
             <Text variant="TextMedium" tw="text-lg">
               {`${t('Dashboard.CrateManagement.CheckOut.paymentType.label')}`}
@@ -447,7 +457,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
               }
             }}
           />
-        </View>
+        </TouchableOpacity>
         <Divider tw="bg-gray-400 my-2" />
         <View tw="flex flex-row w-full justify-between items-center mb-4">
           <Text variant="TextMedium" tw="text-lg">

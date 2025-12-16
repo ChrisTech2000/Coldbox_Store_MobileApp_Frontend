@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
-import { FlatList, View } from 'react-native';
+import { FlatList, TouchableOpacity, View } from 'react-native';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 
 import * as BottomSheetUI from '#ui/components/BottomSheet';
@@ -41,6 +41,7 @@ export default function ContactBottomSheet({ coolingUnits }: Props) {
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
   const [roomsDialogOpen, setRoomsDialogOpen] = useState<boolean>(false);
   const [roomSearchQuery, setRoomSearchQuery] = useState<string>('');
+  const [roomsDialogInitialSelection, setRoomsDialogInitialSelection] = useState<number[]>([]);
 
   const {
     control,
@@ -253,6 +254,9 @@ export default function ContactBottomSheet({ coolingUnits }: Props) {
                   isOpen={roomsDialogOpen}
                   onOpenChange={(open) => {
                     setRoomsDialogOpen(open);
+                    if (open) {
+                      setRoomsDialogInitialSelection(selectedIds);
+                    }
                     if (!open) setRoomSearchQuery('');
                   }}
                 >
@@ -284,7 +288,11 @@ export default function ContactBottomSheet({ coolingUnits }: Props) {
                         <Button
                           mode="text"
                           uppercase
-                          onPress={() => setRoomsDialogOpen(false)}
+                          onPress={() => {
+                            onChange(roomsDialogInitialSelection);
+                            setRoomsDialogOpen(false);
+                            setRoomSearchQuery('');
+                          }}
                           labelStyle="text-sm text-teal-700"
                         >
                           {t('actions.cancel')}
@@ -318,22 +326,27 @@ export default function ContactBottomSheet({ coolingUnits }: Props) {
                       keyExtractor={(item) => `room-select-${item.id}`}
                       renderItem={({ item }) => {
                         const isChecked = selectedIds.includes(item.id);
+                        const toggle = () => {
+                          if (isChecked) {
+                            onChange(selectedIds.filter((id) => id !== item.id));
+                          } else {
+                            onChange([...selectedIds, item.id]);
+                          }
+                        };
                         return (
-                          <View tw="flex flex-row items-center justify-between px-6 py-2 border-b border-gray-200">
+                          <TouchableOpacity
+                            activeOpacity={0.7}
+                            onPress={toggle}
+                            tw="flex flex-row items-center justify-between px-6 py-2 border-b border-gray-200"
+                          >
                             <Text tw="text-base" numberOfLines={2}>
                               {item.name}
                             </Text>
                             <Checkbox
                               status={isChecked ? 'checked' : 'unchecked'}
-                              onPress={() => {
-                                if (isChecked) {
-                                  onChange(selectedIds.filter((id) => id !== item.id));
-                                } else {
-                                  onChange([...selectedIds, item.id]);
-                                }
-                              }}
+                              onPress={toggle}
                             />
-                          </View>
+                          </TouchableOpacity>
                         );
                       }}
                     />

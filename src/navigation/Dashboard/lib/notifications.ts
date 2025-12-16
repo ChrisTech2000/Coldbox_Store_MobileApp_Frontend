@@ -75,7 +75,7 @@ class NotificationManager {
       const isFarmer = this._userRole === ERoles.COOLING_USER;
       const crates = item.crates || {};
       const commonParams = {
-        farmer: crates.farmer ?? '',
+        farmer: (crates.farmer ?? '').trim(),
         crop: find(lookupMap, {
           name: crates.crop ?? '',
           country: options.country,

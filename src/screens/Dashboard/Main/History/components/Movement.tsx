@@ -96,7 +96,9 @@ export function Movement({
       })
     );
 
-    const sorted = [...translatedCrops].sort((a, b) => a.localeCompare(b));
+    const sorted = [...translatedCrops].sort((a, b) =>
+      a.localeCompare(b, locale, { sensitivity: 'base' })
+    );
 
     if (sorted.length <= 2) return sorted.join(', ');
 

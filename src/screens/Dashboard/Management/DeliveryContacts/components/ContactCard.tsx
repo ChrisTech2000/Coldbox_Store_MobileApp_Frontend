@@ -69,13 +69,16 @@ export default function ContactCard({
         onPress={() => roomNames.length && setRoomMenuVisible(true)}
         disabled={roomNames.length <= 2}
       >
-        <View tw="flex flex-row items-center justify-between pt-3">
-          <Text tw="text-sm text-zinc-900">{translations.rooms}</Text>
-          <View tw="flex-row items-center space-x-2 max-w-[240px] justify-end">
+        <View tw="flex flex-row items-center justify-between pt-3 space-x-3">
+          <Text tw="text-sm text-zinc-900 flex-shrink-0">{translations.rooms}</Text>
+          <View tw="flex-1 flex-row items-center space-x-2 justify-end max-w-[260px]">
             <Text
               numberOfLines={1}
               ellipsizeMode="tail"
-              tw={cn('text-sm font-medium text-gray-500', isInactive && 'text-gray-400')}
+              tw={cn(
+                'text-sm font-medium text-gray-500 text-right flex-1',
+                isInactive && 'text-gray-400'
+              )}
             >
               {roomNames.length ? preview : unassignedLabel}
             </Text>

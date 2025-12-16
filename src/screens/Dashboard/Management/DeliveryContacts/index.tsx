@@ -1,17 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FlashList } from '@shopify/flash-list';
+import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useMemo, useState } from 'react';
-import type { ViewStyle } from 'react-native';
-import { FlatList, Platform, TouchableOpacity, View } from 'react-native';
-import { ActivityIndicator, Dialog, Divider, Portal, RadioButton } from 'react-native-paper';
+import { Platform, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Dialog, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
-import { RadioButtonItem } from '#ui/components/RadioButton';
-import { Select } from '#ui/components/Select';
+import MultipleSelectWithStore, {
+  createMultipleSelectStore,
+} from '#ui/components/MultipleSelectWithStore';
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';
 import { APP_EVENTS, emitter, useAppEventListener } from '#ui/lib/emitter';
@@ -38,6 +39,8 @@ const HORIZONTAL_SPACING = Platform.select({
 });
 
 type Contact = GetDeliveryContactsResponse[number];
+type CoolingUnitOption = { id: number; name: string };
+const useCoolingUnitFilterStore = createMultipleSelectStore<CoolingUnitOption>();
 
 function DeliveryContacts() {
   const toast = InAppNotifications.useToast();
@@ -47,7 +50,6 @@ function DeliveryContacts() {
 
   const [contactToDelete, setContactToDelete] = useState<number | null>(null);
   const [processingContactIds, setProcessingContactIds] = useState<Set<number>>(new Set());
-  const [selectedCoolingUnit, setSelectedCoolingUnit] = useState<number | null>(null);
   const [roomMenuVisible, setRoomMenuVisible] = useState<boolean>(false);
 
   const { data: legacyContacts, isLoading: isLoadingLegacy } = useApiCall(
@@ -71,13 +73,8 @@ function DeliveryContacts() {
   );
 
   const { data, isLoading, refetch } = useApiCall(
-    `listDeliveryContacts-${selectedCoolingUnit || 'all'}`,
-    () =>
-      MarketplaceService.listDeliveryContacts(
-        company!.id,
-        selectedCoolingUnit || undefined,
-        undefined
-      ),
+    'listDeliveryContacts',
+    () => MarketplaceService.listDeliveryContacts(company!.id, undefined, undefined),
     undefined,
     {
       skip: !company?.id,
@@ -129,21 +126,61 @@ function DeliveryContacts() {
     emitter.emit(APP_EVENTS.DISPATCH_DELIVERY_CONTACT_BOTTOM_SHEET, contact);
   }, []);
 
-  const getCoolingUnitName = useCallback(
-    (coolingUnitId: number | null) => {
-      if (!coolingUnitId) return t('Dashboard.Management.Delivery.legacyContactsScreen.allRooms');
-      const unit = coolingUnits?.find((u) => u.id === coolingUnitId);
-      return unit?.name || `Room ${coolingUnitId}`;
-    },
-    [coolingUnits, t]
+  const coolingUnitOptions = useMemo(
+    () => (coolingUnits ?? []).map((unit) => ({ id: unit.id, name: unit.name })),
+    [coolingUnits]
   );
 
-  const scrollContentStyle: ViewStyle = useMemo(() => {
-    if (!data?.length) {
-      return { flex: 1, justifyContent: 'center', alignItems: 'center', paddingBottom: 32 };
+  const selectedCoolingUnits = useCoolingUnitFilterStore((store) => store.selectedItems);
+  const resetCoolingUnitSelection = useCoolingUnitFilterStore((store) => store.reset);
+  const selectedCoolingUnitIds = useMemo(
+    () => selectedCoolingUnits.map((unit) => unit.id),
+    [selectedCoolingUnits]
+  );
+
+  const filteredContacts = useMemo(() => {
+    if (!data) return [];
+    if (
+      !selectedCoolingUnitIds.length ||
+      selectedCoolingUnitIds.length === coolingUnitOptions.length
+    ) {
+      return data;
     }
-    return { paddingBottom: 32 };
-  }, [data?.length]);
+
+    return data.filter((contact) => {
+      if (contact.coolingUnitId == null) return false;
+      const ids = Array.isArray(contact.coolingUnitId)
+        ? contact.coolingUnitId
+        : [contact.coolingUnitId];
+      return ids.some((id) => selectedCoolingUnitIds.includes(id));
+    });
+  }, [data, selectedCoolingUnitIds, coolingUnitOptions.length]);
+
+  const scrollContentStyle = useMemo(
+    () => (!filteredContacts?.length ? 'flex-1 justify-center items-center pb-8' : 'pb-8'),
+    [filteredContacts?.length]
+  );
+
+  const coolingUnitDisplayValue = useMemo(() => {
+    if (
+      !selectedCoolingUnitIds.length ||
+      selectedCoolingUnitIds.length === coolingUnitOptions.length
+    ) {
+      return t('Dashboard.Management.Delivery.legacyContactsScreen.allRooms');
+    }
+    return selectedCoolingUnits.map((unit) => unit.name).join(', ');
+  }, [selectedCoolingUnitIds, coolingUnitOptions.length, selectedCoolingUnits, t]);
+
+  useFocusEffect(
+    useCallback(() => {
+      resetCoolingUnitSelection();
+      setRoomMenuVisible(false);
+      return () => {
+        resetCoolingUnitSelection();
+        setRoomMenuVisible(false);
+      };
+    }, [resetCoolingUnitSelection])
+  );
 
   if (isLoading || isLoadingCoolingUnits) {
     return (
@@ -190,59 +227,27 @@ function DeliveryContacts() {
 
         <View tw="flex-1">
           <View tw="pt-3 pb-2">
-            <Select variant="lg" isOpen={roomMenuVisible} onOpenChange={setRoomMenuVisible}>
-              <Select.Touchable
-                label={t('Dashboard.Management.Delivery.roomContacts')}
-                displayValue={
-                  selectedCoolingUnit
-                    ? getCoolingUnitName(selectedCoolingUnit)
-                    : t('Dashboard.Management.Delivery.legacyContactsScreen.allRooms')
-                }
-              />
-              <Select.Dialog
-                enableScroll={false}
-                header={t('Dashboard.Management.Delivery.roomContacts')}
-              >
-                <RadioButton.Group
-                  value={selectedCoolingUnit?.toString() ?? 'all'}
-                  onValueChange={(value) => {
-                    setSelectedCoolingUnit(value === 'all' ? null : Number(value));
-                    setRoomMenuVisible(false);
-                  }}
-                >
-                  <FlatList
-                    scrollEnabled={false}
-                    showsVerticalScrollIndicator={false}
-                    data={[
-                      {
-                        id: 'all',
-                        name: t('Dashboard.Management.Delivery.legacyContactsScreen.allRooms'),
-                      },
-                      ...(coolingUnits || []),
-                    ]}
-                    keyExtractor={(item) => `room-filter-${item.id}`}
-                    renderItem={({ item }) => (
-                      <RadioButtonItem
-                        label={item.name}
-                        value={item.id.toString()}
-                        tw="flex flex-row m-0 px-0 py-2 px-6 w-full"
-                      />
-                    )}
-                    ItemSeparatorComponent={Divider}
-                  />
-                </RadioButton.Group>
-              </Select.Dialog>
-            </Select>
+            <MultipleSelectWithStore
+              useSelectStore={useCoolingUnitFilterStore}
+              datums={coolingUnitOptions}
+              isModalVisible={roomMenuVisible}
+              setIsModalVisible={setRoomMenuVisible}
+              label={t('Dashboard.Management.Delivery.roomContacts')}
+              modalHeader={t('Dashboard.Management.Delivery.roomContacts')}
+              itemName={(item) => item.name}
+              autoSelectAll
+              divider
+              displayValue={coolingUnitDisplayValue}
+            />
           </View>
 
           <KeyboardAwareScrollView
             tw={cn('flex-1', HORIZONTAL_SPACING)}
-            // @ts-expect-error - NativeWind type augmentation issue with ViewStyle
             contentContainerStyle={scrollContentStyle}
             keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
             showsVerticalScrollIndicator={false}
           >
-            {!data?.length ? (
+            {!filteredContacts?.length ? (
               <View tw="items-center space-y-3.5">
                 <View tw="h-36 w-36 items-center justify-center rounded-full bg-zinc-100">
                   <Icon name="phone-outline" size={60} color={paperTheme.colors.primary} />
@@ -251,7 +256,7 @@ function DeliveryContacts() {
               </View>
             ) : (
               <FlashList
-                data={data}
+                data={filteredContacts}
                 extraData={processingContactIds}
                 keyExtractor={(item) => `contact-${item.id}`}
                 showsVerticalScrollIndicator={false}

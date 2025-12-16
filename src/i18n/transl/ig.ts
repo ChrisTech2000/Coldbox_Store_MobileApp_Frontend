@@ -1191,7 +1191,7 @@ export default {
         errorMessage: 'Imelite ndebanye aha adịghị. Biko nwaa ọzọ.',
       },
       survey: {
-        fillMessage: 'Biko zuruoke nyocha onye ọrụ jụrụ oyi (nnyocha ntọala) maka {{crop}}!',
+        fillMessage: 'Biko zuruoke <0>nyocha onye ọrụ jụrụ oyi</0> (nnyocha ntọala) maka {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'Kedu ihe kowatara gi ofuma?',
           occupationFarmer: 'Onye ọrụ ugbo',

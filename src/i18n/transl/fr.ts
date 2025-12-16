@@ -1218,7 +1218,7 @@ export default {
       },
       survey: {
         fillMessage:
-          "Veuillez remplir l'enquête utilisateur de la chambre froide (enquête de référence) pour {{crop}}!",
+          "Veuillez remplir <0>l'enquête utilisateur de la chambre froide</0> (enquête de référence) pour {{crop}}!",
         baseSurvey: {
           occupationQuestion: 'Quelle est la meilleure description de votre occupation?',
           occupationFarmer: 'Un agriculteur',

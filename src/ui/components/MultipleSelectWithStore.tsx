@@ -37,6 +37,7 @@ interface SelectItemProps<T> {
   autoSelect?: boolean;
   autoSelectAll?: boolean;
   datums: Array<T>;
+  displayValue?: string;
   disableOnEmpty?: boolean;
   divider?: boolean;
   emptyMessage?: string;
@@ -61,6 +62,7 @@ export default function MultipleSelectWithStore<T>(props: SelectItemProps<T>) {
     label = '',
     modalHeader = '',
     enableScroll = true,
+    displayValue,
     ...rest
   } = props;
 
@@ -164,7 +166,7 @@ export default function MultipleSelectWithStore<T>(props: SelectItemProps<T>) {
           onOpenChange={setIsModalVisible}
           onDismiss={handleModalClose}
         >
-          <Select.Touchable label={label} />
+          <Select.Touchable label={label} displayValue={displayValue} />
           <Select.Dialog
             enableScroll={enableScroll}
             header={modalHeader}

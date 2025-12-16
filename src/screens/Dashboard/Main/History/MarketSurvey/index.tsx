@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Divider, Icon } from 'react-native-paper';
+import { Trans } from 'react-i18next';
 import colors from 'tailwindcss/colors';
 
 import Danger from '#assets/icons/danger.svg';
@@ -138,9 +139,15 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
                 >
                   <Danger tw="w-7 h-7 flex-shrink-0" />
                   <Text variant="TextMedium" tw="flex-1 flex-wrap">
-                    {t('Dashboard.History.survey.fillMessage', {
-                      crop: item.name || getDefaultCropValues(t).name,
-                    })}
+                    <Trans
+                      i18nKey="Dashboard.History.survey.fillMessage"
+                      values={{ crop: item.name || getDefaultCropValues(t).name }}
+                      components={[
+                        <Text key="0" tw="text-blue-500">
+                          {''}
+                        </Text>,
+                      ]}
+                    />
                   </Text>
                 </TouchableOpacity>
                 <Divider tw="w-full bg-gray-400 mt-1" />

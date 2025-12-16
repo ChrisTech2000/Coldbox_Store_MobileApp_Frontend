@@ -1208,7 +1208,7 @@ export default {
       },
       survey: {
         fillMessage:
-          'Da fatan za a cika binciken mai amfani da sanyaya (binciken tushe) don {{crop}}!',
+          'Da fatan za a cika <0>binciken mai amfani da sanyaya</0> (binciken tushe) don {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'Me yafi bayyana Ka/Ki?',
           occupationFarmer: 'Manomi',
