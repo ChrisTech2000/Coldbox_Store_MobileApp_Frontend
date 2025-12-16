@@ -83,6 +83,19 @@ export default function ProduceDetailsStack() {
             <Appbar.BackAction
               onPress={() => {
                 // eslint-disable-next-line react/prop-types
+                const parentNavigation = props.navigation.getParent();
+                const tabNavigation = parentNavigation?.getParent?.();
+
+                if (routeName === 'Root') {
+                  if (tabNavigation && tabNavigation.navigate) {
+                    tabNavigation.navigate('Dashboard');
+                  }
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  parentNavigation?.popToTop();
+                  return;
+                }
+                // eslint-disable-next-line react/prop-types
                 props.navigation.goBack();
               }}
               size={22}

@@ -81,9 +81,9 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
       (data || []).sort((a, b) => {
         const nameA = translatedCropNames[a.fullCrop.id] || a.fullCrop.name;
         const nameB = translatedCropNames[b.fullCrop.id] || b.fullCrop.name;
-        return nameA.toLowerCase().localeCompare(nameB.toLowerCase());
+        return nameA.localeCompare(nameB, locale, { sensitivity: 'base' });
       }),
-    [data, translatedCropNames]
+    [data, translatedCropNames, locale]
   );
 
   const filteredData = useMemo(

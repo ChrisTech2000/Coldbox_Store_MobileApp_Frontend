@@ -1269,7 +1269,8 @@ const en = {
         errorMessage: 'Failed to update check-in. Please try again.',
       },
       survey: {
-        fillMessage: 'Please fill in the Cooling user survey (baseline survey) for {{crop}}!',
+        fillMessage:
+          'Please fill in the <0>Cooling user survey</0> (baseline survey) for {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'What defines you best?',
           occupationFarmer: 'A farmer',

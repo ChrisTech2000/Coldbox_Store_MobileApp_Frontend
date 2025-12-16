@@ -25,9 +25,9 @@ export default function FeeBreakdownBottomSheet() {
     setData(saleData);
   });
 
-  const soldFor = data?.totalAmountPaid ?? 0;
   const coolingFee = data?.coolingUnitPayout ?? 0;
   const amountReceived = data?.sellerPayout ?? 0;
+  const soldFor = coolingFee + amountReceived;
   const currency = data?.currency ?? DEFAULT_CURRENCY_CODE;
 
   return (

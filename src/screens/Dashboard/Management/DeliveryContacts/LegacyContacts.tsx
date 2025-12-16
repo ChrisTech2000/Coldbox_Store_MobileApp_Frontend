@@ -244,21 +244,28 @@ function LegacyContacts() {
 
   return (
     <View tw="flex-1 bg-white">
-      <View tw="bg-orange-50 border-b border-orange-200 p-4 mb-3">
-        <View tw="flex-row items-start">
-          <Icon name="alert-circle-outline" size={24} color="#E17100" style={{ marginRight: 12 }} />
-          <View tw="flex-1">
-            <Text tw="text-base font-semibold text-orange-900 mb-1">
-              {t('Dashboard.Management.Delivery.legacyContactsScreen.warningTitle', {
-                count: legacyContacts?.length || 0,
-              })}
-            </Text>
-            <Text tw="text-sm text-[#BB4D00] leading-5">
-              {t('Dashboard.Management.Delivery.legacyContactsScreen.warningMessage')}
-            </Text>
+      {legacyContacts.length ? (
+        <View tw="bg-orange-50 border-b border-orange-200 p-4 mb-3">
+          <View tw="flex-row items-start">
+            <Icon
+              name="alert-circle-outline"
+              size={24}
+              color="#E17100"
+              style={{ marginRight: 12 }}
+            />
+            <View tw="flex-1">
+              <Text tw="text-base font-semibold text-orange-900 mb-1">
+                {t('Dashboard.Management.Delivery.legacyContactsScreen.warningTitle', {
+                  count: legacyContacts?.length || 0,
+                })}
+              </Text>
+              <Text tw="text-sm text-[#BB4D00] leading-5">
+                {t('Dashboard.Management.Delivery.legacyContactsScreen.warningMessage')}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
+      ) : null}
 
       <View tw={cn('flex-1', HORIZONTAL_SPACING, hasBulkAssignButton ? 'pb-20' : 'pb-4')}>
         {!legacyContacts?.length ? (
@@ -387,25 +394,32 @@ function LegacyContacts() {
                         keyExtractor={(unit) => `room-assign-${unit.id}`}
                         renderItem={({ item: unit }) => {
                           const isChecked = currentSelection.includes(unit.id);
+
+                          const toggleSelection = () =>
+                            setDraftSelection((prev) => {
+                              const prevSelection = prev[item.id] ?? selectedRoomIds;
+                              const updatedSelection = isChecked
+                                ? prevSelection.filter((id) => id !== unit.id)
+                                : [...prevSelection, unit.id];
+                              return { ...prev, [item.id]: updatedSelection };
+                            });
+
                           return (
-                            <View tw="flex flex-row items-center justify-between px-4 py-2">
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              tw="flex flex-row items-center justify-between px-4 py-2"
+                              onPress={toggleSelection}
+                              disabled={isProcessing}
+                            >
                               <Text tw="text-base w-[70%]" numberOfLines={2}>
                                 {unit.name}
                               </Text>
                               <Checkbox
                                 status={isChecked ? 'checked' : 'unchecked'}
-                                onPress={() =>
-                                  setDraftSelection((prev) => {
-                                    const prevSelection = prev[item.id] ?? selectedRoomIds;
-                                    const updatedSelection = isChecked
-                                      ? prevSelection.filter((id) => id !== unit.id)
-                                      : [...prevSelection, unit.id];
-                                    return { ...prev, [item.id]: updatedSelection };
-                                  })
-                                }
+                                onPress={toggleSelection}
                                 disabled={isProcessing}
                               />
-                            </View>
+                            </TouchableOpacity>
                           );
                         }}
                         ItemSeparatorComponent={Divider}

@@ -249,14 +249,16 @@ async function _dataFetcher(opts: {
 
   const { buildMap, find } = cropTranslationLookup();
   const lookupMap = buildMap();
-  const crops = cloneDeep(allCrops).map((crop) => {
-    crop.name = find(lookupMap, {
-      name: crop.name,
-      country: opts.country,
-      locale: opts.locale,
-    });
-    return crop;
-  });
+  const crops = cloneDeep(allCrops)
+    .map((crop) => {
+      crop.name = find(lookupMap, {
+        name: crop.name,
+        country: opts.country,
+        locale: opts.locale,
+      });
+      return crop;
+    })
+    .sort((a, b) => a.name.localeCompare(b.name, opts.locale, { sensitivity: 'base' }));
 
   const contextualFarmerSurvey = surveys?.at(0);
   return {
