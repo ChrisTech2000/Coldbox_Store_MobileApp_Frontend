@@ -3,7 +3,7 @@ import { Control, Controller } from 'react-hook-form';
 import { FlatList, View } from 'react-native';
 import { Divider, RadioButton } from 'react-native-paper';
 
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 
 import { Text } from '#ui/components/Text';
 import { Select } from '#ui/components/Select';
@@ -21,6 +21,7 @@ type ProduceDetailsOptionProps = {
 
 export function ProduceDetailsOption({ option, index, crops, control }: ProduceDetailsOptionProps) {
   const { t } = useTranslationUtils();
+  const locale = LanguageManager.read();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -53,7 +54,9 @@ export function ProduceDetailsOption({ option, index, crops, control }: ProduceD
                     <FlatList
                       scrollEnabled={false}
                       showsVerticalScrollIndicator={false}
-                      data={Object.entries(crops)}
+                      data={Object.entries(crops).sort((a, b) =>
+                        a[1].localeCompare(b[1], locale, { sensitivity: 'base' })
+                      )}
                       keyExtractor={([cropId], idx) => `rb-${cropId}-${idx}-${index}`}
                       renderItem={({ item: [cropId, cropName] }) => (
                         <RadioButtonItem

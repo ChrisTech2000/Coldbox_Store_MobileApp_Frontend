@@ -25,7 +25,7 @@ export function sortMovements(
 
   switch (sorting) {
     case ESortingOptions.CROP_TYPE:
-      return movementACrops.toLowerCase().localeCompare(movementBCrops.toLowerCase());
+      return movementACrops.localeCompare(movementBCrops, locale, { sensitivity: 'base' });
     case ESortingOptions.MOVEMENT_DATE:
       return new Date(a.date).getTime() - new Date(b.date).getTime();
     case ESortingOptions.MOVEMENT_DATE_REVERSE:
@@ -71,7 +71,9 @@ export function sortMovementCrops(
       ];
   }
 
-  return Array.from(new Set(crops)).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+  return Array.from(new Set(crops)).sort((a, b) =>
+    a.localeCompare(b, locale, { sensitivity: 'base' })
+  );
 }
 
 function _getCropNames(

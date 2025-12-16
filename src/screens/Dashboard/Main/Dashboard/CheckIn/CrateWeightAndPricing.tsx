@@ -1,4 +1,3 @@
-import { useIsFocused } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import React, { useEffect, useRef, useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
@@ -59,16 +58,14 @@ const useCrateWeightPricingStore = create<StoreState & StoreActions>((set) => ({
 }));
 
 export function useCrateWeightPricingBridge(cb: (values: StoreState) => void) {
-  const isFocused = useIsFocused();
-
   const [crates, price] = useCrateWeightPricingStore(
     useShallow((store) => [store.crates, store.price])
   );
 
   useEffect(() => {
-    if (isFocused || !(crates.length >= 1)) return;
+    if (crates.length < 1) return;
     cb({ crates, price });
-  }, [isFocused, crates]);
+  }, [crates, price]);
 }
 
 export function resetCrateWeightPricingBridge() {

@@ -156,13 +156,15 @@ export function useTranslatedCrops(crops: Array<GetAllCropsResponse>): Array<Get
     const { buildMap, find } = cropTranslationLookup();
     const lookupMap = buildMap();
 
-    return cloneDeep(crops).map((crop) => {
-      crop.name = find(lookupMap, {
-        name: crop.name,
-        country: companyCountry || farmerCountry || '',
-        locale,
-      });
-      return crop;
-    });
+    return cloneDeep(crops)
+      .map((crop) => {
+        crop.name = find(lookupMap, {
+          name: crop.name,
+          country: companyCountry || farmerCountry || '',
+          locale,
+        });
+        return crop;
+      })
+      .sort((a, b) => a.name.localeCompare(b.name, locale, { sensitivity: 'base' }));
   }, [crops, companyCountry, farmerCountry, locale]);
 }

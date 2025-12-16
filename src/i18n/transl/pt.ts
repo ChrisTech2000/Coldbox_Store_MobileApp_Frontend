@@ -1283,7 +1283,7 @@ export default {
         errorMessage: 'Falha ao atualizar o check-in. Por favor, tente novamente.',
       },
       survey: {
-        fillMessage: 'Por favor, preencha o inquérito base para {{crop}}!',
+        fillMessage: 'Por favor, preencha o <0>inquérito base</0> para {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'O que melhor o define?',
           occupationFarmer: 'Um agricultor',

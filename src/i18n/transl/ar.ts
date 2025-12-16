@@ -1152,7 +1152,7 @@ export default {
         errorMessage: 'فشل تحديث تسجيل الوصول. يرجى المحاولة مرة أخرى.',
       },
       survey: {
-        fillMessage: 'يرجى إكمال استبيان مستخدم التبريد (الاستبيان الأساسي) لـ {{crop}}!',
+        fillMessage: 'يرجى إكمال <0>استبيان مستخدم التبريد</0> (الاستبيان الأساسي) لـ {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'ما الذي يحددك بشكل أفضل؟',
           occupationFarmer: 'مزارع',

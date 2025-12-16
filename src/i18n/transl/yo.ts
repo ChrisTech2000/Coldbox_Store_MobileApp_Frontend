@@ -1179,7 +1179,7 @@ export default {
         errorMessage: 'Kuna lati mu imudojuiwọn wọle. Jọwọ gbiyanju lẹẹkansi.',
       },
       survey: {
-        fillMessage: 'Jọwọ pari iwadi olumulo itutu (iwadi ipilẹ) fun {{crop}}!',
+        fillMessage: 'Jọwọ pari <0>iwadi olumulo itutu</0> (iwadi ipilẹ) fun {{crop}}!',
         baseSurvey: {
           occupationQuestion: 'Ohun ti o se apejuwe re daada',
           occupationFarmer: 'agbe kan',

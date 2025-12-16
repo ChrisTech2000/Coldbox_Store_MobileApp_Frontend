@@ -11,7 +11,7 @@ import { Select, VIRTUAL_LIST_SIZE_WIDTH } from '#ui/components/Select';
 import { Text } from '#ui/components/Text';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
-import { useTranslationUtils } from '#i18n/utils';
+import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { cn } from '#ui/lib/cn';
 
@@ -37,9 +37,10 @@ export default function CommodityField(props: Props) {
 
   const [internalSelection, setInternalSelection] = useState<Array<number>>(field.value);
 
+  const locale = LanguageManager.read();
   const sortedData = useMemo(
-    () => crops.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())),
-    [crops]
+    () => crops.sort((a, b) => a.name.localeCompare(b.name, locale, { sensitivity: 'base' })),
+    [crops, locale]
   );
 
   const datums = useMemo(

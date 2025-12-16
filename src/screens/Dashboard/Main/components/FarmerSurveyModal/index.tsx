@@ -108,7 +108,7 @@ export function FarmersSurveyModal({
   const { selectedItems: spoilageReasons, onSelect: onSelectSpoilageReasons } =
     useSpoilageReasonsStore();
 
-  const { cropTranslations, selectedItemTranslation } = useMemo(() => {
+  const { cropTranslations, selectedItemTranslation, sortedCrops } = useMemo(() => {
     const datums = cropSelectionAvailable?.crops ?? [];
     const record: Record<number, string> = {};
 
@@ -125,6 +125,12 @@ export function FarmersSurveyModal({
       }
     }
 
+    const sorted = [...datums].sort((a, b) => {
+      const nameA = record[a.id] || a.name;
+      const nameB = record[b.id] || b.name;
+      return nameA.localeCompare(nameB, locale, { sensitivity: 'base' });
+    });
+
     return {
       cropTranslations: record,
       selectedItemTranslation: find(translationMap, {
@@ -132,6 +138,7 @@ export function FarmersSurveyModal({
         country: companyCountry || farmerCountry || undefined,
         locale,
       }),
+      sortedCrops: sorted,
     };
   }, [cropSelectionAvailable?.crops, companyCountry, farmerCountry, locale, crop]);
 
@@ -207,7 +214,7 @@ export function FarmersSurveyModal({
                       {t('Dashboard.CrateManagement.FarmerSurvey.modal.commodityShortlist')}
                     </Text>
                     <SelectWithStore<Crop | GetAllCropsResponse>
-                      datums={cropSelectionAvailable.crops}
+                      datums={sortedCrops}
                       isModalVisible={isCropModalVisible}
                       itemName={(item) => cropTranslations?.[item.id] || item?.name || ''}
                       setIsModalVisible={setIsCropModalVisible}

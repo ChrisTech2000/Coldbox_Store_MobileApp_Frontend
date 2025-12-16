@@ -1,3 +1,5 @@
+import { LanguageManager } from '#i18n/utils';
+
 const PINNED_COUNTRIES = ['Nigeria', 'India'];
 
 export function customCountrySort(a: string, b: string) {
@@ -12,5 +14,6 @@ export function customCountrySort(a: string, b: string) {
     return pinnedIndexA - pinnedIndexB;
   }
 
-  return a.localeCompare(b);
+  const locale = LanguageManager.read();
+  return a.localeCompare(b, locale, { sensitivity: 'base' });
 }
