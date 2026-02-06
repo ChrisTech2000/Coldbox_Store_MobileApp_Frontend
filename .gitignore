@@ -986,3 +986,9 @@ obj/
 # and the added git secret files
 android/keystores/base-key.jks
 fastlane/google-service-account.json
+
+
+
+
+
+android/.gradle-home/
