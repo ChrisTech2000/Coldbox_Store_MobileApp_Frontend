@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, View } from 'react-native';
+import { Platform, View, Image as RNImage } from 'react-native';
 import { Divider } from 'react-native-paper';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { request, PERMISSIONS, type PermissionStatus, RESULTS } from 'react-native-permissions';
@@ -8,7 +8,7 @@ import { Button } from '#ui/components/Button';
 import { Image } from '#ui/components/Image';
 import { Text } from '#ui/components/Text';
 
-import DefaultLogo from '#assets/images/coldtivate_logo.svg';
+//import DefaultLogo from '#assets/images/coldtivate_logo.svg';
 import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
 
@@ -36,7 +36,10 @@ export default function LogoField() {
         </Text>
         <View tw="flex-row items-center space-x-2">
           {!currentLogo.uri ? (
-            <DefaultLogo width={56} height={56} />
+            <RNImage
+              source={require('#assets/images/coldbox-logo-edit.png')}
+              style={{ width: 80, height: 80, resizeMode: 'contain' }}
+            />
           ) : (
             <Image
               tw="h-14 w-14"

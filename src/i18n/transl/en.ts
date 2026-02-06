@@ -1,6 +1,6 @@
 const en = {
   appVersion: {
-    newVersion: 'A new version of Coldtivate is available!',
+    newVersion: 'A new version of ColdBox Store is available!',
     pleaseUpdate: 'Please update app before continuing.',
   },
   languages: {
@@ -65,7 +65,7 @@ const en = {
       AddUserBankAccount: '{{user}} Bank Account',
     },
     bottomTabs: {
-      RootMainTabStack: "{{firstName}}'s Coldtivate",
+      RootMainTabStack: "{{firstName}}'s ColdBoxstore",
       ProduceDetails: '{{produceCode}}',
       MarketplaceSettings: 'Marketplace settings',
       PriceTrend: 'Price trend',
@@ -180,12 +180,12 @@ const en = {
   },
   Auth: {
     welcomePopup:
-      "Welcome to Coldtivate! If you are a farmer, a trader, or are interested in purchasing produce stored in the cold rooms, please sign up by clicking on 'Sign up as cooling user or consumer'. If you work for a cooling company, please contact your responsible to check whether your company is registered. If it is, your responsible should send you an SMS invite for you to sign up as a registered employee or as an operator. If not, you can sign up the company, and register as a registered employee. Please check the 'App info' section for FAQs.",
+      "Welcome to ColdBox Store! If you are a farmer, a trader, or are interested in purchasing produce stored in the cold rooms, please sign up by clicking on 'Sign up as cooling user or consumer'. If you work for a cooling company, please contact your responsible to check whether your company is registered. If it is, your responsible should send you an SMS invite for you to sign up as a registered employee or as an operator. If not, you can sign up the company, and register as a registered employee. Please check the 'App info' section for FAQs.",
     Root: {
-      welcome: 'Welcome to Coldtivate',
+      welcome: 'Digitized Cold Chain For Agriculture',
       signIn: 'Sign In',
-      signUpCompany: 'Sign up as Company',
-      signUpCoolingUser: 'Sign Up as a Cooling User or Consumer',
+      signUpCompany: 'Sign up as ColdRoom Provider',
+      signUpCoolingUser: 'Sign Up as a User',
       appInfo: 'App Info',
     },
     SignIn: {
@@ -242,7 +242,7 @@ const en = {
         cancel: 'Cancel',
         ok: 'OK',
       },
-      welcome: 'Welcome to Coldtivate',
+      welcome: 'Welcome to ColdBox Store',
       schema: {
         passwordError:
           'Your password needs to be at least 8 characters long, contain one uppercase and one lowercase letters, and a number.',
@@ -272,7 +272,7 @@ const en = {
         genderFieldName: 'gender',
         submit: 'Sign Up',
         terms: {
-          agree: 'I agree to Coldtivate',
+          agree: 'I agree to ColdBox Store',
           license: 'User License Agreement',
           privacy: 'Privacy Policy',
           and: 'and',
@@ -298,7 +298,7 @@ const en = {
         },
       },
       SignUpCoolingUser: {
-        header: 'Sign Up as a Cooling User or Consumer',
+        header: 'Sign Up as a Cooling User (Farmer) or Consumer',
         languageFieldName: 'language',
       },
       toasts: {
@@ -328,7 +328,7 @@ const en = {
       resetButton: 'Reset',
     },
     Invite: {
-      heading: 'Welcome to Coldtivate',
+      heading: 'Welcome to ColdBox Store',
       employee:
         'You have been invited as Employee. Please fill in the form to finish your registration.',
       operator:
@@ -357,7 +357,7 @@ const en = {
     noCompanyAvailable: 'No company available',
     noCoolingUnitAvailable: 'No cooling unit available',
     noLocationsAvailable:
-      'Welcome to Coldtivate. Get started by adding locations to your app in the management panel.',
+      'Welcome to ColdBox Store. Get started by adding locations to your app in the management panel.',
     coolingUserNavigateToMarketplace:
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!',
     MarketPrice: {
@@ -786,7 +786,7 @@ const en = {
       },
       AddOperator: {
         messages: {
-          operator: 'To join the Coldtivate app as an Operator, go to: {{link}}',
+          operator: 'To join the ColdBox Store app as an Operator, go to: {{link}}',
         },
         toasts: {
           success: 'Successfully invited operator',
@@ -834,7 +834,7 @@ const en = {
         deleteOther: 'If you want to delete this account, please contact {{contact}}',
       },
       AddRegisteredEmployee: {
-        message: 'To join the Coldtivate app as a Registered Employee, go to: {{link}}',
+        message: 'To join the ColdBox Store app as a Registered Employee, go to: {{link}}',
         toasts: {
           success: 'Successfully invited registered employee',
         },
@@ -1578,9 +1578,9 @@ const en = {
     },
   },
   tutorial: {
-    welcome: 'Welcome to Coldtivate! This is a walkthrough of the functionalities.',
+    welcome: 'Welcome to ColdBox Store! This is a walkthrough of the functionalities.',
     farmerWelcome:
-      'Welcome to Coldtivate! This tutorial will help you understand how to use the app.',
+      'Welcome to ColdBox Store! This tutorial will help you understand how to use the app.',
     quit: 'Quit Tutorial',
     congratulations:
       'Congratulations! You have completed the tutorial! Go back to the dashboard to start using the app.',
@@ -1599,7 +1599,7 @@ const en = {
       operatorManagementNavigation:
         'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users',
       addCoolingUser:
-        'Cooling users who have not registered on Coldtivate can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".',
+        'Cooling users who have not registered on ColdBox Store can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab',
       listCoolingUsers:
         'Cooling users with a smartphone are identified by a phone icon on the right side of the screens. The others are cooling users with a basic phone. In both cases, you can click on a name to access their details and the cooling user survey.',
@@ -1673,7 +1673,7 @@ const en = {
         'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.',
       more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.',
       marketplaceStep1:
-        'This is the Coldtivate digital marketplace, where all users can buy and sell produce that is being stored in the cold room. Each crate for sale is listed here, and you can buy any amount (in kg) or the full crate.',
+        'This is the ColdBox Store digital marketplace, where all users can buy and sell produce that is being stored in the cold room. Each crate for sale is listed here, and you can buy any amount (in kg) or the full crate.',
       marketplaceStep2:
         'After selecting items to buy, click the shopping cart icon to see the items in your cart.',
       shoppingCart:

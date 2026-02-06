@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, View, Image } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
+//import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 import { Button } from '#ui/components/Button';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import type { RecaptchaModalRef } from '#ui/components/RecaptchaModal';
@@ -113,7 +113,10 @@ function Invite(props: AuthRouteProps<'Invite'>) {
               </Text>
             </View>
 
-            <ColdtivateLogo width={LOGO_SIZE} height={LOGO_SIZE} tw="self-center my-4" />
+            <Image
+              source={require('#assets/images/coldbox-logo-edit.png')}
+              style={{ width: LOGO_SIZE, height: LOGO_SIZE, resizeMode: 'contain' }}
+            />
             <FormFields />
             <Button
               tw="w-full mt-6"

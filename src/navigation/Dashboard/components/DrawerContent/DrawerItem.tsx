@@ -1,4 +1,6 @@
-import { useDrawerStatus, DrawerNavigationProp } from '@react-navigation/drawer';
+import { useDrawerStatus } from '@react-navigation/drawer';
+import type { DrawerContentComponentProps } from '@react-navigation/drawer';
+
 import React from 'react';
 import { Dimensions, LayoutChangeEvent } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
@@ -18,7 +20,7 @@ import { useAuthStore } from '#stores/auth';
 import { useTutorialStore } from '#stores/tutorial';
 import { ERoles } from '#types/global';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
-import type { DashboardRoutes } from '../../index';
+//import type { DashboardRoutes } from '../../index';
 
 type DrawerItemProps = {
   t: Translator;
@@ -29,7 +31,7 @@ type DrawerItemProps = {
   };
   focusedRoute: string;
   routeName: string;
-  navigation: DrawerNavigationProp<DashboardRoutes>;
+  navigation: DrawerContentComponentProps['navigation'];
 };
 
 type LayoutFn = (event: LayoutChangeEvent) => void;

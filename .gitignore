@@ -991,4 +991,10 @@ fastlane/google-service-account.json
 
 
 
+# local build/cache
 android/.gradle-home/
+android/.gradle/
+android/app/build/
+android/build/
+ios/build/
+node_modules/

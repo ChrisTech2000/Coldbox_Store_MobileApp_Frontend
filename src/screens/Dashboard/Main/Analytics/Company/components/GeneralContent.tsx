@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 
-import Logo from '#assets/images/coldtivate_logo.svg';
+//import Logo from '#assets/images/coldtivate_logo.svg';
 
 import { Text } from '#ui/components/Text';
 
@@ -27,7 +27,10 @@ export function GeneralContent() {
 
   return (
     <View tw="bg-violet-100 items-center w-full rounded-lg py-2 my-2">
-      <Logo width={50} height={50} tw="mb-4" />
+      <Image
+        source={require('#assets/images/coldbox-logo-edit.png')}
+        style={{ width: 80, height: 80, resizeMode: 'contain' }}
+      />
       <View tw="flex flex-row flex-wrap items-center justify-center space-x-2 space-y-2">
         <View tw="bg-violet-950 rounded-md px-2 py-1 items-center">
           <Text variant="TextMedium" tw="text-base text-white mb-2">

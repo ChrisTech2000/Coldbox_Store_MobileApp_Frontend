@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TouchableOpacity, View, Platform } from 'react-native';
+import { TouchableOpacity, View, Platform, Image } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-import Logo from '#assets/images/coldtivate_logo.svg';
+//import Logo from '#assets/images/coldtivate_logo.svg';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -263,7 +263,10 @@ export function FarmerAnalytics() {
           {!activeTab ? (
             <View>
               <View tw="bg-gray-200 rounded-lg py-2 items-center">
-                <Logo width={50} height={50} tw="mb-4" />
+                <Image
+                  source={require('#assets/images/coldbox-logo-edit.png')}
+                  style={{ width: 80, height: 80, resizeMode: 'contain' }}
+                />
                 <View tw="flex flex-row flex-wrap items-center justify-center space-x-2 space-y-2">
                   <View tw="bg-gray-800 rounded-md px-2 py-1 items-center">
                     <Text variant="TextMedium" tw="text-base text-white">

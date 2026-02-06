@@ -1,7 +1,5 @@
 import React from 'react';
-import { Dimensions, View } from 'react-native';
-
-import RootHero from '#assets/images/root_hero.svg';
+import { Dimensions, View, Image } from 'react-native';
 
 import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
@@ -12,6 +10,7 @@ import type { AuthRouteProps } from '#navigation/Auth';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 
 import { SelectLanguage } from './components/SelectLanguage';
+//import { FontWidth } from '@shopify/react-native-skia';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -25,7 +24,10 @@ function AuthRoot(props: AuthRouteProps<'Root'>) {
 
   return (
     <View tw="space-y-4 mx-4 flex-col items-center justify-center">
-      <RootHero width={HERO_IMG_SIZE} height={HERO_IMG_SIZE} />
+      <Image
+        source={require('#assets/images/coldbox-logo-edit.png')}
+        style={{ width: HERO_IMG_SIZE, height: HERO_IMG_SIZE, resizeMode: 'contain' }}
+      />
       <Text tw="mb-3 text-xl font-bold">{t('Auth.Root.welcome')}</Text>
       <Button
         tw="w-full border-2"

@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, View, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 
 import Employee from '#assets/icons/employee.svg';
 import Farmer from '#assets/icons/farmer.svg';
 import Operator from '#assets/icons/operator.svg';
-import Logo from '#assets/images/coldtivate_logo.svg';
+//import Logo from '#assets/images/coldtivate_logo.svg';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
@@ -185,7 +185,10 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
   return (
     <KeyboardAwareScrollView tw="mt-[-24]" showsVerticalScrollIndicator={false}>
       <View tw="flex-1 items-center">
-        <Logo width={IMG_SIZE} height={IMG_SIZE} tw="mb-4" />
+        <Image
+          source={require('#assets/images/coldbox-logo-edit.png')}
+          style={{ width: IMG_SIZE, height: IMG_SIZE, resizeMode: 'contain' }}
+        />
         <Text tw="mb-2 text-xl font-bold">{t('Auth.SignIn.heading')}</Text>
 
         <View tw="w-full flex-row mb-2 justify-between px-2 mt-1" id="this-one">

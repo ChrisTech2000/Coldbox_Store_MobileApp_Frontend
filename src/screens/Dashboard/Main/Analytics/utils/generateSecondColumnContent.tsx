@@ -1,6 +1,6 @@
 import startCase from 'lodash/startCase';
 import React from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
@@ -29,6 +29,14 @@ export function generateSecondColumnContent(
           key={`${key}-${val}-${index}`}
           tw={cn('w-[90%] flex flex-row space-x-1 items-center', withAmount ? 'pt-4' : '')}
         >
+          <Image
+            source={require('#assets/images/coldbox-logo-edit.png')}
+            style={{
+              width: withAmount ? 24 : 15,
+              height: withAmount ? 24 : 12,
+              resizeMode: 'contain',
+            }}
+          />
           <ColdtivateLogo
             width={withAmount ? 24 : 15}
             height={withAmount ? 24 : 12}

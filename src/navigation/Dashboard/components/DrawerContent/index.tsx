@@ -4,11 +4,11 @@ import {
 } from '@react-navigation/drawer';
 import { styled } from 'nativewind';
 import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import { View, Image as RNImage } from 'react-native';
 import { Drawer } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 
-import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
+//import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
 
 import { Image } from '#ui/components/Image';
 
@@ -71,7 +71,10 @@ export default function DrawerContent(props: Props) {
     <StyledDrawerContentScrollView {...props} tw="flex-1">
       <View tw="mx-6 mb-4">
         {!props.logoURI ? (
-          <ColdtivateLogo width={60} height={60} />
+          <RNImage
+            source={require('#assets/images/coldbox-logo-edit.png')}
+            style={{ width: 80, height: 80, resizeMode: 'contain' }}
+          />
         ) : (
           <Image
             tw="h-14 w-14"
