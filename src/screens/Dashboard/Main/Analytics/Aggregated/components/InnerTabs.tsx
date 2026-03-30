@@ -19,10 +19,10 @@ type InnerTabsProps = {
 export function InnerTabs({ activeTab, compactMode, disabled, onTabSelection }: InnerTabsProps) {
   const { t } = useTranslationUtils();
   return (
-    <View tw={cn('w-full', compactMode && 'flex flex-row justify-center space-x-2 flex-wrap')}>
+    <View tw={cn('w-full bg-gray-100 p-1 rounded-xl flex-row', compactMode && 'space-x-1')}>
       <Tab
         name={t(`Dashboard.Analytics.users`)}
-        icon="account-multiple-outline"
+        icon="account-group"
         isActive={activeTab === 'users'}
         onSelect={() => onTabSelection('users')}
         compactMode={compactMode}

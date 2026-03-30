@@ -2,7 +2,7 @@ import { Translations } from './en';
 
 export default {
   appVersion: {
-    newVersion: 'Ẹya tuntun ti Coldtivate wa lọwọlọwọ!',
+    newVersion: 'Ẹya tuntun ti Coldboxstore wa lọwọlọwọ!',
     pleaseUpdate: 'Jọwọ ṣe imudojuiwọn ohun elo ṣaaju ki o to tẹsiwaju.',
   },
   languages: {
@@ -63,7 +63,7 @@ export default {
       LegacyContacts: 'Àwọn kọ́ńtàkì àtijọ́',
     },
     bottomTabs: {
-      RootMainTabStack: 'Coldtivate ti {{firstName}}',
+      RootMainTabStack: 'Coldboxstore ti {{firstName}}',
       ProduceDetails: '{{produceCode}}',
       MarketplaceSettings: 'Awọn eto ibi-ọja',
       PriceTrend: 'Aṣa idiyele',
@@ -176,9 +176,9 @@ export default {
   },
   Auth: {
     welcomePopup:
-      "Kaabo si Coldtivate! Ti o ba jẹ agbẹ, oniṣowo kan, tabi ti o nifẹ si rira ọja ti o fipamọ sinu awọn yara tutu, jọwọ forukọsilẹ nipa tite “Forukọsilẹ bi olumulo itutu agbaiye tabi olura”. Ti o ba ṣiṣẹ fun ile-iṣẹ itutu agbaiye, jọwọ kan si oniduro rẹ lati ṣayẹwo boya ile-iṣẹ rẹ ti forukọsilẹ. Ti o ba jẹ bẹ, oniduro rẹ yẹ ki o fi ifiwepe SMS ranṣẹ si ọ lati forukọsilẹ bi oṣiṣẹ ti o forukọsilẹ tabi bi oniṣẹ. Ti kii ba ṣe bẹ, o le forukọsilẹ ile-iṣẹ, ati forukọsilẹ bi oṣiṣẹ ti o forukọsilẹ. Jọwọ ṣayẹwo apakan 'Alaye App' fun awọn FAQs.",
+      "Kaabo si Coldboxstore! Ti o ba jẹ agbẹ, oniṣowo kan, tabi ti o nifẹ si rira ọja ti o fipamọ sinu awọn yara tutu, jọwọ forukọsilẹ nipa tite “Forukọsilẹ bi olumulo itutu agbaiye tabi olura”. Ti o ba ṣiṣẹ fun ile-iṣẹ itutu agbaiye, jọwọ kan si oniduro rẹ lati ṣayẹwo boya ile-iṣẹ rẹ ti forukọsilẹ. Ti o ba jẹ bẹ, oniduro rẹ yẹ ki o fi ifiwepe SMS ranṣẹ si ọ lati forukọsilẹ bi oṣiṣẹ ti o forukọsilẹ tabi bi oniṣẹ. Ti kii ba ṣe bẹ, o le forukọsilẹ ile-iṣẹ, ati forukọsilẹ bi oṣiṣẹ ti o forukọsilẹ. Jọwọ ṣayẹwo apakan 'Alaye App' fun awọn FAQs.",
     Root: {
-      welcome: 'Kaabo si Coldtivate.',
+      welcome: 'Kaabo si Coldboxstore.',
       signIn: 'wọle',
       signUpCompany: 'Forukọsilẹ bi ile-iṣẹ',
       signUpCoolingUser: 'Forukọsilẹ bi Olumulo Itutu tabi Olura',
@@ -226,7 +226,7 @@ export default {
     },
     SignUp: {
       select: { header: 'Yan {{fieldName}} kan', label: 'Wa…', cancel: 'Fagilee', ok: 'O dara' },
-      welcome: 'Kaabo si Coldtivate.',
+      welcome: 'Kaabo si Coldboxstore.',
       schema: {
         passwordError:
           'Ọrọigbaniwọle rẹ nilo lati jẹ o kere ju awọn lẹta 8 gun, ni awọn lẹta nla kan ati awọn lẹta kekere kan ninu, ati nọmba kan.',
@@ -255,7 +255,7 @@ export default {
         genderFieldName: 'Akọ abi abo',
         submit: 'Forukọsilẹ',
         terms: {
-          agree: 'Mo gba lati Coldtivate',
+          agree: 'Mo gba lati Coldboxstore',
           license: 'Adehun iwe-aṣẹ olumulo',
           privacy: 'ikoko Ilana',
           and: 'ati',
@@ -305,7 +305,7 @@ export default {
       resetButton: 'tun to',
     },
     Invite: {
-      heading: 'Kaabo si Coldtivate.',
+      heading: 'Kaabo si Coldboxstore.',
       employee: 'A ti pe ọ gege bi Oṣiṣẹ. Jọwọ fọwọsi fọọmu naa lati pari iforukọsilẹ rẹ.',
       operator: 'A ti pe ọ gege bi amoju ero. Jọwọ fọwọsi fọọmu naa lati pari iforukọsilẹ rẹ.',
       fields: {
@@ -332,7 +332,7 @@ export default {
     noCompanyAvailable: 'Ko si ile-iṣẹ ti o wa',
     noCoolingUnitAvailable: 'Ko si ẹrọ itutu agbaiye',
     noLocationsAvailable:
-      'Kaabo si Coldtivate. Bẹrẹ nipa fifi agbe gbe re kun app rẹ ni ibi iṣakoso.',
+      'Kaabo si Coldboxstore. Bẹrẹ nipa fifi agbe gbe re kun app rẹ ni ibi iṣakoso.',
     coolingUserNavigateToMarketplace:
       'Ṣe o nifẹ si rira ọja tí a fipamọ sinu yàrá tó tútù? Ṣàbẹwò taabu Ọjà ni apa ọtún isalẹ!',
     MarketPrice: {
@@ -492,7 +492,7 @@ export default {
         SelectCropType: {
           fruits: 'Awọn eso',
           vegetables: 'Awọn ẹfọ',
-          rootVegetables: 'Gbongbo Ẹfọ',
+          meat: 'Gbongbo Ẹfọ',
           other: 'Awọn nkan miiran',
         },
         SelectCrop: { additionalInfo: 'Afikun Alaye' },
@@ -733,7 +733,7 @@ export default {
         actions: { invite: 'Pe', save: 'Fi awọn ayipada pamọ' },
       },
       AddOperator: {
-        messages: { operator: 'Lati darapọ mọ app Coldtivate bi eni ti oun lo, lọ si: {{link}}' },
+        messages: { operator: 'Lati darapọ mọ app Coldboxstore bi eni ti oun lo, lọ si: {{link}}' },
         toasts: {
           success: 'Ti se aṣeyọri pi pe amoju ero',
         },
@@ -770,7 +770,7 @@ export default {
         deleteOther: 'Ti o ba fẹ pa akọọlẹ akanti yii rẹ, jọwọ kan si wa  {{contact}}',
       },
       AddRegisteredEmployee: {
-        message: 'Lati darapọ mọ ohun elo Coldtivate bi Oṣiṣẹ ti Iforukọsilẹ, lọ si: {{link}}',
+        message: 'Lati darapọ mọ ohun elo Coldboxstore bi Oṣiṣẹ ti Iforukọsilẹ, lọ si: {{link}}',
         toasts: { success: 'Oṣiṣẹ ti o forukọsilẹ ni aṣeyọri pe' },
       },
       CoolingUsers: {
@@ -1483,9 +1483,9 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'Kaabo si Coldtivate. Eleyi jẹ kan Ririn ti awọn iṣẹ.',
+    welcome: 'Kaabo si Coldboxstore. Eleyi jẹ kan Ririn ti awọn iṣẹ.',
     farmerWelcome:
-      'Kaabọ sí Coldtivate! Ìtọnisọna yìí yóò ràn ọ lọ́wọ́ láti mọ bí o ṣe lè lo app náà.',
+      'Kaabọ sí Coldboxstore! Ìtọnisọna yìí yóò ràn ọ lọ́wọ́ láti mọ bí o ṣe lè lo app náà.',
     quit: 'jade kuro ninu idanilẹkọ',
     congratulations:
       'Idanilẹkọ! O ti pari ikẹkọ naa! Pada si dasibodu lati bẹrẹ lilo ohun elo naa.',
@@ -1503,7 +1503,7 @@ export default {
       operatorManagementNavigation:
         'Nínú Akojọ aṣayan, o le lọ sí "Ìṣàkóso" kí o tẹ̀ é láti fi Olùmúlò Ẹ̀ka Ìtútù kun tàbí ṣe àtúnṣe.',
       addCoolingUser:
-        'Awọn olumulo itutu ti ko forukọsilẹ lori Coldtivate ni a le ṣafikun nipasẹ fifi awọn alaye wọn sii (orukọ, nọmba foonu). Awọn olumulo itutu ti o forukọsilẹ tẹlẹ ninu ohun elo naa le ṣafikun nipasẹ koodu. Wọn le wa koodu wọn lori profaili wọn -> "Awọn alaye akọọlẹ" -> "Koodu agbewọle Olumulo Itutu".',
+        'Awọn olumulo itutu ti ko forukọsilẹ lori Coldboxstore ni a le ṣafikun nipasẹ fifi awọn alaye wọn sii (orukọ, nọmba foonu). Awọn olumulo itutu ti o forukọsilẹ tẹlẹ ninu ohun elo naa le ṣafikun nipasẹ koodu. Wọn le wa koodu wọn lori profaili wọn -> "Awọn alaye akọọlẹ" -> "Koodu agbewọle Olumulo Itutu".',
       navigateToCoolingUser: 'Tẹ taabu Olùmúlò Ẹ̀ka Ìtútù láti tẹ̀síwájú.',
       listCoolingUsers:
         'Awọn olumulo itutu agbaiye pẹlu foonuiyara jẹ idanimọ nipasẹ aami foonu kan ni apa ọtun ti awọn iboju. Awọn miiran n tutu awọn olumulo pẹlu foonu ipilẹ kan. Ni awọn ọran mejeeji, o le tẹ orukọ kan lati wọle si awọn alaye wọn ati iwadii olumulo itutu agbaiye.',
@@ -1575,7 +1575,7 @@ export default {
         'Ẹ kú oríire! O ti parí ìtọnisọna yìí! Tí o bá ní ìbéèrè nípa app náà, a ṣàbẹ̀wò kí o ṣàyẹ̀wò FAQ, bẹ̀rẹ̀ lọ́wọ́ alábòójútó yàrá tútù, tàbí kọ lẹ́tà sí wa ní app@yourvcca.org.',
       more: 'Tí o bá tẹ "Die e sii", o máa lè yan àwọn iboju "Ìtàn", "Ìye Ọ̀gbìn", "Ẹ̀ka Ìtútù", àti "Àṣẹ".',
       marketplaceStep1:
-        'Eyi ni ọjà díjítàlì Coldtivate, níbi tí gbogbo àwọn olùmúlò ti le rà àti tà àwọn ọjà tí a ti fipamọ́ sínú yàrá tútù. Gbogbo apoti tí a fi sílẹ̀ fún tita wà níbí, o sì le rà iye kankan (ní kg) tàbí apoti kikun.',
+        'Eyi ni ọjà díjítàlì Coldboxstore, níbi tí gbogbo àwọn olùmúlò ti le rà àti tà àwọn ọjà tí a ti fipamọ́ sínú yàrá tútù. Gbogbo apoti tí a fi sílẹ̀ fún tita wà níbí, o sì le rà iye kankan (ní kg) tàbí apoti kikun.',
       marketplaceStep2:
         'Lẹ́yìn yíyàn àwọn nǹkan tí o fẹ́ rà, tẹ aami kẹrísì rira láti wo àwọn nǹkan tó wà nínú rẹ.',
       shoppingCart:

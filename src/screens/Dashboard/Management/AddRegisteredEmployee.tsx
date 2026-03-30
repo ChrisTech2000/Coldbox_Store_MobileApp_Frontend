@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Banner, Text, TextInput } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import colors from 'tailwindcss/colors';
-import { isValidPhoneNumber } from 'libphonenumber-js';
+import { isValidPhone, normalizePhone } from '#services/utils/phoneUtils';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
@@ -63,7 +63,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
           .string()
           .min(1, { message: t('Auth.SignUp.schema.phoneError') })
           .default('')
-          .refine((value) => isValidPhoneNumber(value), {
+          .refine((value) => isValidPhone(value, company?.country), {
             message: t('Auth.SignUp.schema.invalidPhoneError'),
           }),
       })
@@ -101,7 +101,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
     try {
       await ColdtivateService.sendEmployeeInvitation({
         coolingUnits,
-        phone: values.phoneNumber,
+        phone: normalizePhone(values.phoneNumber, company?.country),
         userId,
         recaptchaToken,
       });

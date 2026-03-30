@@ -68,7 +68,7 @@ export default function DataAggregator(props: PropsWithChildren<{ companyId?: nu
   const [companyCrops, companyOperators, companyLocations] = useMemo(() => {
     const crops: Array<[number, string]> = [];
     for (const crop of allCrops) {
-      if (!companyDetails.crop.includes(crop.id)) continue;
+      if (!companyDetails?.crop?.includes(crop.id)) continue;
       crops.push([crop.id, crop.name]);
     }
 

@@ -13,15 +13,22 @@ export function processMarketplaceCrateListing(
   localProduces: Array<ProduceCrate>,
   backendProduces: CheckInResponse['produces']
 ) {
-  const listing = new Map<DatumKey, { crateIds: Array<number>; pricePerKg: IPricePerKg }>();
+  console.log('--- processMarketplaceCrateListing ---');
+  console.log('localProduces:', JSON.stringify(localProduces, null, 2));
+  console.log('backendProduces:', JSON.stringify(backendProduces, null, 2));
+
+  const listing = new Map<DatumKey, { crateIds: Array<number>; pricePerKg: IPricePerKg; totalListedWeight?: number; picture?: any }>();
 
   for (let produceIdx = 0; produceIdx < localProduces.length; produceIdx++) {
     const produce = localProduces[produceIdx];
     const insertedProduce = backendProduces[produceIdx];
 
+    console.log(`Checking produce ${produceIdx}: local cropId=${produce?.crop?.id}, backend cropId=${insertedProduce?.cropId}`);
+
     if (!insertedProduce || insertedProduce.cropId !== produce.crop.id) continue;
 
     const priceSafeValue = produce?.price ?? 0;
+    console.log(`priceSafeValue for produce ${produceIdx} is ${priceSafeValue}`);
     if (priceSafeValue === 0) continue;
 
     let accumulatedWeight = 0;
@@ -30,7 +37,11 @@ export function processMarketplaceCrateListing(
     for (let crateIdx = 0; crateIdx < produce.crates.length; crateIdx++) {
       const crate = produce.crates[crateIdx];
       const insertedCrateId = insertedProduce.cratesIds?.[crateIdx];
-      if (!crate?.isSellable || !insertedCrateId) continue;
+      console.log(`crate ${crateIdx}: isSellable=${crate?.isSellable}, backendCrateId=${insertedCrateId}`);
+      if (!crate?.isSellable || !insertedCrateId) {
+        console.log(`crate ${crateIdx} filtered out. isSellable=${crate?.isSellable}, insertedCrateId=${insertedCrateId}`);
+        continue;
+      }
       accumulatedWeight += crate.weight;
       crateIds.add(insertedCrateId);
     }
@@ -42,7 +53,7 @@ export function processMarketplaceCrateListing(
       const item = listing.get(key);
 
       if (typeof item === 'undefined') {
-        listing.set(key, { crateIds: Array.from(crateIds), pricePerKg });
+        listing.set(key, { crateIds: Array.from(crateIds), pricePerKg, totalListedWeight: produce.totalListedWeight, picture: produce.picture });
         continue;
       }
 

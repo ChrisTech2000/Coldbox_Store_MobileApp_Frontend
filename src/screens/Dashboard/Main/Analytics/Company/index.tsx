@@ -134,32 +134,27 @@ export function CompanySection() {
   return (
     <ScrollView tw="mt-4 h-full" showsVerticalScrollIndicator={false}>
       <View tw={screenHeight <= SMALL_SCREEN_THRESHOLD ? 'mb-20' : 'mb-12'}>
-        {activeTab && (
-          <TouchableOpacity
-            tw="flex flex-row w-full items-center space-x-2 justify-start"
-            onPress={() => setActiveTab(undefined)}
-          >
-            <BackArrowIcon />
-            <Text variant="TextMedium" tw="text-base">
-              {t(`Dashboard.Analytics.companyTab.goBackButton`)}
-            </Text>
-          </TouchableOpacity>
-        )}
+        <View tw="flex-row justify-between items-center mb-4">
+          {activeTab ? (
+            <TouchableOpacity
+              tw="flex flex-row items-center space-x-2"
+              onPress={() => setActiveTab(undefined)}
+            >
+              <BackArrowIcon />
+              <Text variant="TextMedium" tw="text-base">
+                {t(`Dashboard.Analytics.companyTab.goBackButton`)}
+              </Text>
+            </TouchableOpacity>
+          ) : <View />}
 
-        <View tw="items-center mt-2 space-y-2">
-          <InnerTabs
-            activeTab={activeTab}
-            onTabSelection={(tab: Tab) => setActiveTab(tab)}
-            compactMode
-          />
           {activeTab ? (
             <Button
               mode="contained"
-              uppercase
               onPress={onDownloadData}
-              icon={isCreatingPdf ? undefined : 'check-circle-outline'}
-              contentStyle="flex flex-row-reverse"
-              tw="w-[50%] mt-2"
+              icon="download-outline"
+              contentStyle="h-8"
+              labelStyle="text-[10px] h-5"
+              tw="bg-green-primary"
               disabled={isCreatingPdf}
             >
               {isCreatingPdf ? (
@@ -169,6 +164,14 @@ export function CompanySection() {
               )}
             </Button>
           ) : null}
+        </View>
+
+        <View tw="items-center mt-2 space-y-4">
+          <InnerTabs
+            activeTab={activeTab}
+            onTabSelection={(tab: Tab) => setActiveTab(tab)}
+            compactMode
+          />
           {!activeTab ? (
             <View tw="w-full">
               {loadingCoolingUnits || loadingImpactCompany || loadingImpactData ? (

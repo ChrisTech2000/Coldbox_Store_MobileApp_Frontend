@@ -28,6 +28,7 @@ export type AvailableListingDatum = {
   produceInfo: string;
   price: number;
   shelfLife: number | null;
+  picture?: string | null;
   crop: {
     id: number;
     name: string;
@@ -51,6 +52,27 @@ export type AvailableListingDatum = {
     isPhonePublic: boolean;
   };
 };
+
+/**
+ * Merges multiple per-crate listing nodes that share the same check-in movement,
+ * crop, and price into a single datum with the summed available weight.
+ * This prevents the marketplace from showing one tile per crate when an operator
+ * lists a total kg amount spread across several crates.
+ */
+function groupListingsByMovement(listings: AvailableListingDatum[]): AvailableListingDatum[] {
+  const groups = new Map<string, AvailableListingDatum>();
+  for (const item of listings) {
+    const key = `${item.movementCode}::${item.crop.id}::${item.price}`;
+    const existing = groups.get(key);
+    if (existing) {
+      // Accumulate weight — keep all other fields from the first crate in the group
+      existing.crateWeight = Math.round((existing.crateWeight + item.crateWeight) * 100) / 100;
+    } else {
+      groups.set(key, { ...item });
+    }
+  }
+  return Array.from(groups.values());
+}
 
 export function useMarketplaceListing() {
   const [companyCountry] = useManagementStore(useShallow((store) => [store.company?.country]));
@@ -116,6 +138,7 @@ export function useMarketplaceListing() {
             crateWeight: node.availableWeightInKg,
             shelfLife: node.relCrateRemainingShelfLife,
             price: node.producePricePerKg,
+            picture: (node as any).picture,
             owner: {
               name: node.ownedOnBehalfOfCompanyId
                 ? ((owner as Company)?.name ?? '')
@@ -180,32 +203,28 @@ export function useMarketplaceListing() {
         },
       }));
 
+      let filtered: AvailableListingDatum[];
       if (isEmpty(companiesToFilterIn) && isEmpty(cropsToFilterIn) && isNil(priceRangeFilter)) {
-        return datumsWithTranslatedCrops;
+        filtered = datumsWithTranslatedCrops;
+      } else {
+        filtered = datumsWithTranslatedCrops.filter((datum) => {
+          const isInCompanyFilter =
+            !companiesToFilterIn.size || companiesToFilterIn.has(datum.company.id);
+          const isInCropFilter = !cropsToFilterIn.size || cropsToFilterIn.has(datum.crop.id);
+          const isInPriceRange =
+            !priceRangeFilter ||
+            ((priceRangeFilter[0] === undefined ||
+              priceRangeFilter[0] === 0 ||
+              datum.price >= priceRangeFilter[0]) &&
+              (priceRangeFilter[1] === undefined ||
+                priceRangeFilter[1] === 0 ||
+                datum.price <= priceRangeFilter[1]));
+          return isInCompanyFilter && isInCropFilter && isInPriceRange;
+        });
       }
 
-      // apply filters to the remapped listings
-      return datumsWithTranslatedCrops.filter((datum) => {
-        const isInCompanyFilter =
-          !companiesToFilterIn.size || companiesToFilterIn.has(datum.company.id);
-        const isInCropFilter = !cropsToFilterIn.size || cropsToFilterIn.has(datum.crop.id);
-
-        // check if price is within range filter, if filter exists
-        // returns true if:
-        // 1. no price filter is set (!priceRangeFilter), or
-        // 2. price is greater than or equal to min (index 0) if set and not 0
-        //    AND price is less than or equal to max (index 1) if set and not 0
-        const isInPriceRange =
-          !priceRangeFilter ||
-          ((priceRangeFilter[0] === undefined ||
-            priceRangeFilter[0] === 0 ||
-            datum.price >= priceRangeFilter[0]) &&
-            (priceRangeFilter[1] === undefined ||
-              priceRangeFilter[1] === 0 ||
-              datum.price <= priceRangeFilter[1]));
-
-        return isInCompanyFilter && isInCropFilter && isInPriceRange;
-      });
+      // Merge per-crate nodes from the same check-in batch into one tile
+      return groupListingsByMovement(filtered);
     }, [datums, companyCountry, farmerCountry, locale, filtering]),
   };
 }

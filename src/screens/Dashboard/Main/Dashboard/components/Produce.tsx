@@ -40,9 +40,16 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
   const colors = useTailwindColors();
   const { user } = useAuthStore();
 
-  const generateDaysString = useCallback((days: number) => {
-    return `${days} ${days > 1 ? t('Dashboard.CrateManagement.CheckOut.days') : t('Dashboard.CrateManagement.CheckOut.day')}`;
-  }, []);
+  const generateStorageDaysString = useCallback((currentDays: number, plannedDays: number | null) => {
+    const daysLabel = (plannedDays || currentDays) > 1
+      ? t('Dashboard.CrateManagement.CheckOut.days')
+      : t('Dashboard.CrateManagement.CheckOut.day');
+
+    if (plannedDays) {
+      return `${currentDays}/${plannedDays} ${daysLabel}`;
+    }
+    return `${currentDays} ${daysLabel}`;
+  }, [t]);
 
   const getPricing = useCallback((produce: DashboardProduce, currency: string) => {
     const isDailyRate =
@@ -61,6 +68,8 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
     } else {
       displayPrice = produce.cratesCombinedCost || 0;
     }
+
+    displayPrice = parseFloat(Number(displayPrice).toFixed(2));
 
     return `${displayPrice}${currencies.find((c) => c.code === currency)?.symbol ?? ''}${isDailyRate ? ` / ${t('Dashboard.CrateManagement.CheckOut.day')}` : ''}`;
   }, []);
@@ -102,11 +111,11 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
         tw={cn(
           'bg-green-400 w-2 rounded-l-lg border-green-400',
           produce.minimumRemainingShelfLife <= 7 &&
-            produce.minimumRemainingShelfLife > 2 &&
-            'bg-yellow-400 border-yellow-400',
+          produce.minimumRemainingShelfLife > 2 &&
+          'bg-yellow-400 border-yellow-400',
           produce.minimumRemainingShelfLife <= 2 && 'bg-red-700 border-red-700',
           (isNil(produce.minimumRemainingShelfLife) || produce.minimumRemainingShelfLife === -1) &&
-            'bg-gray-300 border-gray-300'
+          'bg-gray-300 border-gray-300'
         )}
       />
 
@@ -122,7 +131,7 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
                     produce.minimumRemainingShelfLife > 7
                       ? colors.green[400]
                       : produce.minimumRemainingShelfLife <= 7 &&
-                          produce.minimumRemainingShelfLife > 2
+                        produce.minimumRemainingShelfLife > 2
                         ? colors.yellow[400]
                         : colors.red[700]
                   }
@@ -132,8 +141,8 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
                   tw={cn(
                     'text-green-400 font-bold',
                     produce.minimumRemainingShelfLife <= 7 &&
-                      produce.minimumRemainingShelfLife > 2 &&
-                      'text-yellow-400',
+                    produce.minimumRemainingShelfLife > 2 &&
+                    'text-yellow-400',
                     produce.minimumRemainingShelfLife <= 2 && 'text-red-700'
                   )}
                 >
@@ -177,7 +186,7 @@ export function Produce({ currency, produce, onNavigate, onLayout }: ProduceProp
           <View tw="flex flex-row items-center space-x-1">
             <ColdRoom width={16} height={16} tw="text-black" />
             <Text variant="TextMedium" tw="text-sm">
-              {generateDaysString(produce.currentStorageDays)}
+              {generateStorageDaysString(produce.currentStorageDays, produce.plannedDays)}
             </Text>
           </View>
 

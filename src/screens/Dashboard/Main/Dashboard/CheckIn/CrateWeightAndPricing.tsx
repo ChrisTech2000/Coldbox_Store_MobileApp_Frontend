@@ -1,30 +1,23 @@
-import { FlashList } from '@shopify/flash-list';
-import React, { useEffect, useRef, useState } from 'react';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { Dimensions, View } from 'react-native';
-import { Pressable } from 'react-native-gesture-handler';
+import React, { useEffect, useRef } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { View, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import colors from 'tailwindcss/colors';
+import { ActivityIndicator } from 'react-native-paper';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
-import { Checkbox } from '#ui/components/Checkbox';
 import { GenericError } from '#ui/components/GenericError';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { Input } from '#ui/components/Input';
 import { Sup } from '#ui/components/SuperscriptText';
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
 import { USER_WITHOUT_PHONE } from '#constants/general';
-import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useApiCall } from '#services/hooks/useAPiCall';
@@ -38,38 +31,61 @@ import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import { InfoModal } from './CrateSetup/InfoModal';
 import { formatCurrencyWithSymbol } from './utils';
 
-type FormValues<T = string> = {
-  applyToAll: boolean;
-  crates: Array<{
-    weight: T;
-    isSellable: boolean;
-    tag: string | undefined;
-  }>;
-  price: T | undefined;
+type CrateData = {
+  weight: number;
+  isSellable: boolean;
+  tag: string | undefined;
 };
 
-type StoreState = Omit<FormValues<number>, 'applyToAll'>;
+type FormValues = {
+  kgToList: string;
+  price: string;
+};
+
+type StoreState = { crates: CrateData[]; price: number | undefined; totalListedWeight: number | undefined; picture?: { uri: string; type: string; name: string } | null; };
 type StoreActions = { mutate: (values: StoreState) => void };
 
 const useCrateWeightPricingStore = create<StoreState & StoreActions>((set) => ({
   crates: [],
   price: undefined,
+  totalListedWeight: undefined,
+  picture: undefined,
   mutate: (values: StoreState) => set(values),
 }));
 
 export function useCrateWeightPricingBridge(cb: (values: StoreState) => void) {
-  const [crates, price] = useCrateWeightPricingStore(
-    useShallow((store) => [store.crates, store.price])
+  const [crates, price, totalListedWeight, picture] = useCrateWeightPricingStore(
+    useShallow((store) => [store.crates, store.price, store.totalListedWeight, store.picture])
   );
 
   useEffect(() => {
     if (crates.length < 1) return;
-    cb({ crates, price });
-  }, [crates, price]);
+    cb({ crates, price, totalListedWeight, picture });
+  }, [crates, price, totalListedWeight, picture]);
 }
 
 export function resetCrateWeightPricingBridge() {
-  useCrateWeightPricingStore.getState().mutate({ crates: [], price: undefined });
+  useCrateWeightPricingStore.getState().mutate({ crates: [], price: undefined, totalListedWeight: undefined, picture: undefined });
+}
+
+/**
+ * Greedy crate selection: picks crates (largest first) until targetKg is reached.
+ * Returns a copy of all crates with isSellable set appropriately.
+ */
+function selectCratesForKg(
+  crates: Array<{ weight: number; isSellable: boolean; tag: string | undefined }>,
+  targetKg: number
+): CrateData[] {
+  const indexed = crates.map((c, i) => ({ ...c, _i: i }));
+  const sorted = [...indexed].sort((a, b) => b.weight - a.weight);
+  let remaining = targetKg;
+  const selected = new Set<number>();
+  for (const c of sorted) {
+    if (remaining <= 0) break;
+    selected.add(c._i);
+    remaining -= c.weight;
+  }
+  return crates.map((c, i) => ({ ...c, isSellable: selected.has(i) }));
 }
 
 function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPricing'>) {
@@ -81,8 +97,8 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   const user = useCheckInStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
 
-  const [infoVisible, setInfoVisible] = useState(false);
-
+  const [infoVisible, setInfoVisible] = React.useState(false);
+  const [picture, setPicture] = React.useState<{ uri: string; type: string; name: string } | null>(null);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   const isUserWithoutPhone = user?.user.firstName === USER_WITHOUT_PHONE && !user.user.phone;
@@ -104,59 +120,66 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
     }
   );
 
+  // Total kg available from all crates passed in
+  const totalAvailableKg = Math.round(params.crates.reduce((sum, c) => sum + (c.weight ?? 0), 0));
+
   const form = useForm<FormValues>({
     defaultValues: {
-      applyToAll: params.applyToAll,
-      crates: params.crates.map((crate) => ({
-        weight: crate.weight.toString(),
-        isSellable: crate.isSellable,
-        tag: crate.tag,
-      })),
-      price: params.sellingPrice.toString(),
+      kgToList: '',
+      price: params.sellingPrice?.toString() ?? '0',
     },
     resolver: zodResolver((z) => {
-      const coerseNumber = z.coerce.number();
+      const max = totalAvailableKg;
       return z.object({
-        applyToAll: z.boolean(),
+        kgToList: z
+          .string()
+          .transform((v) => v.replaceAll(',', '.'))
+          .pipe(z.coerce.number().gte(0).lte(max)),
         price: z
           .string()
           .transform((v) => v.replaceAll(',', '.'))
-          .pipe(coerseNumber.gte(0))
-          .optional(),
-        crates: z
-          .array(
-            z.object({
-              id: z.number().optional(),
-              weight: z.preprocess((v) => (v ? Number(v) : 0), coerseNumber.gt(0)),
-              isSellable: z.boolean(),
-            })
-          )
-          .min(1),
+          .pipe(z.coerce.number().gte(0)),
       });
     }),
     reValidateMode: 'onSubmit',
   });
 
-  const crateFields = useFieldArray({ control: form.control, name: 'crates' });
-
-  const applyToAll = form.watch('applyToAll');
+  const kgToList = form.watch('kgToList');
   const price = form.watch('price');
-  const crates = form.watch('crates');
-  const areTagsDefined = crates.filter((crate) => !!crate.tag).length > 0;
 
-  const totalWeight = crates.reduce((acc, curr) => {
-    if (!curr.isSellable) return acc;
-    const wInt = Number(curr.weight);
-    if (isNaN(wInt)) return acc;
-    return (acc += wInt);
-  }, 0);
-
+  const parsedKg = Number(formatFloat(kgToList ?? '0'));
   const parsedPrice = Number(formatFloat(price ?? '0'));
-  const potentialPrice = isNaN(parsedPrice) ? 0 : totalWeight * parsedPrice;
+  const isListingForSale = !isNaN(parsedKg) && parsedKg > 0;
+  const potentialPrice = isListingForSale && !isNaN(parsedPrice) ? parsedKg * parsedPrice : 0;
 
-  function onSubmit(values: FormValues<number>): void {
-    useCrateWeightPricingStore.getState().mutate({ crates: values.crates, price: potentialPrice });
-    props.navigation.goBack();
+  function onSubmit(values: FormValues): void {
+    try {
+      const kg = Number(formatFloat(values.kgToList));
+      const parsedPriceVal = Number(formatFloat(values.price));
+      const rawCrates = params.crates.map((c) => ({
+        weight: c.weight,
+        isSellable: false,
+        tag: c.tag,
+      }));
+      const selectedCrates = kg > 0 ? selectCratesForKg(rawCrates, kg) : rawCrates;
+
+      // Compute price from ACTUAL selected crate weight so processMarketplaceCrateListing
+      // gets the exact pricePerKg back: (actualWeight * pricePerKg) / actualWeight = pricePerKg
+      const actualSellableKg = selectedCrates
+        .filter((c) => c.isSellable)
+        .reduce((sum, c) => sum + c.weight, 0);
+      const correctTotalPrice = actualSellableKg > 0 ? actualSellableKg * parsedPriceVal : 0;
+
+      useCrateWeightPricingStore.getState().mutate({
+        crates: selectedCrates,
+        price: correctTotalPrice,
+        totalListedWeight: kg > 0 ? kg : undefined,
+        picture,
+      });
+      props.navigation.goBack();
+    } catch (e) {
+      console.error('Submit error', e);
+    }
   }
 
   const companyEligible = eligibility.companies?.[company?.id ?? ''];
@@ -164,17 +187,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
   const allowedToSetPricing =
     guard('SET', 'MarketplaceListForSale') && companyEligible && farmerEligible;
 
-  // check if any crates are marked for sale
-  const hasAnyCrateForSale = crates.some((crate) => crate.isSellable);
-
-  // determine if submit button should be disabled
+  const hasErrors = Object.keys(form.formState.errors).length > 0;
   const isSubmitDisabled =
-    hasAnyCrateForSale &&
-    (!!form.formState.errors.crates ||
-      !!form.formState.errors.price ||
-      form.formState.isSubmitting ||
-      !form.formState.isDirty ||
-      (allowedToSetPricing && !parsedPrice));
+    hasErrors ||
+    form.formState.isSubmitting ||
+    (isListingForSale && allowedToSetPricing && (!parsedPrice || parsedPrice <= 0));
 
   if (isLoading) {
     return (
@@ -186,6 +203,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
 
   return (
     <React.Fragment>
+      {/* Bank account / eligibility warnings */}
       <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
         {isUserWithoutPhone ? (
           <Text tw="mx-4">{t('Dashboard.ProduceDetails.userWithoutPhone')}</Text>
@@ -215,246 +233,129 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
 
       <KeyboardAwareScrollView
         ref={scrollViewRef}
-        tw="px-3 pt-3 bg-white mb-20"
+        tw="px-4 pt-6 bg-white mb-20"
         showsVerticalScrollIndicator={false}
       >
-        <View tw="flex-1">
-          <View tw="flex-col">
-            <Controller
-              control={form.control}
-              name="applyToAll"
-              render={({ field: { value, onChange } }) => (
-                <Pressable
-                  tw="pb-2 px-2 flex flex-row items-center justify-between"
-                  disabled={!allowedToSetPricing}
-                  onPress={() => {
-                    const isSellable = form.getValues('crates.0.isSellable');
-                    for (let i = 0; i < crateFields.fields.length; i++) {
-                      form.setValue(`crates.${i}.isSellable`, isSellable);
-                    }
-                    onChange(!value);
-                  }}
-                >
-                  <Text tw="text-base">
-                    {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.applyAll')}
-                  </Text>
-                  <Checkbox status={value ? 'checked' : 'unchecked'} />
-                </Pressable>
-              )}
-            />
-            <Divider tw="bg-gray-400" />
+        <View tw="flex-1 space-y-6">
+
+          {/* Total available kg badge */}
+          <View tw="bg-green-50 border border-green-100 rounded-2xl p-5">
+            <Text tw="text-xs text-green-700 font-bold uppercase tracking-widest mb-1">
+              {t('Dashboard.ProduceDetails.combinedWeight')}
+            </Text>
+            <Text tw="text-3xl text-green-900 font-black">
+              {totalAvailableKg}{' '}
+              <Text tw="text-xl text-green-700 font-semibold">
+                {t('Dashboard.ProduceDetails.kilogram')}
+              </Text>
+            </Text>
           </View>
 
-          <FlashList
-            tw="py-3"
-            data={crateFields.fields}
-            keyExtractor={(field) => field.id}
-            estimatedItemSize={120}
-            renderItem={({ item, index }) => {
-              const isDisabled = applyToAll && index > 0;
-              return (
-                <View tw="flex-row items-center my-3 justify-between">
-                  <View tw="flex-col items-center px-3 mt-5 self-end">
-                    <Icon
-                      name="basket-outline"
-                      size={30}
-                      color={isDisabled ? colors.gray[400] : paperTheme.colors.onSurface}
-                    />
-                    <Text tw={cn('text-sm w-12 text-center', isDisabled && 'text-gray-400')}>
-                      #&nbsp;
-                      {areTagsDefined
-                        ? (item.tag ??
-                          t(
-                            'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.unavailableId'
-                          ))
-                        : index + 1}
+          {/* Market listing section */}
+          <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
+            {allowedToSetPricing ? (
+              <View tw="space-y-5">
+                {/* KG to list */}
+                <View tw="space-y-2">
+                  <Text tw="text-base font-semibold text-gray-800">
+                    How many kg do you want to list for the market?
+                  </Text>
+                  <View tw="flex-row items-center space-x-1 mb-1">
+                    <Text tw="text-xs text-gray-500">
+                      Max available:
+                    </Text>
+                    <Text tw="text-xs text-green-700 font-semibold">
+                      {totalAvailableKg} {t('Dashboard.ProduceDetails.kilogram').toLowerCase()}
                     </Text>
                   </View>
+                  <Controller
+                    control={form.control}
+                    name="kgToList"
+                    render={({ field: { value, onChange }, fieldState: { error } }) => (
+                      <View>
+                        <Input
+                          tw="bg-white border border-gray-200 rounded-xl h-14 text-lg"
+                          keyboardType="numeric"
+                          value={value}
+                          placeholder="e.g. 25"
+                          onChangeText={onChange}
+                        />
+                        {!!error && (
+                          <Text tw="text-red-500 text-sm mt-1">
+                            {`Please enter a value between 1 and ${totalAvailableKg} ${t('Dashboard.ProduceDetails.kilogram').toLowerCase()}`}
+                          </Text>
+                        )}
+                      </View>
+                    )}
+                  />
+                </View>
 
-                  <View tw="flex-col">
-                    <View tw="flex-row mb-1">
-                      <Text tw={cn('text-base self-center', isDisabled && 'text-gray-400')}>
-                        {t('Dashboard.CoolingUnitsCratesInfo.weight')}
+                {/* Price per kg — only appears once they enter a kg value */}
+                {isListingForSale && (
+                  <View tw="space-y-2 pb-20">
+                    <View tw="flex-row items-center space-x-1">
+                      <Text tw="text-base font-semibold text-gray-800">
+                        {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.sellingPrice')}
                       </Text>
-                      <Sup disabled={isDisabled}>
-                        ({t('Dashboard.ProduceDetails.kilogram').toUpperCase()})
+                      <Sup>
+                        ({params.companyCurrency}/{t('Dashboard.ProduceDetails.kilogram').toUpperCase()})
                       </Sup>
                     </View>
                     <Controller
                       control={form.control}
-                      name={`crates.${index}.weight`}
+                      name="price"
                       render={({ field: { value, onChange } }) => (
                         <Input
-                          tw={cn(
-                            'bg-white border rounded-sm h-14 text-center',
-                            isDisabled ? 'border-gray-400' : undefined
-                          )}
+                          tw="bg-white border border-gray-200 rounded-xl h-14 text-lg"
                           keyboardType="numeric"
                           value={value}
-                          defaultValue="0"
-                          placeholder="0"
-                          editable={false}
-                          onChangeText={(text) => {
-                            if (!applyToAll) return onChange(text);
-                            for (let i = 0; i < crateFields.fields.length; i++) {
-                              form.setValue(`crates.${i}.weight`, text);
-                            }
-                          }}
-                          disabled={isDisabled}
-                          left={
-                            <TextInput.Icon
-                              icon="minus"
-                              color={paperTheme.colors.primary}
-                              disabled={isDisabled || value === '1'}
-                              onPress={(evt) => {
-                                evt.stopPropagation();
-                                const int = Number(value);
-                                if (isNaN(int)) return; // safe guard
-                                const finalValue = (int > 0 ? int - 1 : 0).toString();
-                                if (!applyToAll) return onChange(finalValue);
-                                for (let i = 0; i < crateFields.fields.length; i++) {
-                                  form.setValue(`crates.${i}.weight`, finalValue);
-                                }
-                              }}
-                            />
-                          }
-                          right={
-                            <TextInput.Icon
-                              icon="plus"
-                              color={paperTheme.colors.primary}
-                              disabled={isDisabled}
-                              onPress={(evt) => {
-                                evt.stopPropagation();
-                                const int = Number(value);
-                                if (isNaN(int)) return; // safe guard
-                                const finalValue = (int + 1).toString();
-                                if (!applyToAll) return onChange(finalValue);
-                                for (let i = 0; i < crateFields.fields.length; i++) {
-                                  form.setValue(`crates.${i}.weight`, finalValue);
-                                }
-                              }}
-                            />
-                          }
+                          placeholder="0.00"
+                          onChangeText={onChange}
                         />
                       )}
                     />
                   </View>
+                )}
 
-                  <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
-                    <Controller
-                      control={form.control}
-                      name={`crates.${index}.isSellable`}
-                      render={({ field: { value, onChange } }) => (
-                        <Pressable
-                          tw="flex flex-row items-center justify-between self-center mt-5 pr-3 space-x-1 w-30"
-                          onPress={() => {
-                            if (!applyToAll) {
-                              onChange(!value);
-                            } else {
-                              for (let i = 0; i < crateFields.fields.length; i++) {
-                                form.setValue(`crates.${i}.isSellable`, !value);
-                              }
+                {/* Image Picker */}
+                {isListingForSale && (
+                  <View tw="space-y-2 pb-20 pt-4">
+                    <Text tw="text-base font-semibold text-gray-800">
+                      Add a picture of the produce (Optional)
+                    </Text>
+                    <View tw="flex-row items-center space-x-3">
+                      <Button
+                        onPress={() => {
+                          const { launchImageLibrary } = require('react-native-image-picker');
+                          launchImageLibrary({ mediaType: 'photo', quality: 0.8 }, (res: any) => {
+                            if (res.assets?.[0]) {
+                              const { uri, type, fileName } = res.assets[0];
+                              setPicture({ uri, type, name: fileName });
                             }
-                          }}
-                          disabled={isDisabled || !allowedToSetPricing}
-                        >
-                          <Checkbox
-                            status={value ? 'checked' : 'unchecked'}
-                            disabled={isDisabled || !allowedToSetPricing}
-                          />
-                          <Text
-                            tw={cn(
-                              'text-base text-wrap',
-                              Dimensions.get('window').height <= SMALL_SCREEN_THRESHOLD && 'w-20',
-                              (isDisabled || !allowedToSetPricing) && 'text-gray-300'
-                            )}
-                          >
-                            {t(
-                              'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.list'
-                            )}
-                          </Text>
-                        </Pressable>
-                      )}
-                    />
-                  </RBAC.ProtectedResource>
-                </View>
-              );
-            }}
-            ListFooterComponent={
-              <View tw="w-full flex-row justify-start">
-                <Button
-                  tw="my-3"
-                  mode="text"
-                  disabled={applyToAll}
-                  uppercase
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    crateFields.append({
-                      weight: '25',
-                      isSellable: false,
-                      tag: undefined,
-                    });
-                    scrollViewRef.current?.scrollToEnd(true);
-                  }}
-                >
-                  {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.addMore')}
-                </Button>
-              </View>
-            }
-          />
-        </View>
-
-        <Divider tw="bg-gray-400" />
-
-        <RBAC.ProtectedResource action="SET" subject="MarketplaceListForSale">
-          {crates.some((crate) => crate.isSellable) ? (
-            <View tw="pb-20">
-              <View tw="flex flex-row space-x-1 mt-6 mb-2">
-                <Text tw="text-base">
-                  {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.sellingPrice')}
-                </Text>
-                <Sup>
-                  ({params.companyCurrency}/{t('Dashboard.ProduceDetails.kilogram').toUpperCase()})
-                </Sup>
-              </View>
-
-              <Controller
-                control={form.control}
-                name="price"
-                render={({ field: { value, onChange } }) => (
-                  <View>
-                    <Input
-                      tw="bg-white border rounded-sm h-14"
-                      keyboardType="numeric"
-                      value={value}
-                      placeholder="0.00"
-                      onChangeText={(text) => onChange(text)}
-                    />
+                          });
+                        }}
+                      >
+                        {picture ? 'Change Picture' : 'Select Picture'}
+                      </Button>
+                      {picture ? (
+                        <Text tw="text-green-600 font-medium">Image selected ✓</Text>
+                      ) : null}
+                    </View>
                   </View>
                 )}
-              />
-            </View>
-          ) : null}
-        </RBAC.ProtectedResource>
+              </View>
+            ) : null}
+          </RBAC.ProtectedResource>
+
+        </View>
       </KeyboardAwareScrollView>
 
       <HideWithKeyboardView tw="absolute bottom-0 left-0 w-full">
-        {crates.some((crate) => crate.isSellable) ? (
-          <View tw="flex flex-row items-center justify-between bg-teal-50 p-4 rounded-sm">
-            <View tw="flex flex-row items-center space-x-1">
-              <Text tw="text-lg">
-                {t(
-                  'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.potentialSellingPrice'
-                )}
-              </Text>
-              <Pressable
-                onPress={() => setInfoVisible(true)}
-                disabled={form.formState.isSubmitting}
-              >
-                <Icon name="information-outline" size={20} />
-              </Pressable>
-            </View>
-
+        {potentialPrice > 0 ? (
+          <View tw="flex flex-row items-center justify-between bg-teal-50 p-4">
+            <Text tw="text-lg">
+              {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.potentialSellingPrice')}
+            </Text>
             <Text tw="text-lg text-green-primary">
               {formatCurrencyWithSymbol(params.companyCurrency, potentialPrice.toFixed(2))}
             </Text>

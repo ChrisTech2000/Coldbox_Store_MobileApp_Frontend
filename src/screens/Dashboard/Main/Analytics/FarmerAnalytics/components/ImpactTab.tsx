@@ -18,7 +18,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 
 import { DashboardMainRoutes } from 'navigation/Dashboard/Main';
-import { DownChange, ImpactSection, UpChange } from '../../components/ImpactContent';
+import { Badge, ImpactSection } from '../../components/ImpactContent';
 import { SectionAccordion } from '../../components/SectionAccordion';
 import { useFarmerAnalyticsData } from '../store';
 
@@ -120,10 +120,10 @@ export function ImpactTab() {
           name: val.cropName,
           to,
           from,
-          change: Math.abs(to - from),
+          change: to - from,
         };
       }),
-      change: Math.abs(to - from),
+      change: to - from,
     };
   }, [impact]);
 
@@ -140,10 +140,10 @@ export function ImpactTab() {
           name: val.cropName,
           to,
           from,
-          change: Math.abs(to - from),
+          change: to - from,
         };
       }),
-      change: Math.abs(to - from),
+      change: to - from,
     };
   }, [impact]);
 
@@ -305,14 +305,15 @@ export function ImpactTab() {
           foodLoss.to === foodLoss.from ? (
             <Icon source="equal" size={40} />
           ) : foodLoss.change < 0 ? (
-            <DownChange
-              value={`${foodLoss.change.toFixed(2)}%`}
-              message={t('Dashboard.Analytics.farmersAnalytics.decreaseInFoodLoss')}
+            <Badge
+              value={`${(foodLoss.change * -1).toFixed(2)}%`}
+              positive
+              label={t('Dashboard.Analytics.farmersAnalytics.decreaseInFoodLoss')}
             />
           ) : (
-            <UpChange
+            <Badge
               value={`${foodLoss.change.toFixed(2)}%`}
-              message={t('Dashboard.Analytics.farmersAnalytics.increaseInFoodLoss')}
+              label={t('Dashboard.Analytics.farmersAnalytics.increaseInFoodLoss')}
             />
           )
         }
@@ -377,16 +378,15 @@ export function ImpactTab() {
           revenueChange.to === revenueChange.from ? (
             <Icon source="equal" size={40} />
           ) : revenueChange.change < 0 ? (
-            <DownChange
-              value={`${revenueChange.change.toFixed(2)}%`}
-              message={t('Dashboard.Analytics.farmersAnalytics.decreaseInRevenue')}
-              negative
+            <Badge
+              value={`${(revenueChange.change * -1).toFixed(2)}%`}
+              label={t('Dashboard.Analytics.farmersAnalytics.decreaseInRevenue')}
             />
           ) : (
-            <UpChange
+            <Badge
               value={`${revenueChange.change.toFixed(2)}%`}
-              message={t('Dashboard.Analytics.farmersAnalytics.increaseInRevenue')}
               positive
+              label={t('Dashboard.Analytics.farmersAnalytics.increaseInRevenue')}
             />
           )
         }

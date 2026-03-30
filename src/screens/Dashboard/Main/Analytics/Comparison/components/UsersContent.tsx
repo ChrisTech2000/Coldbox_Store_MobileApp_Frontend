@@ -110,7 +110,6 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
   return (
     <ScrollView tw="w-full mt-2" contentContainerStyle="pb-20" showsVerticalScrollIndicator={false}>
       <SectionAccordion
-        color="bg-green-transparency"
         expanded={expanded === 'operators'}
         setExpanded={() => expandTab('operators')}
         title={t('Dashboard.Analytics.comparisonTab.usersTab.operators')}
@@ -128,7 +127,6 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
       />
 
       <SectionAccordion
-        color="bg-green-transparency"
         expanded={expanded === 'users'}
         setExpanded={() => expandTab('users')}
         title={t('Dashboard.Analytics.comparisonTab.usersTab.users')}
@@ -146,7 +144,6 @@ export function UsersContent({ sorting }: { sorting: ESortingOptions }) {
       />
 
       <SectionAccordion
-        color="bg-green-transparency"
         expanded={expanded === 'beneficiaries'}
         setExpanded={() => expandTab('beneficiaries')}
         title={t('Dashboard.Analytics.comparisonTab.usersTab.beneficiaries')}
@@ -172,16 +169,16 @@ function Table({ items, header, total, empty }: TableProps) {
   const headers = header[1].split('|');
 
   return (
-    <DataTable tw="py-4 px-2 min-w-full">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-18 space-x-4 min-w-full">
+    <DataTable tw="w-full">
+      <DataTable.Header tw="bg-gray-50 border-b border-gray-100 h-18 space-x-4 min-w-full">
         <DataTable.Cell tw="max-w-[30%] min-w-[30%]">
-          <Text variant="TextMedium" tw="text-white text-base text-center text-wrap">
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px] text-center">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Cell>
         <DataTable.Cell tw="max-w-[50%] min-w-[50%]">
           <View>
-            <Text variant="TextMedium" tw="text-white text-base text-center">
+            <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px] text-center mb-1">
               {header[0]}
             </Text>
             <View tw="flex flex-row justify-between items-center w-full">
@@ -189,21 +186,18 @@ function Table({ items, header, total, empty }: TableProps) {
                 <React.Fragment key={`val-${text}-${index}`}>
                   <Text
                     key={`${text}-${index}`}
-                    variant="TextMedium"
-                    tw="text-white text-base text-center"
+                    variant="TextSmall"
+                    tw="text-gray-400 font-bold uppercase text-[9px] text-center"
                   >
                     {text}
                   </Text>
-                  {index < headers.length - 1 ? (
-                    <Text tw="text-wrap text-center text-white"> | </Text>
-                  ) : null}
                 </React.Fragment>
               ))}
             </View>
           </View>
         </DataTable.Cell>
         <DataTable.Cell tw="max-w-[20%] min-w-[20%] px-2">
-          <Text variant="TextMedium" tw="text-white text-base text-center">
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px] text-center">
             {startCase(t('Dashboard.Analytics.comparisonTab.total'))}
           </Text>
         </DataTable.Cell>

@@ -344,13 +344,24 @@ class MarketplaceService extends HttpClient {
         ...body
       } = params;
 
+      let payload: any = body;
+      if (body.picture) {
+        const formData = new FormData();
+        formData.append('picture', body.picture as any);
+        formData.append('produce_price_per_kg', body.producePricePerKg.toString());
+        if (body.totalListedWeight) formData.append('total_listed_weight', body.totalListedWeight.toString());
+        body.crateIds.forEach((id) => formData.append('crate_ids', id.toString()));
+        payload = formData;
+      }
+
       const { data } = await this.post<UpdateListedCrateResponse>(
         query(EMarketplaceEndpoints.UPSERT_LISTED_CRATE, {
           operatorOnBehalfOfSellerFarmerId,
           operatorOnBehalfOfSellerUserId,
           operatorOnBehalfOfSellerCompanyId,
         }),
-        body
+        payload,
+        body.picture ? { headers: { 'Content-Type': 'multipart/form-data' } } : undefined
       );
       return data;
     } catch (error) {

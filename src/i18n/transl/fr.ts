@@ -2,7 +2,7 @@ import type { Translations } from './en';
 
 export default {
   appVersion: {
-    newVersion: 'Une nouvelle version de Coldtivate est disponible !',
+    newVersion: 'Une nouvelle version de Coldboxstore est disponible !',
     pleaseUpdate: "Veuillez mettre à jour l'application avant de continuer.",
   },
   languages: {
@@ -64,7 +64,7 @@ export default {
       LegacyContacts: 'Contacts hérités',
     },
     bottomTabs: {
-      RootMainTabStack: "{{firstName}}'s Coldtivate",
+      RootMainTabStack: "{{firstName}}'s Coldboxstore",
       ProduceDetails: '{{produceCode}}',
       MarketplaceSettings: 'Paramètres du marché',
       PriceTrend: 'Tendance des prix',
@@ -177,9 +177,9 @@ export default {
   },
   Auth: {
     welcomePopup:
-      'Bienvenue chez Coldtivate ! Si vous êtes un agriculteur, un commerçant ou si vous êtes intéressé par l’achat de produits stockés dans les chambres froides, veuillez vous inscrire en cliquant sur « S’inscrire en tant qu’utilisateur ou consommateur de froid ». Si vous travaillez pour une entreprise de refroidissement, veuillez contacter votre responsable pour vérifier si votre entreprise est enregistrée. Si c’est le cas, votre responsable doit vous envoyer un SMS pour vous inviter à vous inscrire en tant qu’employé enregistré ou en tant qu’opérateur. Si ce n’est pas le cas, vous pouvez vous inscrire à l’entreprise et vous inscrire en tant qu’employé enregistré. Veuillez consulter la section « Infos sur l’application » pour les FAQ.',
+      'Bienvenue chez Coldboxstore ! Si vous êtes un agriculteur, un commerçant ou si vous êtes intéressé par l’achat de produits stockés dans les chambres froides, veuillez vous inscrire en cliquant sur « S’inscrire en tant qu’utilisateur ou consommateur de froid ». Si vous travaillez pour une entreprise de refroidissement, veuillez contacter votre responsable pour vérifier si votre entreprise est enregistrée. Si c’est le cas, votre responsable doit vous envoyer un SMS pour vous inviter à vous inscrire en tant qu’employé enregistré ou en tant qu’opérateur. Si ce n’est pas le cas, vous pouvez vous inscrire à l’entreprise et vous inscrire en tant qu’employé enregistré. Veuillez consulter la section « Infos sur l’application » pour les FAQ.',
     Root: {
-      welcome: 'Bienvenue sur Coldtivate',
+      welcome: 'Bienvenue sur Coldboxstore',
       signIn: 'Se connecter',
       signUpCompany: "S'inscrire comme entreprise",
       signUpCoolingUser: "Inscrivez-vous en tant qu'utilisateur ou consommateur de climatisation",
@@ -236,7 +236,7 @@ export default {
         cancel: 'Annuler',
         ok: 'OK',
       },
-      welcome: 'Bienvenue sur Coldtivate',
+      welcome: 'Bienvenue sur Coldboxstore',
       schema: {
         passwordError:
           'Votre mot de passe doit comporter au moins 8 caractères, contenir une lettre majuscule, une lettre minuscule et un chiffre.',
@@ -267,7 +267,7 @@ export default {
         submit: "S'inscrire",
         terms: {
           agree: "J'accepte l'Accord de",
-          license: 'licence utilisateur Coldtivate',
+          license: 'licence utilisateur Coldboxstore',
           privacy: 'la Politique de confidentialité',
           and: 'et',
           comsol: "les Conditions d'utilisation COMSOL",
@@ -317,7 +317,7 @@ export default {
       resetButton: 'Réinitialiser',
     },
     Invite: {
-      heading: 'Bienvenue sur Coldtivate',
+      heading: 'Bienvenue sur Coldboxstore',
       employee:
         "Vous avez été invité en tant qu'employé. Veuillez remplir le formulaire pour terminer votre inscription.",
       operator:
@@ -348,7 +348,7 @@ export default {
     noCompanyAvailable: 'Aucune entreprise disponible',
     noCoolingUnitAvailable: 'Aucune unité de réfrigération disponible',
     noLocationsAvailable:
-      'Bienvenue sur Coldtivate. Commencez en ajoutant des lieux à votre application dans le panneau de gestion.',
+      'Bienvenue sur Coldboxstore. Commencez en ajoutant des lieux à votre application dans le panneau de gestion.',
     coolingUserNavigateToMarketplace:
       'Intéressé par l’achat de produits stockés en chambre froide ? Rendez-vous dans l’onglet Marché en bas à droite !',
     MarketPrice: {
@@ -511,7 +511,7 @@ export default {
         SelectCropType: {
           fruits: 'Fruits',
           vegetables: 'Légumes',
-          rootVegetables: 'Légumes-racines',
+          meat: 'Légumes-racines',
           other: 'Autres articles',
         },
         SelectCrop: { additionalInfo: 'Informations supplémentaires' },
@@ -763,7 +763,7 @@ export default {
       AddOperator: {
         messages: {
           operator:
-            "Pour rejoindre l'application Coldtivate en tant qu'Opérateur, rendez-vous sur : {{link}}",
+            "Pour rejoindre l'application Coldboxstore en tant qu'Opérateur, rendez-vous sur : {{link}}",
         },
         toasts: { success: 'Opérateur invité avec succès' },
         phoneFormat: 'Assurez-vous que le numéro de téléphone saisi a un code pays.',
@@ -800,7 +800,7 @@ export default {
       },
       AddRegisteredEmployee: {
         message:
-          "Pour rejoindre l'application Coldtivate en tant qu'Employé enregistré, rendez-vous sur : {{link}}",
+          "Pour rejoindre l'application Coldboxstore en tant qu'Employé enregistré, rendez-vous sur : {{link}}",
         toasts: { success: 'Employé enregistré invité avec succès' },
       },
       CoolingUsers: {
@@ -1527,9 +1527,9 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'Bienvenue sur Coldtivate! Ceci est un guide des fonctions.',
+    welcome: 'Bienvenue sur Coldboxstore! Ceci est un guide des fonctions.',
     farmerWelcome:
-      'Bienvenue chez Coldtivate ! Ce tutoriel vous aidera à comprendre comment utiliser l’application',
+      'Bienvenue chez Coldboxstore ! Ce tutoriel vous aidera à comprendre comment utiliser l’application',
     quit: 'Quitter le tutoriel',
     congratulations:
       "Félicitations ! Vous avez terminé le tutoriel ! Retournez au tableau de bord pour commencer à utiliser l'application.",
@@ -1549,7 +1549,7 @@ export default {
       operatorManagementNavigation:
         'Dans le menu, vous pouvez accéder à « Gestion » et appuyer dessus pour ajouter ou modifier des Utilisateurs de chambre froide',
       addCoolingUser:
-        'Les Utilisateurs de chambre froide qui ne se sont pas inscrits sur Coldtivate peuvent être ajoutés en insérant leurs coordonnées (nom, numéro de téléphone). Les Utilisateurs de chambre froide déjà inscrits dans l\'application peuvent être ajoutés par code. Ils peuvent trouver leur code sur leur profil -> "Détails du compte" -> "Code d\'importation de l\'Utilisateur de chambre froide".',
+        'Les Utilisateurs de chambre froide qui ne se sont pas inscrits sur Coldboxstore peuvent être ajoutés en insérant leurs coordonnées (nom, numéro de téléphone). Les Utilisateurs de chambre froide déjà inscrits dans l\'application peuvent être ajoutés par code. Ils peuvent trouver leur code sur leur profil -> "Détails du compte" -> "Code d\'importation de l\'Utilisateur de chambre froide".',
       navigateToCoolingUser: "Allez-y et cliquez sur l'onglet des Utilisateurs de chambre froide",
       listCoolingUsers:
         "Les Utilisateurs de chambre froide ayant un smartphone sont identifiés par une icône de téléphone sur le côté droit des écrans. Les autres sont des Utilisateurs de chambre froide avec un téléphone basique. Dans les deux cas, vous pouvez cliquer sur un nom pour accéder à leurs détails et au questionnaire de l'Utilisateur de chambre froide.",
@@ -1624,7 +1624,7 @@ export default {
         "Félicitations ! Vous avez terminé le tutoriel ! Si vous avez des questions concernant l'application, nous vous recommandons de consulter la FAQ, de demander à un opérateur de la chambre froide, ou de nous écrire à app@yourvcca.org.",
       more: 'Si vous voyez un onglet nommé « Prix des cultures », vous pouvez vérifier les prix des différents fruits et légumes à travers le pays au cours des derniers jours, ainsi qu’une prévision des prix pour l’avenir. Pour l’instant, cette option n’est disponible que pour certains pays.',
       marketplaceStep1:
-        'Bienvenue sur la place de marché numérique de Coldtivate, où tous les utilisateurs peuvent acheter et vendre des produits stockés dans la chambre froide. Chaque caisse mise en vente est listée ici, et vous pouvez acheter n’importe quelle quantité (en kg) ou la caisse entière.',
+        'Bienvenue sur la place de marché numérique de Coldboxstore, où tous les utilisateurs peuvent acheter et vendre des produits stockés dans la chambre froide. Chaque caisse mise en vente est listée ici, et vous pouvez acheter n’importe quelle quantité (en kg) ou la caisse entière.',
       marketplaceStep2:
         'Après avoir sélectionné les articles à acheter, cliquez sur l’icône du panier pour voir les articles dans votre panier.',
       shoppingCart:

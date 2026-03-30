@@ -110,33 +110,31 @@ export function UsersContent() {
       <UserSection
         title={t('Dashboard.Analytics.operatorsTotal', {
           amount: operators.total ?? 0,
-        })}
+        }).replace('Total number of operators', 'Harvest Managers')}
         userType1={t('Dashboard.Analytics.maleLabel', {
           amount: operators.male ?? 0,
         })}
         userType2={t('Dashboard.Analytics.femaleLabel', {
           amount: operators.female ?? 0,
         })}
-        otherType={operators.other ?? 0}
       />
 
       <UserSection
         title={t('Dashboard.Analytics.usersTotal', {
           amount: users.total ?? 0,
-        })}
+        }).replace('Total number of distinct cooling users', 'Smallholder Farmers')}
         userType1={t('Dashboard.Analytics.maleLabel', {
           amount: users.male ?? 0,
         })}
         userType2={t('Dashboard.Analytics.femaleLabel', {
           amount: users.female ?? 0,
         })}
-        otherType={users.other ?? 0}
       />
 
       <UserSection
         title={t('Dashboard.Analytics.beneficiariesTotal', {
           amount: Math.round(beneficiaries.total) ?? 0,
-        })}
+        }).replace('Total number of indirect beneficiaries', 'Local Beneficiaries')}
         userType1={t('Dashboard.Analytics.maleLabel', {
           amount: beneficiaries.male,
         })}

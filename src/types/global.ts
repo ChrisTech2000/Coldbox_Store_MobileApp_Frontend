@@ -715,7 +715,7 @@ export enum EPaymentMethod {
 export enum ECropType {
   FRUITS = 1,
   VEGETABLES = 2,
-  ROOT_VEGETABLES = 3,
+  MEAT = 3,
   OTHER = 4,
 }
 

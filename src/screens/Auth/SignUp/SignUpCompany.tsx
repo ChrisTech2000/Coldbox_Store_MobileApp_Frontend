@@ -46,6 +46,7 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
     watch,
     setValue,
     clearErrors,
+    setError,
     formState: { errors },
     getValues,
   } = useForm<SignUpCompanySchemaType>({
@@ -140,8 +141,48 @@ function SignUpCompany(props: AuthRouteProps<'SignUpCompany'>) {
           recaptchaToken
         );
       } catch (exception) {
-        if (exception instanceof CustomError && exception.originalError.response.status >= 500) {
-          toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+        if (exception instanceof CustomError) {
+          const status = exception.originalError?.response?.status;
+          const errorData = exception.originalError?.response?.data as any;
+
+          if (status === 400 && errorData) {
+            let handled = false;
+
+            if (errorData.company && Array.isArray(errorData.company)) {
+              setError('companyName', { type: 'server', message: errorData.company[0] });
+              handled = true;
+            }
+
+            if (errorData.user) {
+              if (Array.isArray(errorData.user)) {
+                // Usually means duplicate user, fallback to email field
+                setError('email', { type: 'server', message: errorData.user[0] });
+                handled = true;
+              } else if (typeof errorData.user === 'object') {
+                if (errorData.user.phone && Array.isArray(errorData.user.phone)) {
+                  setError('phone', { type: 'server', message: errorData.user.phone[0] });
+                  handled = true;
+                }
+                if (errorData.user.email && Array.isArray(errorData.user.email)) {
+                  setError('email', { type: 'server', message: errorData.user.email[0] });
+                  handled = true;
+                }
+              }
+            }
+
+            if (handled) {
+              return;
+            }
+          }
+
+          if (status && status >= 500) {
+            toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+          } else {
+            toast.show(t('Auth.SignUp.toasts.error'), {
+              type: 'md_danger',
+              style: { marginBottom: 55 },
+            });
+          }
         } else {
           toast.show(t('Auth.SignUp.toasts.error'), {
             type: 'md_danger',

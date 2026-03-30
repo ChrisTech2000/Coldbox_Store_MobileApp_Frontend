@@ -65,7 +65,7 @@ const en = {
       AddUserBankAccount: '{{user}} Bank Account',
     },
     bottomTabs: {
-      RootMainTabStack: "{{firstName}}'s ColdBoxstore",
+      RootMainTabStack: 'Manamuz',
       ProduceDetails: '{{produceCode}}',
       MarketplaceSettings: 'Marketplace settings',
       PriceTrend: 'Price trend',
@@ -518,7 +518,7 @@ const en = {
         SelectCropType: {
           fruits: 'Fruits',
           vegetables: 'Vegetables',
-          rootVegetables: 'Root Vegetables',
+          meat: 'Meat',
           other: 'Other Items',
         },
         SelectCrop: {
@@ -1599,7 +1599,7 @@ const en = {
       operatorManagementNavigation:
         'In the Menu, you can navigate to "Management" and tap there to add or edit Cooling Users',
       addCoolingUser:
-        'Cooling users who have not registered on ColdBox Store can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".',
+        'Cooling users who have not registered on Manamuz can be added by inserting their details (name, phone number). Cooling users who already signed up in the app can be added by code. They can find their code on their profile -> "Account details" -> "Cooling User Import Code".',
       navigateToCoolingUser: 'Go ahead and click the Cooling Users tab',
       listCoolingUsers:
         'Cooling users with a smartphone are identified by a phone icon on the right side of the screens. The others are cooling users with a basic phone. In both cases, you can click on a name to access their details and the cooling user survey.',

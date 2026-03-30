@@ -78,8 +78,13 @@ export function useI18n(): boolean {
 
   useEffect(() => {
     async function bootstrap(): Promise<void> {
-      await _initializeI18nConfiguration();
-      setIsReady(true);
+      try {
+        await _initializeI18nConfiguration();
+      } catch (error) {
+        console.error('Failed to initialize i18n', error);
+      } finally {
+        setIsReady(true);
+      }
     }
     void bootstrap();
   }, []);

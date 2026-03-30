@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Banner, Divider } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 import colors from 'tailwindcss/colors';
-import { isValidPhoneNumber } from 'libphonenumber-js';
+import { isValidPhone, normalizePhone } from '#services/utils/phoneUtils';
 import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
@@ -79,7 +79,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
           .string()
           .min(1, { message: t('Auth.SignUp.schema.phoneError') })
           .default('')
-          .refine((value) => isValidPhoneNumber(value), {
+          .refine((value) => isValidPhone(value, company?.country), {
             message: t('Auth.SignUp.schema.invalidPhoneError'),
           }),
         coolingUnits: z.array(z.number()),
@@ -126,9 +126,12 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
     const userId = useAuthStore.getState().user?.id;
     if (!userId) return; // safe guard
 
+    // Normalize phone number to E.164 format using company country
+    const normalizedPhone = normalizePhone(values.phoneNumber, company?.country);
+
     try {
       await ColdtivateService.sendOperatorInvitation({
-        phone: values.phoneNumber,
+        phone: normalizedPhone,
         coolingUnits: values.coolingUnits,
         userId,
         recaptchaToken,

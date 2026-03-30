@@ -20,7 +20,17 @@ export type GeoLocationAddress = {
 };
 
 export class LocationGeocoder {
-  private static _client: GeocodeService = geocodingClient({ accessToken: MAPBOX_ACCESS_TOKEN });
+  private static _client: GeocodeService | null = null;
+
+  private static getClient(): GeocodeService {
+    if (!LocationGeocoder._client) {
+      if (!MAPBOX_ACCESS_TOKEN) {
+        throw new Error('MAPBOX_ACCESS_TOKEN is not defined in environment variables');
+      }
+      LocationGeocoder._client = geocodingClient({ accessToken: MAPBOX_ACCESS_TOKEN });
+    }
+    return LocationGeocoder._client;
+  }
 
   public static async getCurrentLocation() {
     try {
@@ -37,7 +47,7 @@ export class LocationGeocoder {
 
   public static async getCoordsFromAddress(datums: GeoLocationAddress) {
     try {
-      const result = await LocationGeocoder._client
+      const result = await LocationGeocoder.getClient()
         .forwardGeocode({ query: LocationGeocoder.buildAddressFromDatum(datums), limit: 1 })
         .send();
 
@@ -59,7 +69,7 @@ export class LocationGeocoder {
     datums: Pick<GeoLocationAddress, 'latitude' | 'longitude'>
   ) {
     try {
-      const result = await LocationGeocoder._client
+      const result = await LocationGeocoder.getClient()
         .reverseGeocode({ query: [datums.longitude, datums.latitude], limit: 1 })
         .send();
 
@@ -98,7 +108,7 @@ export class LocationGeocoder {
         throw new Error(EGeolocationError.InvalidFormat);
       }
 
-      const result = await LocationGeocoder._client
+      const result = await LocationGeocoder.getClient()
         .forwardGeocode({
           query: datums.cityName,
           countries: [datums.countryCode],
@@ -112,7 +122,7 @@ export class LocationGeocoder {
         return { longitude, latitude };
       }
 
-      const globalResult = await LocationGeocoder._client
+      const globalResult = await LocationGeocoder.getClient()
         .forwardGeocode({
           query: datums.cityName,
           limit: 1,

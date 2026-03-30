@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Icon } from 'react-native-paper';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -13,6 +13,7 @@ import reportCrash from '#ui/lib/reportCrash';
 import InAppNotifications from '#common/InAppNotifications';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
+import { useTailwindColors } from '#ui/hooks/useTailwindColors';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
@@ -36,6 +37,7 @@ const screenHeight = Dimensions.get('window').height;
 
 export function ComparisonSection() {
   const { t } = useTranslationUtils();
+  const colors = useTailwindColors();
   const toast = InAppNotifications.useToast();
   const coolingUnits = useAnalyticsData((store) => store.coolingUnits);
   const company = useManagementStore((store) => store.company);
@@ -150,9 +152,9 @@ export function ComparisonSection() {
           <Configuration openModal={() => setIsModalOpen(true)} />
         ) : (
           <View tw="w-full space-y-4 justify-between">
-            <View tw="w-full flex flex-row flex-wrap justify-between items-center mb-4">
+            <View tw="w-full flex-row justify-between items-center mb-4">
               <TouchableOpacity
-                tw="flex flex-row items-center space-x-2 justify-start"
+                tw="flex flex-row items-center space-x-2"
                 onPress={onBackToMain}
               >
                 <BackArrowIcon />
@@ -160,18 +162,36 @@ export function ComparisonSection() {
                   {t(`Dashboard.Analytics.companyTab.goBackButton`)}
                 </Text>
               </TouchableOpacity>
-              <View tw="flex flex-row items-center space-x-1 space-y-1">
+
+              <View tw="flex-row items-center space-x-2">
+                <Button
+                  mode="contained"
+                  onPress={onDownloadData}
+                  icon="download-outline"
+                  contentStyle="h-8"
+                  labelStyle="text-[10px] h-5"
+                  tw="bg-green-primary"
+                  disabled={isCreatingPdf}
+                >
+                  {isCreatingPdf ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    t('Dashboard.Analytics.downloadDataButton')
+                  )}
+                </Button>
+
                 <SortingMenu
                   isModalVisible={isSortModalOpen}
                   setIsModalVisible={setIsSortModalOpen}
                   useSortingStore={useSortingStore}
                 />
+
                 <Button
                   mode="contained"
                   contentStyle="bg-gray-800 h-8"
                   icon="cog"
                   onPress={() => setIsModalOpen(true)}
-                  labelStyle="h-5"
+                  labelStyle="text-[10px] h-5"
                 >
                   {t('Dashboard.Analytics.tabsShared.configureButton')}
                 </Button>
@@ -189,36 +209,38 @@ export function ComparisonSection() {
                 <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
               </View>
             ) : (
-              <View tw="items-center">
-                <Button
-                  mode="contained"
-                  uppercase
-                  onPress={onDownloadData}
-                  icon="check-circle-outline"
-                  contentStyle="flex flex-row-reverse"
-                  tw="w-[50%] mb-4"
-                  disabled={isCreatingPdf}
-                >
-                  {isCreatingPdf ? (
-                    <ActivityIndicator size="small" color="white" />
-                  ) : (
-                    t('Dashboard.Analytics.downloadDataButton')
-                  )}
-                </Button>
-                <View tw="w-full bg-green-transparency rounded-lg px-2 py-1">
-                  <Text variant="TextMedium" tw="text-base font-bold">
-                    {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}{' '}
-                    <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                      {dateFmt(configData.startDate.toISOString(), 'MMMM d, yyyy')} -{' '}
-                      {dateFmt(configData.endDate.toISOString(), 'MMMM d, yyyy')}
-                    </Text>
-                  </Text>
-                  <Text variant="TextMedium" tw="text-base font-bold">
-                    {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}{' '}
-                    <Text variant="TextMedium" tw="text-base font-bold text-green-primary">
-                      {configData.coolingUnits.map((unit) => unit.name).join(', ')}
-                    </Text>
-                  </Text>
+              <View tw="items-center mt-2">
+                <View tw="w-full bg-white border border-gray-100 shadow-sm rounded-2xl p-4 space-y-3 my-2">
+                  <View tw="flex-row items-center space-x-3">
+                    <View tw="p-2 bg-green-primary/10 rounded-lg">
+                      <Icon source="calendar-range" size={20} color={colors.green.primary} />
+                    </View>
+                    <View tw="flex-1">
+                      <Text variant="TextSmall" tw="text-gray-400 uppercase tracking-wider text-[10px] font-bold">
+                        {t('Dashboard.Analytics.tabsShared.dateRangeLabel')}
+                      </Text>
+                      <Text variant="TextMedium" tw="text-sm font-bold text-gray-800">
+                        {dateFmt(configData.startDate.toISOString(), 'MMM d, yyyy')} -{' '}
+                        {dateFmt(configData.endDate.toISOString(), 'MMM d, yyyy')}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View tw="h-[1px] bg-gray-50 w-full" />
+
+                  <View tw="flex-row items-center space-x-3">
+                    <View tw="p-2 bg-blue-500/10 rounded-lg">
+                      <Icon source="coolant-temperature" size={20} color={colors.blue[500]} />
+                    </View>
+                    <View tw="flex-1">
+                      <Text variant="TextSmall" tw="text-gray-400 uppercase tracking-wider text-[10px] font-bold">
+                        {t('Dashboard.Analytics.tabsShared.selectedUnitsLabel')}
+                      </Text>
+                      <Text variant="TextMedium" tw="text-sm font-bold text-gray-800" numberOfLines={1}>
+                        {configData.coolingUnits?.map((unit) => unit.name).join(', ')}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
                 {activeTab === 'users' ? (
                   <UsersContent key="users-content-comparison-section" sorting={sorting} />

@@ -27,6 +27,8 @@ import { useCartInformation } from './stores/shoppingCart';
 import { navigatorTheme, paperTheme } from './ui/lib/theme';
 
 if (
+  SENTRY_DSN &&
+  SENTRY_DSN !== 'undefined' &&
   typeof ENVIRONMENT === 'string' &&
   ENVIRONMENT !== 'development' &&
   ENVIRONMENT !== 'e2e' &&

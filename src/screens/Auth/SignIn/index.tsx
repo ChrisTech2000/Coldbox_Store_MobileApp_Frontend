@@ -168,7 +168,7 @@ function SignIn(props: AuthRouteProps<'SignIn'>) {
         await useAuthStore.getState().renewSession();
       }
     } catch (exception) {
-      if (exception instanceof CustomError && exception.originalError.response.status <= 401) {
+      if (exception instanceof CustomError && exception.originalError?.response?.status <= 401) {
         toast.show(t('Auth.SignIn.accounts.toasts.login'), { type: 'md_danger' });
       } else {
         toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });

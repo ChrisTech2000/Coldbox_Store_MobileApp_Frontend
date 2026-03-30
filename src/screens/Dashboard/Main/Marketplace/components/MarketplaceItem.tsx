@@ -52,6 +52,7 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
   produceInfo: string;
   movementCode: string;
   cropImageUri: string;
+  picture?: string | null;
   owner: { name: string; contact: string; isPhonePublic: boolean };
 }) {
   const { t } = useTranslationUtils();
@@ -120,7 +121,7 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
         </View>
       </View>
 
-      <FastImage tw="w-14 h-14" resizeMode="contain" source={{ uri: props.cropImageUri }} />
+      <FastImage tw="w-14 h-14" resizeMode="contain" source={{ uri: props.picture ? (props.picture.startsWith('http') ? props.picture : `${API_BASE_URL}${props.picture.startsWith('/') ? props.picture.slice(1) : props.picture}`) : props.cropImageUri }} />
     </View>
   );
 };
@@ -210,9 +211,9 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
       <Divider tw="bg-gray-400 my-0.5" />
 
       <View tw="flex-row items-center py-1 justify-between w-[98%]">
-        <View tw={cn('flex-row items-center justify-between pr-2', hasAction ? 'w-2/3' : 'w-full')}>
+        <View tw={cn('flex-row items-center justify-between pr-2 flex-1', hasAction ? '' : 'w-full')}>
           <TouchableOpacity
-            tw="flex flex-row items-center space-x-1"
+            tw="flex flex-row items-center space-x-1 flex-shrink-0"
             onPress={() => {
               emitter.emit(APP_EVENTS.DISPATCH_CLOSE_MARKETPLACE_TOOLTIPS);
               setIsTooltipShowing(!isTooltipShowing);
@@ -226,7 +227,7 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
             <MaterialCommunityIcon name="information-outline" size={15} color={colors.gray[700]} />
           </TouchableOpacity>
 
-          <Text variant="TextMedium" tw="text-sm">
+          <Text variant="TextMedium" tw="text-sm flex-shrink" numberOfLines={1}>
             {props.currencyValue} {t('Dashboard.ShoppingCart.perKg')}
           </Text>
         </View>

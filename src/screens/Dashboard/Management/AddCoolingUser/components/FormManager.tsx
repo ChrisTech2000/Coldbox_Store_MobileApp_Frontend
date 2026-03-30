@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
-import { isValidPhoneNumber } from 'libphonenumber-js';
+import { isValidPhone } from '#services/utils/phoneUtils';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { EApiGender } from '#types/global';
@@ -24,6 +24,7 @@ type FormManagerProps = {
   initialValues: FormValues;
   onSubmit: (values: FormValues) => Promise<void>;
   children: (props: CallbackProps) => React.ReactNode;
+  companyCountry?: string;
 };
 
 export default function FormManager(props: FormManagerProps) {
@@ -41,7 +42,7 @@ export default function FormManager(props: FormManagerProps) {
           .string()
           .min(1, { message: t('Auth.SignUp.schema.phoneError') })
           .default('')
-          .refine((value) => isValidPhoneNumber(value), {
+          .refine((value) => isValidPhone(value, props.companyCountry), {
             message: t('Auth.SignUp.schema.invalidPhoneError'),
           }),
         gender: z.union([

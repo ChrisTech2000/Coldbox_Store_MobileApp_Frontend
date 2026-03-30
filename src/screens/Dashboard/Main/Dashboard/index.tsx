@@ -305,10 +305,10 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
       />
 
       {isGlobalInfoLoading ||
-      loadingFarmerDashboardProduces ||
-      loadingOperatorDashboardProduces ||
-      loadingFarmers ||
-      areCoolingUnitsLoading ? (
+        loadingFarmerDashboardProduces ||
+        loadingOperatorDashboardProduces ||
+        loadingFarmers ||
+        areCoolingUnitsLoading ? (
         <View tw="flex-1 items-center justify-center">
           <ActivityIndicator animating color={paperTheme.colors.primary} size="large" />
         </View>

@@ -79,12 +79,18 @@ export default function AddToCartModal() {
           updateStrategy: crateAlreadyInCart ? 'increase' : 'replace',
         });
 
-        setCart(result.cart);
-        resetState();
+        // Close the modal first, then defer both setCart and navigation.
+        // This avoids triggering a Zustand re-render (which causes NativeWind's
+        // useInsertionEffect to schedule a style update) while the bottom sheet
+        // close animation is still running — which React 19 forbids.
         modalActions.close();
-        if (redirect) {
-          navigation.navigate('ShoppingCart', { screen: 'Root' });
-        }
+        setTimeout(() => {
+          setCart(result.cart);
+          useCartStore.getState().fetchCoolingUnits();
+          if (redirect) {
+            navigation.navigate('ShoppingCart', { screen: 'Root' });
+          }
+        }, 300);
       } catch (exception) {
         reportCrash(exception as Error);
       }

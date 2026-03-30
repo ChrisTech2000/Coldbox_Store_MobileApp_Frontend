@@ -3,7 +3,7 @@ import { ToastOptions } from 'react-native-toast-notifications';
 import { create } from 'zustand';
 
 import { CustomToastOptions } from '#common/InAppNotifications';
-import DataloaderService from '#services/DataloaderService';
+import ColdtivateService from '#services/ColdtivateService';
 import MarketplaceService from '#services/MarketplaceService';
 import { GetCartResponse } from '#types/api.responses';
 import { CoolingUnit } from '#types/global';
@@ -78,8 +78,27 @@ const useCartStore = create<CartStoreState>((set, get) => ({
   fetchCoolingUnits: async () => {
     set({ isCoolingUnitsLoading: true, coolingUnitsError: null });
     try {
-      const coolingUnits = await DataloaderService.coolingUnits.getAll();
-      set({ allCoolingUnits: coolingUnits ?? [], isCoolingUnitsLoading: false });
+      // Buyers don't own cooling units — the relevant units are the SELLER's,
+      // referenced in each cart item via relCoolingUnitId + relCompanyId.
+      // Fetch those specific units instead of the user's own list.
+      const cartItems = get().cartData?.items ?? [];
+      const seen = new Set<number>();
+      const unique = cartItems.filter((item) => {
+        if (seen.has(item.relCoolingUnitId)) return false;
+        seen.add(item.relCoolingUnitId);
+        return true;
+      });
+
+      const results = await Promise.all(
+        unique.map((item) =>
+          ColdtivateService.getCoolingUnit({
+            coolingUnitId: item.relCoolingUnitId,
+            companyId: item.relCompanyId,
+          })
+        )
+      );
+
+      set({ allCoolingUnits: results.filter(Boolean) as unknown as CoolingUnit[], isCoolingUnitsLoading: false });
     } catch (err) {
       set({ coolingUnitsError: err as Error, isCoolingUnitsLoading: false });
       reportCrash(err as Error);

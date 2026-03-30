@@ -33,6 +33,30 @@ export function cropTranslationLookup() {
 
       const CROP_TRANSLATIONS_STATIC = [
         {
+          commodityName: 'Beef',
+          en: { IN: 'Beef', NG: 'Beef', global: 'Beef' },
+          hi: 'गोमांस', or: 'ଗୋମାଂସ', gu: 'ગોમાંસ', pt: 'Carne bovina',
+          fr: 'Bœuf', ha: 'Naman sa', yo: 'Eran malu', ig: 'Anu ehi', ar: 'لحم بقر'
+        },
+        {
+          commodityName: 'Mutton',
+          en: { IN: 'Mutton', NG: 'Mutton', global: 'Mutton' },
+          hi: 'बकरे का मांस', or: 'ମେଣ୍ଢା ମାଂସ', gu: 'બકરીનું માંસ', pt: 'Carne de carneiro',
+          fr: 'Mouton', ha: 'Naman rago', yo: 'Eran agutan', ig: 'Anu aturu', ar: 'لحم ضأن'
+        },
+        {
+          commodityName: 'Chicken',
+          en: { IN: 'Chicken', NG: 'Chicken', global: 'Chicken' },
+          hi: 'मुर्गा', or: 'କୁକୁଡ଼ା ମାଂସ', gu: 'મરઘી', pt: 'Frango',
+          fr: 'Poulet', ha: 'Naman kaza', yo: 'Eran adie', ig: 'Anu okuko', ar: 'دجاج'
+        },
+        {
+          commodityName: 'Others',
+          en: { IN: 'Others', NG: 'Others', global: 'Others' },
+          hi: 'अन्य', or: 'ଅନ୍ୟାନ୍ୟ', gu: 'અન્ય', pt: 'Outros',
+          fr: 'Autres', ha: 'Sauran', yo: 'Awon miran', ig: 'Ndị ọzọ', ar: 'آحرون'
+        },
+        {
           commodityName: 'Capsicum (Bell Pepper)',
           en: {
             IN: 'Capsicum (Bell Pepper)',

@@ -100,7 +100,7 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
     return sortData(data, sorting);
   }, [impactData, sorting, configData]);
 
-  const revenueData = useMemo(() => {
+  const revenueComparisonData = useMemo(() => {
     const coolingUnitsLength = configData?.coolingUnits.length ?? 0;
 
     const data = Array.from({ length: coolingUnitsLength }, (_, i) => {
@@ -185,13 +185,15 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
     return sortData(data, sorting);
   }, [impactData, sorting, configData]);
 
+  const colors = useTailwindColors();
+
   return (
     <ScrollView tw="w-full mt-2" contentContainerStyle="pb-24" showsVerticalScrollIndicator={false}>
       <SectionAccordion
-        color="bg-violet-100"
         expanded={expanded === 'occupancy'}
         setExpanded={() => expandTab('occupancy')}
         title={t('Dashboard.Analytics.comparisonTab.impactTab.occupancyLabel')}
+        color={colors.blue[500]}
         content={
           <Table
             header={t('Dashboard.Analytics.comparisonTab.impactTab.occupancy')}
@@ -202,10 +204,10 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
       />
 
       <SectionAccordion
-        color="bg-violet-100"
         expanded={expanded === 'foodLoss'}
         setExpanded={() => expandTab('foodLoss')}
         title={t('Dashboard.Analytics.comparisonTab.impactTab.foodLossLabel')}
+        color={colors.red[500]}
         content={
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.impactTab.changePercentage')}
@@ -218,26 +220,26 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
       />
 
       <SectionAccordion
-        color="bg-violet-100"
         expanded={expanded === 'revenue'}
         setExpanded={() => expandTab('revenue')}
         title={t('Dashboard.Analytics.comparisonTab.impactTab.revenueLabel')}
+        color={colors.emerald[500]}
         content={
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.impactTab.changePercentage')}
             column2={t('Dashboard.Analytics.comparisonTab.impactTab.revenueLevels')}
             fourColumnsVersion
-            items={revenueData}
+            items={revenueComparisonData}
             total={configData?.coolingUnits.length ?? 0}
           />
         }
       />
 
       <SectionAccordion
-        color="bg-violet-100"
         expanded={expanded === 'revenuePerRoom'}
         setExpanded={() => expandTab('revenuePerRoom')}
         title={t('Dashboard.Analytics.comparisonTab.impactTab.revenuePerRoomLabel')}
+        color={colors.emerald[600]}
         content={
           <Table
             header={t('Dashboard.Analytics.comparisonTab.impactTab.revenueLevels')}
@@ -248,10 +250,10 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
       />
 
       <SectionAccordion
-        color="bg-violet-100"
         expanded={expanded === 'co2'}
         setExpanded={() => expandTab('co2')}
         title={t('Dashboard.Analytics.comparisonTab.impactTab.co2Label')}
+        color={colors.gray[500]}
         content={
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.impactTab.changePercentage')}
@@ -264,10 +266,10 @@ export function ImpactContent({ sorting }: { sorting: ESortingOptions }) {
       />
 
       <SectionAccordion
-        color="bg-violet-100"
         expanded={expanded === 'surveys'}
         setExpanded={() => expandTab('surveys')}
         title={t('Dashboard.Analytics.comparisonTab.impactTab.surveysAmountLabel')}
+        color={colors.amber[500]}
         content={
           <ExtendedTable
             column1={t('Dashboard.Analytics.comparisonTab.impactTab.completePercentage')}
@@ -286,15 +288,15 @@ function Table({ items, header, total }: TableProps) {
   const colors = useTailwindColors();
 
   return (
-    <DataTable tw="py-4 px-2 min-w-full">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
+    <DataTable tw="w-full">
+      <DataTable.Header tw="bg-gray-50 border-b border-gray-100 h-14">
         <DataTable.Title tw="max-w-[50%] min-w-[50%]">
-          <Text variant="TextMedium" tw="text-white text-base">
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px]">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Title>
-        <DataTable.Title tw="max-w-[50%] min-w-[50%]">
-          <Text variant="TextMedium" tw="text-white text-base">
+        <DataTable.Title tw="max-w-[50%] min-w-[50%] text-center">
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px]">
             {header}
           </Text>
         </DataTable.Title>
@@ -322,26 +324,26 @@ function ExtendedTable({ items, column1, column2, total, fourColumnsVersion }: E
   const colors = useTailwindColors();
 
   return (
-    <DataTable tw="py-4 px-2 min-w-full">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14">
+    <DataTable tw="w-full">
+      <DataTable.Header tw="bg-gray-50 border-b border-gray-100 h-14">
         <DataTable.Cell
           tw={fourColumnsVersion ? 'max-w-[30%] min-w-[30%]' : 'max-w-[35%] min-w-[35%]'}
         >
-          <Text variant="TextMedium" tw="text-white text-base">
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px]">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Cell>
         <DataTable.Cell
           tw={fourColumnsVersion ? 'max-w-[25%] min-w-[25%]' : 'max-w-[35%] min-w-[35%]'}
         >
-          <Text tw="flex-wrap text-base text-white" numberOfLines={3}>
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px] text-center" numberOfLines={3}>
             {column1}
           </Text>
         </DataTable.Cell>
         <DataTable.Cell
           tw={fourColumnsVersion ? 'max-w-[35%] min-w-[35%]' : 'max-w-[30%] min-w-[30%]'}
         >
-          <Text tw="flex-wrap text-base text-white" numberOfLines={3}>
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px] text-center" numberOfLines={3}>
             {column2}
           </Text>
         </DataTable.Cell>
@@ -389,13 +391,13 @@ function ExtendedTable({ items, column1, column2, total, fourColumnsVersion }: E
                   <Icon source="equal" size={25} />
                 ) : item.column3 === 'decrease' ? (
                   <Icon
-                    source="chevron-double-down"
+                    source={item.negative ? "chevron-double-up" : "chevron-double-down"}
                     size={30}
                     color={item.negative ? colors.green.primary : colors.red[500]}
                   />
                 ) : item.column3 === 'increase' ? (
                   <Icon
-                    source="chevron-double-up"
+                    source={item.negative ? "chevron-double-down" : "chevron-double-up"}
                     size={30}
                     color={item.negative ? colors.red[500] : colors.green.primary}
                   />

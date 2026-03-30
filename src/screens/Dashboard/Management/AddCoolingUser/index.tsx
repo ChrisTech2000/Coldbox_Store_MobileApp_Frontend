@@ -13,6 +13,7 @@ import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import AuthService from '#services/AuthService';
 import ColdtivateService from '#services/ColdtivateService';
+import { normalizePhone } from '#services/utils/phoneUtils';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
@@ -64,7 +65,7 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
           firstName: values.firstName,
           lastName: values.lastName,
           gender: values.gender,
-          phone: values.phone,
+          phone: normalizePhone(values.phone, company?.country),
           language: values.language,
           password: 'fakePassword',
         },
@@ -94,7 +95,7 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
   const disabled = !!farmer;
 
   return (
-    <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(farmer)}>
+    <FormManager onSubmit={onSubmit} initialValues={_buildInitialValues(farmer)} companyCountry={company?.country}>
       {({ submitHandler, isSubmitting }) => (
         <View tw="flex-1 pt-4">
           <KeyboardAwareScrollView

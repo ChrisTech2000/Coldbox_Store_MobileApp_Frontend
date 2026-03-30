@@ -27,8 +27,8 @@ export function Analytics() {
   const [activeTab, setActiveTab] = useState<Tab>('company');
 
   return (
-    <View tw="space-y-4 m-4">
-      <View tw="flex flex-row items-center justify-center">
+    <View tw="flex-1">
+      <View tw="bg-gray-100/80 p-1.5 rounded-xl flex-row items-center mx-4 mt-2">
         <Tab
           name="company"
           isActive={activeTab === 'company'}
@@ -45,7 +45,7 @@ export function Analytics() {
           onSelect={() => setActiveTab('comparison')}
         />
       </View>
-      {[TABS[activeTab]]}
+      <View tw="flex-1 px-4">{TABS[activeTab]}</View>
     </View>
   );
 }
@@ -54,10 +54,17 @@ function Tab({ name, isActive, onSelect }: TabProps) {
   const { t } = useTranslationUtils();
   return (
     <TouchableOpacity
-      tw={cn('bg-gray-200 rounded-md mx-2 py-1 px-3', isActive && 'bg-gray-800')}
+      tw={cn(
+        'flex-1 py-2.5 items-center justify-center rounded-lg transition-all',
+        isActive ? 'bg-white shadow-sm' : 'bg-transparent'
+      )}
       onPress={onSelect}
+      activeOpacity={0.7}
     >
-      <Text variant="TitleMedium" tw={cn('text-base', isActive && 'text-white')}>
+      <Text
+        variant="TitleSmall"
+        tw={cn('text-sm', isActive ? 'text-green-primary font-bold' : 'text-gray-500')}
+      >
         {t(`Dashboard.Analytics.${name}`)}
       </Text>
     </TouchableOpacity>

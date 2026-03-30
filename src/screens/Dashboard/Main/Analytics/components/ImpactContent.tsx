@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { Icon } from 'react-native-paper';
+import { cn } from '#ui/lib/cn';
 import { StoreApi, UseBoundStore } from 'zustand';
 
 import { ScrollView } from '#ui/components/ScrollView';
@@ -38,7 +39,7 @@ export function ImpactContent<T extends Store>({
   revenue,
 }: ImpactContentProps<T>) {
   const { t } = useTranslationUtils();
-  const { company } = useManagementStore();
+  const colors = useTailwindColors();
   const { impactData } = useStore();
 
   const foodLoss = useMemo(() => {
@@ -50,220 +51,161 @@ export function ImpactContent<T extends Store>({
     };
   }, [impactData]);
 
+  const currencyCode = 'NGN';
+  const currencySymbol = '₦';
+
+  const formatNaira = (value: number) => {
+    return `${currencySymbol}${value.toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
+  };
+
   const revenueChange = useMemo(() => {
-    const from = getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth);
-    const to = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyFarmerRevenue);
+    const from = getMetricValue(impactData?.impactMetrics?.[0]?.avgBaselineFarmerRevenueMonth) || 0;
+    const to = getMetricValue(impactData?.impactMetrics?.[0]?.avgMonthlyFarmerRevenue) || 0;
     return {
-      from: from.toLocaleString('en-US', {
-        style: 'currency',
-        currency: company?.currency,
-      }),
-      to: to.toLocaleString('en-US', {
-        style: 'currency',
-        currency: company?.currency,
-      }),
+      from: formatNaira(from),
+      to: formatNaira(to),
       evolution: getMetricValue(
         impactData?.impactMetrics?.[0]?.avgMonthlyPercRevenueIncreaseEvolution
       ),
     };
-  }, [impactData, company]);
+  }, [impactData]);
 
   const co2 = useMemo(() => {
     const from = impactData?.co2Metrics?.[0]?.['co2Crops']?.co2From || 0;
     const to = impactData?.co2Metrics?.[0]?.['co2Crops']?.co2To || 0;
     return {
-      from: from.toFixed(2),
-      to: to.toFixed(2),
+      from: from.toFixed(1),
+      to: to.toFixed(1),
       evolution: to - from,
     };
   }, [impactData]);
 
   const surveyPercentage = useMemo(() => {
-    const percentage =
-      (getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys) /
-        getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom)) *
-      100;
-    return Number.isNaN(percentage) ? 0 : percentage.toFixed(2);
+    const recorded = getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys);
+    const total = getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom);
+    if (!total || total === 0) return '0.0';
+    const percentage = (recorded / total) * 100;
+    return Number.isNaN(percentage) ? '0.0' : percentage.toFixed(1);
   }, [impactData]);
 
   return (
     <ScrollView
-      tw="w-full mt-2"
-      contentContainerStyle="items-center"
+      tw="w-full mt-4"
+      contentContainerStyle="items-center pb-24"
       showsVerticalScrollIndicator={false}
     >
       {type === 'aggregated' && (
-        <View tw="w-full bg-violet-100 px-2 py-1 items-center rounded-lg space-y-3 my-2">
-          <Text variant="TextMedium" tw="text-base">
-            {t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel')}
-          </Text>
-          <Text variant="HeadingRegular" tw="text-blue-800">
-            {t('Dashboard.Analytics.companyTab.utilizationTab.occupancyContent', {
-              amount: occupancy,
-            })}
-          </Text>
-        </View>
-      )}
-      <View tw="w-full pb-20">
-        <ImpactSection
-          title={t('Dashboard.Analytics.companyTab.impactTab.foodLossLabel')}
-          from={
-            <View tw="flex flex-row">
-              <Text variant="TextMedium" tw="text-base font-bold">
-                {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
-              </Text>
-              <Text variant="TextMedium" tw="text-base font-bold">
-                {foodLoss.from.toFixed(2)}
-              </Text>
-              <Text variant="TextMedium" tw="text-base text-purple-500 font-bold">
-                %
-              </Text>
+        <View tw="w-full flex-row space-x-3 mb-3">
+          <View tw="flex-1 bg-white border border-green-100 shadow-sm p-4 rounded-2xl items-center">
+            <View tw="p-2 bg-green-50 rounded-lg mb-2">
+              <Icon source="percent" size={20} color={colors.green[600]} />
             </View>
-          }
-          to={
-            <View tw="flex flex-row">
-              <Text variant="TextMedium" tw="text-base font-bold">
-                {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
-              </Text>
-              <Text variant="TextMedium" tw="text-base font-bold">
-                {foodLoss.to.toFixed(2)}
-              </Text>
-              <Text variant="TextMedium" tw="text-base text-purple-500 font-bold">
-                %
-              </Text>
-            </View>
-          }
-          change={
-            foodLoss.to === foodLoss.from ? (
-              <Icon source="equal" size={40} />
-            ) : foodLoss.evolution < 0 ? (
-              <DownChange
-                value={`${foodLoss.evolution.toFixed(2)}%`}
-                message={t('Dashboard.Analytics.farmersAnalytics.decreaseInFoodLoss')}
-              />
-            ) : (
-              <UpChange
-                value={`${foodLoss.evolution.toFixed(2)}%`}
-                message={t('Dashboard.Analytics.farmersAnalytics.increaseInFoodLoss')}
-              />
-            )
-          }
-        />
-
-        <ImpactSection
-          title={t('Dashboard.Analytics.companyTab.impactTab.revenueLabel')}
-          from={
-            <View tw="flex flex-row">
-              <Text variant="TextMedium" tw="text-base font-bold">
-                {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
-              </Text>
-              <Text variant="TextMedium" tw="text-base font-bold">
-                {revenueChange.from}
-              </Text>
-            </View>
-          }
-          to={
-            <View tw="flex flex-row">
-              <Text variant="TextMedium" tw="text-base font-bold">
-                {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
-              </Text>
-              <Text variant="TextMedium" tw="text-base font-bold">
-                {revenueChange.to}
-              </Text>
-            </View>
-          }
-          change={
-            revenueChange.to === revenueChange.from ? (
-              <Icon source="equal" size={40} />
-            ) : revenueChange.evolution < 0 ? (
-              <DownChange
-                value={`${revenueChange.evolution.toFixed(2)}%`}
-                message={t('Dashboard.Analytics.farmersAnalytics.decreaseInRevenue')}
-                negative
-              />
-            ) : (
-              <UpChange
-                value={`${revenueChange.evolution.toFixed(2)}%`}
-                message={t('Dashboard.Analytics.farmersAnalytics.increaseInRevenue')}
-                positive
-              />
-            )
-          }
-        />
-
-        {type === 'aggregated' && (
-          <View tw="w-full bg-violet-100 px-2 py-1 items-center rounded-lg space-y-3 my-2">
-            <Text variant="TextMedium" tw="text-base">
-              {t('Dashboard.Analytics.tabsShared.roomRevenue')}
+            <Text variant="TextSmall" tw="text-gray-500 font-bold uppercase text-[9px] mb-1 tracking-wider">
+              {t('Dashboard.Analytics.companyTab.utilizationTab.occupancyLabel')}
             </Text>
-            <Text variant="HeadingRegular" tw="text-blue-800">
-              {revenue?.toLocaleString('en-US', {
-                style: 'currency',
-                currency: company?.currency,
-              })}
+            <Text variant="TitleLarge" tw="text-green-900 font-bold">
+              {occupancy}%
             </Text>
           </View>
-        )}
 
-        <ImpactSection
-          title={t('Dashboard.Analytics.companyTab.impactTab.co2Label')}
-          from={
-            <View tw="space-y-1 items-center">
-              <Text variant="TextMedium" tw="text-base text-purple-500 text-center">
-                <Text variant="TextMedium" tw="text-base font-bold text-center">
-                  {t('Dashboard.Analytics.companyTab.impactTab.from')}{' '}
-                </Text>
-                <Text variant="TextMedium" tw="text-base font-bold text-center">
-                  {co2.from}{' '}
-                </Text>
-                {t('Dashboard.Analytics.companyTab.impactTab.co2WithoutCooling')}
-              </Text>
+          <View tw="flex-1 bg-white border border-amber-100 shadow-sm p-4 rounded-2xl items-center">
+            <View tw="p-2 bg-amber-50 rounded-lg mb-2">
+              <Icon source="cash-multiple" size={20} color={colors.amber[600]} />
             </View>
-          }
-          to={
-            <Text variant="TextMedium" tw="text-base text-purple-500 text-center">
-              <Text variant="TextMedium" tw="text-base font-bold text-center">
-                {t('Dashboard.Analytics.companyTab.impactTab.to')}{' '}
-              </Text>
-              <Text variant="TextMedium" tw="text-base font-bold text-center">
-                {co2.to}{' '}
-              </Text>
-              {t('Dashboard.Analytics.companyTab.impactTab.co2WithCooling')}
+            <Text variant="TextSmall" tw="text-gray-500 font-bold uppercase text-[9px] mb-1 tracking-wider">
+              {t('Dashboard.Analytics.tabsShared.roomRevenue')}
             </Text>
-          }
+            <Text variant="TitleLarge" tw="text-amber-900 font-bold">
+              {formatNaira(revenue || 0)}
+            </Text>
+          </View>
+        </View>
+      )}
+
+      <View tw="w-full space-y-4">
+        <ImpactSection
+          title="Food Loss Prevention"
+          icon="sprout"
+          color={colors.green[600]}
+          bgColor={colors.green[50]}
+          from={`${foodLoss.from.toFixed(1)}%`}
+          to={`${foodLoss.to.toFixed(1)}%`}
           change={
-            co2.to === co2.from ? (
-              <Icon source="equal" size={40} />
-            ) : co2.evolution < 0 ? (
-              <DownChange
-                value={`${co2.evolution.toFixed(2)}Kg`}
-                message={t('Dashboard.Analytics.companyTab.impactTab.co2Decrease')}
-              />
+            foodLoss.to === foodLoss.from ? (
+              null
+            ) : foodLoss.evolution < 0 ? (
+              <Badge value={`${(foodLoss.evolution * -1).toFixed(1)}%`} positive />
             ) : (
-              <UpChange
-                value={`${co2.evolution.toFixed(2)}Kg`}
-                message={t('Dashboard.Analytics.companyTab.impactTab.co2Increase')}
-              />
+              <Badge value={`${foodLoss.evolution.toFixed(1)}%`} />
             )
           }
         />
 
-        <View tw="w-full bg-violet-100 p-2 items-center rounded-lg space-y-1 my-2">
-          <Text variant="TextMedium" tw="text-base text-center">
-            {t('Dashboard.Analytics.companyTab.impactTab.surveysAmountLabel')}
-          </Text>
+        <ImpactSection
+          title="Farmer Earnings"
+          icon="finance"
+          color={colors.amber[600]}
+          bgColor={colors.amber[50]}
+          from={revenueChange.from}
+          to={revenueChange.to}
+          change={
+            revenueChange.to === revenueChange.from ? (
+              null
+            ) : revenueChange.evolution < 0 ? (
+              <Badge value={`${(revenueChange.evolution * -1).toFixed(1)}%`} />
+            ) : (
+              <Badge value={`${revenueChange.evolution.toFixed(1)}%`} positive />
+            )
+          }
+        />
 
-          <View tw="flex flex-row items-center space-x-6">
-            <View tw="flex flex-row items-end">
-              <Text variant="TextMedium" tw="text-3xl font-bold">
-                {getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys)}
-              </Text>
-              <Text variant="TextMedium" tw="text-xl">
-                /{getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom)}
-              </Text>
+        <ImpactSection
+          title="Environmental Impact"
+          icon="leaf"
+          color={colors.emerald[600]}
+          bgColor={colors.emerald[50]}
+          from={`${co2.from}kg`}
+          to={`${co2.to}kg`}
+          change={
+            co2.to === co2.from ? (
+              null
+            ) : co2.evolution < 0 ? (
+              <Badge value={`${(co2.evolution * -1).toFixed(1)}kg`} positive />
+            ) : (
+              <Badge value={`${co2.evolution.toFixed(1)}kg`} />
+            )
+          }
+        />
+
+        <View tw="w-full bg-white border border-gray-100 shadow-sm p-5 rounded-3xl">
+          <View tw="flex-row items-center justify-between mb-4">
+            <View tw="flex-row items-center space-x-3">
+              <View tw="p-2.5 bg-orange-50 rounded-xl">
+                <Icon source="clipboard-check-outline" size={22} color={colors.orange[600]} />
+              </View>
+              <View>
+                <Text variant="TitleSmall" tw="text-gray-900 font-black tracking-tight">
+                  Farmer Success Surveys
+                </Text>
+                <Text variant="TextSmall" tw="text-gray-400 text-[10px] font-bold">
+                  {t('Dashboard.Analytics.companyTab.impactTab.surveysAmountLabel').toUpperCase()}
+                </Text>
+              </View>
             </View>
-            <Text variant="TextMedium" tw="text-4xl font-bold text-purple-500">
-              ({surveyPercentage}%)
+            <View tw="bg-orange-500 px-3 py-1 rounded-full">
+              <Text tw="text-white text-[10px] font-black">{surveyPercentage}%</Text>
+            </View>
+          </View>
+
+          <View tw="h-[10px] bg-gray-50 rounded-full w-full overflow-hidden mb-4">
+            <View style={{ width: `${surveyPercentage}%` as `${number}%` }} tw="h-full bg-orange-500" />
+          </View>
+
+          <View tw="flex-row justify-between items-center px-1">
+            <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px]">Harvests Recorded</Text>
+            <Text variant="TitleSmall" tw="text-gray-900 font-black">
+              {getMetricValue(impactData?.impactMetrics?.[0]?.numPostHarvestSurveys)}
+              <Text tw="text-gray-300 font-bold"> / {getMetricValue(impactData?.impactMetrics?.[0]?.possiblePostCheckoutSurveyRoom)}</Text>
             </Text>
           </View>
         </View>
@@ -272,80 +214,57 @@ export function ImpactContent<T extends Store>({
   );
 }
 
-export function ImpactSection({ title, from, to, change }: SectionProps) {
+function ImpactSection({ title, from, to, change, icon, color, bgColor }: any) {
   const colors = useTailwindColors();
-
   return (
-    <View tw="w-full bg-violet-100 px-2 pt-4 pb-3 items-center rounded-lg space-y-1 my-2">
-      <Text variant="TextMedium" tw="text-base">
-        {title}
-      </Text>
-
-      {change}
-
-      {from}
-      <Icon source="menu-down" size={40} color={colors.gray[500]} />
-      {to}
-    </View>
-  );
-}
-
-export function DownChange({
-  value,
-  message,
-  negative,
-}: {
-  value: string;
-  message: string;
-  negative?: boolean;
-}) {
-  const colors = useTailwindColors();
-
-  return (
-    <View tw="space-y-3 items-center my-2">
-      <View tw="flex flex-row space-x-2 items-center">
-        <Icon
-          source="chevron-double-down"
-          size={30}
-          color={negative ? colors.red[500] : colors.green.primary}
-        />
-        <Text variant="HeadingRegular" tw={negative ? 'text-red-500' : 'text-green-primary'}>
-          {value}
-        </Text>
+    <View tw="w-full bg-white border border-gray-100 shadow-sm p-5 rounded-3xl">
+      <View tw="flex-row items-center justify-between mb-5">
+        <View tw="flex-row items-center space-x-3">
+          <View style={{ backgroundColor: bgColor }} tw="p-2.5 rounded-xl">
+            <Icon source={icon} size={22} color={color} />
+          </View>
+          <Text variant="TitleSmall" tw="text-gray-900 font-black tracking-tight">{title}</Text>
+        </View>
+        {change}
       </View>
-      <Text variant="TextMedium" tw="text-base text-center">
-        {message}
-      </Text>
-    </View>
-  );
-}
 
-export function UpChange({
-  value,
-  message,
-  positive,
-}: {
-  value: string;
-  message: string;
-  positive?: boolean;
-}) {
-  const colors = useTailwindColors();
+      <View tw="flex-row items-center justify-between bg-gray-50/70 rounded-2xl p-4 border border-gray-50">
+        <View tw="items-start">
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[9px] mb-1 tracking-widest">Baseline</Text>
+          <Text variant="TitleSmall" tw="text-gray-500 font-bold">{from}</Text>
+        </View>
 
-  return (
-    <View tw="space-y-3 items-center my-2">
-      <View tw="flex flex-row space-x-2 items-center">
-        <Icon
-          source="chevron-double-up"
-          size={30}
-          color={positive ? colors.green.primary : colors.red[500]}
-        />
-        <Text variant="HeadingRegular" tw={positive ? 'text-green-primary' : 'text-red-500'}>
-          {value}
-        </Text>
+        <View tw="bg-white p-2 rounded-full border border-gray-100 shadow-sm">
+          <Icon source="arrow-right" size={20} color={colors.green[500]} />
+        </View>
+
+        <View tw="items-end">
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[9px] mb-1 tracking-widest">Current</Text>
+          <Text variant="TitleMedium" tw="text-green-900 font-black">{to}</Text>
+        </View>
       </View>
-      <Text variant="TextMedium" tw="text-base text-center">
-        {message}
+    </View>
+  );
+}
+
+function Badge({ value, positive, label }: { value: string; positive?: boolean; label?: string }) {
+  const colors = useTailwindColors();
+  return (
+    <View
+      tw={cn(
+        'flex-row items-center px-3 py-1.5 rounded-full space-x-1.5',
+        positive ? 'bg-green-100' : 'bg-red-100'
+      )}
+    >
+      <Icon
+        source={positive ? 'arrow-up-circle' : 'arrow-down-circle'}
+        size={14}
+        color={positive ? colors.green[700] : colors.red[700]}
+      />
+      <Text tw={cn('text-[10px] font-black', positive ? 'text-green-800' : 'text-red-800')}>
+        {label || value}
       </Text>
     </View>
   );
 }
+

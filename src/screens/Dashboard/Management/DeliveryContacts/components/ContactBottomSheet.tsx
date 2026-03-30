@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, TextInput } from 'react-native-paper';
 import { FlatList, TouchableOpacity, View } from 'react-native';
-import { isValidPhoneNumber } from 'libphonenumber-js';
+import { isValidPhone, normalizePhone } from '#services/utils/phoneUtils';
 
 import * as BottomSheetUI from '#ui/components/BottomSheet';
 import { Button } from '#ui/components/Button';
@@ -61,7 +61,7 @@ export default function ContactBottomSheet({ coolingUnits }: Props) {
           .string()
           .min(1, { message: t('Auth.SignUp.schema.phoneError') })
           .default('')
-          .refine((value) => isValidPhoneNumber(value), {
+          .refine((value) => isValidPhone(value, company?.country), {
             message: t('Auth.SignUp.schema.invalidPhoneError'),
           }),
         deliveryCompanyName: z
@@ -124,7 +124,7 @@ export default function ContactBottomSheet({ coolingUnits }: Props) {
           await MarketplaceService.updateDeliveryContact({
             contactId: editingContact.id,
             contactName: data.contactName,
-            phone: data.phoneNumber,
+            phone: normalizePhone(data.phoneNumber, company?.country),
             deliveryCompanyName: data.deliveryCompanyName,
             coolingUnitIds: data.coolingUnitIds,
           });
@@ -136,7 +136,7 @@ export default function ContactBottomSheet({ coolingUnits }: Props) {
         } else {
           await MarketplaceService.createDeliveryContact({
             contactName: data.contactName,
-            phone: data.phoneNumber,
+            phone: normalizePhone(data.phoneNumber, company?.country),
             deliveryCompanyName: data.deliveryCompanyName,
             coolingUnitIds: data.coolingUnitIds,
           });
@@ -241,8 +241,8 @@ export default function ContactBottomSheet({ coolingUnits }: Props) {
             const summary =
               selectedIds.length > 0
                 ? selectedIds
-                    .map((id) => coolingUnits.find((u) => u.id === id)?.name || `Room ${id}`)
-                    .join(', ')
+                  .map((id) => coolingUnits.find((u) => u.id === id)?.name || `Room ${id}`)
+                  .join(', ')
                 : '';
             const filteredRooms = (coolingUnits || []).filter((unit) =>
               unit.name.toLowerCase().includes(roomSearchQuery.toLowerCase())

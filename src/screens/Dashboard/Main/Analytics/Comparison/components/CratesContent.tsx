@@ -243,7 +243,6 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
   return (
     <ScrollView tw="w-full mt-2" contentContainerStyle="pb-24" showsVerticalScrollIndicator={false}>
       <SectionAccordion
-        color="bg-gray-200"
         expanded={expanded === 'crates'}
         setExpanded={() => expandTab('crates')}
         title={t('Dashboard.Analytics.totalCratesLabel')}
@@ -257,7 +256,6 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
         }
       />
       <SectionAccordion
-        color="bg-gray-200"
         expanded={expanded === 'quantity'}
         setExpanded={() => expandTab('quantity')}
         title={t('Dashboard.Analytics.totalQuantityLabel')}
@@ -271,7 +269,6 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
         }
       />
       <SectionAccordion
-        color="bg-gray-200"
         expanded={expanded === 'operations'}
         setExpanded={() => expandTab('operations')}
         title={t('Dashboard.Analytics.totalOperations')}
@@ -285,7 +282,6 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
         }
       />
       <SectionAccordion
-        color="bg-gray-200"
         expanded={expanded === 'checkedInCropDistribution'}
         setExpanded={() => expandTab('checkedInCropDistribution')}
         title={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInCropDistribution')}
@@ -300,7 +296,6 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
         }
       />
       <SectionAccordion
-        color="bg-gray-200"
         expanded={expanded === 'checkedOutCropDistribution'}
         setExpanded={() => expandTab('checkedOutCropDistribution')}
         title={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutCropDistribution')}
@@ -315,7 +310,6 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
         }
       />
       <SectionAccordion
-        color="bg-gray-200"
         expanded={expanded === 'checkedInKgDistribution'}
         setExpanded={() => expandTab('checkedInKgDistribution')}
         title={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedInKgDistribution')}
@@ -330,7 +324,6 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
         }
       />
       <SectionAccordion
-        color="bg-gray-200"
         expanded={expanded === 'checkedOutKgDistribution'}
         setExpanded={() => expandTab('checkedOutKgDistribution')}
         title={t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOutKgDistribution')}
@@ -345,7 +338,6 @@ export function CratesContent({ sorting }: { sorting: ESortingOptions }) {
         }
       />
       <SectionAccordion
-        color="bg-gray-200"
         expanded={expanded === 'co2'}
         setExpanded={() => expandTab('co2')}
         title={t('Dashboard.Analytics.comparisonTab.cratesTab.co2')}
@@ -367,27 +359,23 @@ function Table({ items, header, total, empty }: TableProps) {
   const { t } = useTranslationUtils();
 
   return (
-    <DataTable tw="py-4 px-2 w-full min-w-full">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14 space-x-4 min-w-full">
+    <DataTable tw="w-full">
+      <DataTable.Header tw="bg-gray-50 border-b border-gray-100 h-14 space-x-4 min-w-full">
         <DataTable.Cell tw="max-w-[30%] min-w-[30%]">
-          <Text variant="TextMedium" tw="text-white text-base" numberOfLines={2}>
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px]" numberOfLines={2}>
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Cell>
         <DataTable.Cell tw="max-w-[70%] min-w-[70%]">
           <View tw="px-2">
-            <Text variant="TextMedium" tw="text-white text-base text-center">
+            <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px] text-center mb-1">
               {header}
             </Text>
             <View tw="flex flex-row justify-between w-full">
-              <Text variant="TextMedium" tw="text-white text-base text-center">
+              <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[9px] text-center">
                 {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedIn')}
               </Text>
-              <Text variant="TextMedium" tw="text-white text-base text-center">
-                {' '}
-                |{' '}
-              </Text>
-              <Text variant="TextMedium" tw="text-white text-base text-center">
+              <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[9px] text-center">
                 {t('Dashboard.Analytics.comparisonTab.cratesTab.checkedOut')}
               </Text>
             </View>
@@ -459,18 +447,18 @@ function ExtendedTable({ items, column1, column2, total, empty }: ExtendedTableP
   const { t } = useTranslationUtils();
 
   return (
-    <DataTable tw="py-4 px-2 min-w-full">
-      <DataTable.Header tw="bg-gray-700 rounded-t-lg h-14 space-x-4 min-w-full">
+    <DataTable tw="min-w-full">
+      <DataTable.Header tw="bg-gray-50 border-b border-gray-100 h-14 space-x-4 min-w-full">
         <DataTable.Cell tw="max-w-[30%] min-w-[30%]">
-          <Text variant="TextMedium" tw="text-white text-base text-center">
+          <Text variant="TextSmall" tw="text-gray-400 font-bold uppercase text-[10px] text-center">
             {t('Dashboard.Analytics.comparisonTab.coolingUnit')}
           </Text>
         </DataTable.Cell>
         <DataTable.Cell tw="max-w-[15%] min-w-[15%]">
-          <Text tw="flex-wrap text-base text-white text-center">{column1}</Text>
+          <Text tw="flex-wrap text-[10px] text-gray-400 font-bold uppercase text-center">{column1}</Text>
         </DataTable.Cell>
         <DataTable.Cell tw="max-w-[55%] min-w-[55%]">
-          <Text tw="flex-wrap text-base text-white text-center w-[90%]" numberOfLines={2}>
+          <Text tw="flex-wrap text-[10px] text-gray-400 font-bold uppercase text-center w-[90%]" numberOfLines={2}>
             {column2}
           </Text>
         </DataTable.Cell>

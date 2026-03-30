@@ -55,6 +55,7 @@ export type SetupSchema = {
   plannedDays: number | undefined;
   dateHarvested: EDateCropped;
   price: number | undefined;
+  totalListedWeight: number | undefined;
 };
 
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
@@ -89,15 +90,15 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   } = useForm<SetupSchema>({
     ...('contextualProduce' in route.params
       ? {
-          defaultValues: {
-            numberOfCrates: route.params.contextualProduce.crates.length,
-            generalCrateWeight: coolingUnit?.crateWeight ?? 25,
-            crates: route.params.contextualProduce.crates ?? [],
-            plannedDays: route.params.contextualProduce.crates[0].plannedDays,
-            price: route.params.contextualProduce.price,
-            dateHarvested: route.params.contextualProduce.harvestDate,
-          },
-        }
+        defaultValues: {
+          numberOfCrates: route.params.contextualProduce.crates.length,
+          generalCrateWeight: coolingUnit?.crateWeight ?? 25,
+          crates: route.params.contextualProduce.crates ?? [],
+          plannedDays: route.params.contextualProduce.crates[0].plannedDays,
+          price: route.params.contextualProduce.price,
+          dateHarvested: route.params.contextualProduce.harvestDate,
+        },
+      }
       : {}),
     resolver: zodResolver((z, t) =>
       z.object({
@@ -107,7 +108,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
             message: t('Dashboard.CrateManagement.CheckIn.Setup.cratesError'),
           })
           .default(0),
-        generalWeight: z
+        generalCrateWeight: z
           .number()
           .min(1, {
             message: t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightError'),
@@ -149,6 +150,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       })),
       numberOfCrates: values.crates.length,
       price: values.price,
+      totalListedWeight: values.totalListedWeight,
     }));
   });
 
@@ -220,49 +222,58 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       onChange(value);
       field && clearErrors(field);
 
+      const currentCrts = getValues('numberOfCrates') || 1;
+      const currentGeneralWt = getValues('generalCrateWeight') || 0;
+
       if (field === 'generalCrateWeight' && crates) {
-        const crateWeight = value;
+        // value is the *total* weight of all crates
+        const perCrateWeight = currentCrts > 0 ? value / currentCrts : 0;
         setValue(
           'crates',
           crates.map((crate) => ({
             ...crate,
-            crateWeight,
+            weight: perCrateWeight,
           }))
         );
       }
 
       if (field === 'numberOfCrates') {
-        const numberOfCrates = value;
-        const weight = generalCrateWeight ?? coolingUnit?.crateWeight ?? 25;
+        const numCrates = value;
+        const perCrateWeight = numCrates > 0 ? currentGeneralWt / numCrates : 0;
 
         let newCrates =
           !crates || crates.length === 0
-            ? Array.from({ length: numberOfCrates }, () => ({
-                weight,
-                tag: undefined,
-                isSellable: false,
-              }))
+            ? Array.from({ length: numCrates }, () => ({
+              weight: perCrateWeight,
+              tag: undefined,
+              isSellable: false,
+            }))
             : [...crates];
 
-        if (newCrates.length !== numberOfCrates) {
-          if (newCrates.length < numberOfCrates) {
+        if (newCrates.length !== numCrates) {
+          if (newCrates.length < numCrates) {
             const additionalCrates = Array.from(
-              { length: numberOfCrates - newCrates.length },
+              { length: numCrates - newCrates.length },
               () => ({
-                weight,
+                weight: perCrateWeight,
                 tag: undefined,
                 isSellable: false,
               })
             );
             newCrates = [...newCrates, ...additionalCrates];
           } else {
-            newCrates = newCrates.slice(0, numberOfCrates);
+            newCrates = newCrates.slice(0, numCrates);
           }
         }
-        setValue('crates', newCrates);
+
+        // Recalculate weights for *all* crates since the denominator changed
+        setValue(
+          'crates',
+          newCrates.map(crate => ({ ...crate, weight: perCrateWeight }))
+        );
       }
     },
-    [crates, generalCrateWeight, coolingUnit]
+    [crates, getValues, clearErrors, setValue]
   );
 
   const onOpenModal = useCallback(() => {
@@ -298,6 +309,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         harvestDate: values.dateHarvested,
         hasPicture: false, // TODO: confirm this in the future, but sending true returns a 500 error
         price: values.price,
+        totalListedWeight: values.totalListedWeight,
       });
 
       resetCrateWeightPricingBridge();

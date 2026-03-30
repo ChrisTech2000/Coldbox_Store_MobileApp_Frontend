@@ -29,13 +29,13 @@ export type CheckInStackRoutes = {
   SelectCropType: undefined;
   CropList: { type: ECropType };
   CrateSetup:
-    | {
-        crop: Crop;
-        additionalInfo: string;
-      }
-    | {
-        contextualProduce: ProduceCrate;
-      };
+  | {
+    crop: Crop;
+    additionalInfo: string;
+  }
+  | {
+    contextualProduce: ProduceCrate;
+  };
   CrateWeightAndPricing: {
     companyCurrency: string;
     crates: Array<{
@@ -87,9 +87,9 @@ export default function CheckInStack() {
     const translationPath = NAVIGATOR_HEADERS[routeName];
     const routeTitle = translationPath
       ? t(translationPath, {
-          cropType,
-          user: `${farmer?.firstName ?? ''} ${farmer?.lastName ?? ''}`,
-        })
+        cropType,
+        user: `${farmer?.firstName ?? ''} ${farmer?.lastName ?? ''}`,
+      })
       : undefined;
     return {
       ...props,
@@ -139,8 +139,8 @@ function mapCroppedType(type: ECropType, t: Translator) {
       return t('Dashboard.CrateManagement.CheckIn.SelectCropType.fruits');
     case ECropType.VEGETABLES:
       return t('Dashboard.CrateManagement.CheckIn.SelectCropType.vegetables');
-    case ECropType.ROOT_VEGETABLES:
-      return t('Dashboard.CrateManagement.CheckIn.SelectCropType.rootVegetables');
+    case ECropType.MEAT:
+      return t('Dashboard.CrateManagement.CheckIn.SelectCropType.meat');
     case ECropType.OTHER:
       return t('Dashboard.CrateManagement.CheckIn.SelectCropType.other');
   }

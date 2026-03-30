@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Dimensions, FlatList, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Dimensions, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { Dialog, Divider, Icon, List, Portal } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
@@ -229,6 +229,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   }, [coolingUnit, user, checkOutCode]);
 
   async function handleCheckIn() {
+    console.warn('SENDING CHECK-IN PAYLOAD PRODUCES: ', JSON.stringify(cloneDeep(produces), null, 2));
+
     return ColdtivateService.checkIn({
       farmerId: user.id,
       id: undefined,
@@ -300,17 +302,36 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
       if (!result) return;
 
-      if (guard('SET', 'MarketplaceListForSale') && 'movement' in result) {
-        const processedCrateListing = processMarketplaceCrateListing(produces, result.produces);
-        await Promise.allSettled(
-          processedCrateListing.map(({ crateIds, pricePerKg }) =>
+      const canList = guard('SET', 'MarketplaceListForSale');
+      const hasMovement = result && 'movement' in result;
+      console.log('[Marketplace] canList:', canList, '| hasMovement:', hasMovement);
+
+      if (canList && hasMovement) {
+        const processedCrateListing = processMarketplaceCrateListing(produces, (result as CheckInResponse).produces);
+        console.log('[Marketplace] processedCrateListing:', JSON.stringify(processedCrateListing));
+        const settled = await Promise.allSettled(
+          processedCrateListing.map(({ crateIds, pricePerKg, totalListedWeight, picture }) =>
             MarketplaceService.upsertListedCrate({
               crateIds,
               producePricePerKg: pricePerKg,
+              totalListedWeight,
+              picture,
               operatorOnBehalfOfSellerFarmerId: user.id,
             })
           )
         );
+        settled.forEach((r, i) => {
+          if (r.status === 'rejected') {
+            console.error(`[Marketplace] upsertListedCrate[${i}] FAILED:`, r.reason);
+          } else {
+            console.log(`[Marketplace] upsertListedCrate[${i}] OK:`, JSON.stringify(r.value));
+          }
+        });
+
+        // Refresh marketplace listings if any items were listed
+        if (processedCrateListing.length > 0) {
+          emitter.emit(APP_EVENTS.DISPATCH_INVALIDATE_MARKETPLACE_LISTING);
+        }
       }
 
       toast.show(t('Dashboard.CrateManagement.CheckIn.successMessage'), { type: 'md_success' });
@@ -383,13 +404,9 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             </Text>
           ) : null}
 
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            data={produces}
-            extraData={{ surveys, translatedCropNames }}
-            keyExtractor={(item, itemIdx) => `crate-${item.crop.id}-#${itemIdx}`}
-            renderItem={({ item, index }) => (
-              <View>
+          <View>
+            {produces.map((item, index) => (
+              <View key={`crate-${item.crop.id}-#${index}`}>
                 <CheckedInCard
                   item={item}
                   index={index}
@@ -412,9 +429,8 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
                   />
                 ) : null}
               </View>
-            )}
-            nestedScrollEnabled
-          />
+            ))}
+          </View>
         </ScrollView>
 
         <View tw="space-y-2 mb-32 py-2.5">
@@ -469,7 +485,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             <Text variant="TextMedium" tw="text-lg font-bold text-green-primary">
               {formatCurrencyWithSymbol(company?.currency || DEFAULT_CURRENCY_CODE, total)}
               {coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY &&
-              !allHavePlannedDays
+                !allHavePlannedDays
                 ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
                 : ''}
             </Text>

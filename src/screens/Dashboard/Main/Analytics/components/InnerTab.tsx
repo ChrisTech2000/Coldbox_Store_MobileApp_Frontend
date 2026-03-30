@@ -21,39 +21,44 @@ export function Tab({ compactMode, disabled, name, icon, isActive, onSelect }: T
   return (
     <TouchableOpacity
       tw={cn(
-        'flex flex-row items-center justify-between space-x-2 my-1 px-3 py-1.5 border border-gray-400 rounded-md',
-        isActive && compactMode && 'bg-green-primary border-green-primary',
-        compactMode && 'mx-2',
-        disabled && ''
+        'flex flex-row items-center space-x-1.5 my-1.5 px-3 py-2.5 rounded-xl border',
+        isActive ? 'bg-green-primary/10 border-green-primary' : 'bg-white border-gray-100 shadow-sm',
+        compactMode && 'flex-1 mx-1',
+        disabled && 'opacity-50'
       )}
       onPress={onSelect}
       disabled={disabled}
+      activeOpacity={0.7}
     >
       <View
         tw={cn(
-          'p-1 bg-gray-300 rounded-3xl',
-          isActive && compactMode && 'bg-green-primary',
+          'p-1 rounded-lg',
+          isActive ? 'bg-green-primary' : 'bg-gray-100',
           disabled && 'bg-gray-200'
         )}
       >
         <Icon
           source={icon}
-          size={18}
-          color={disabled ? colors.gray[300] : isActive && compactMode ? 'white' : 'black'}
+          size={16}
+          color={disabled ? colors.gray[400] : isActive ? 'white' : colors.gray[600]}
         />
       </View>
       <Text
-        variant="TextMedium"
+        variant="TitleSmall"
         tw={cn(
-          'text-base text-gray-500',
-          isActive && compactMode && 'text-white',
+          'text-[12px] leading-tight',
+          isActive ? 'text-green-primary font-bold' : 'text-gray-600',
           disabled && 'text-gray-300'
         )}
       >
         {name}
       </Text>
 
-      {!compactMode ? <_NavigationArrow color={disabled ? colors.gray[300] : 'black'} /> : null}
+      {!compactMode ? (
+        <View tw="flex-1 items-end">
+          <_NavigationArrow color={isActive ? colors.green['600'] : colors.gray[400]} />
+        </View>
+      ) : null}
     </TouchableOpacity>
   );
 }

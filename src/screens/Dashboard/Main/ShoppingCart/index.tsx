@@ -1,6 +1,6 @@
 import { useIsFocused } from '@react-navigation/native';
 import React, { useMemo, useState } from 'react';
-import { Platform, RefreshControl, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { ActivityIndicator, Divider } from 'react-native-paper';
@@ -9,9 +9,9 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { Button } from '#ui/components/Button';
 import { GenericError } from '#ui/components/GenericError';
-import { ScrollView } from '#ui/components/ScrollView';
+
 import { Text } from '#ui/components/Text';
-import { cn } from '#ui/lib/cn';
+
 import { paperTheme } from '#ui/lib/theme';
 import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
@@ -36,10 +36,7 @@ import CompanyBottomSheet from '../Marketplace/components/CompanyBottomSheet';
 import { CartItem } from './components/CartItem';
 import { OwnershipModal } from './components/OwnershipModal';
 
-const HORIZONTAL_SPACING = Platform.select({
-  android: 'px-4',
-  ios: 'mx-4',
-});
+
 
 export const CART_MINIMUM_VALUE = 100;
 
@@ -129,17 +126,21 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
 
   const orderDisabled =
     contextualCartData.totalProduceAmount -
-      contextualCartData.totalDiscountAmount +
-      contextualCartData.totalCoolingFeesAmount <
+    contextualCartData.totalDiscountAmount +
+    contextualCartData.totalCoolingFeesAmount <
     CART_MINIMUM_VALUE;
 
+  // Only block proceed if we finished loading and still have no units (or an error).
+  // Don't disable the button while units are still loading.
   const cannotProceedWithoutUnits =
-    isCoolingUnitsLoading || coolingUnitsError || !allCoolingUnits?.length;
+    (!isCoolingUnitsLoading && coolingUnitsError) ||
+    (!isCoolingUnitsLoading && allCoolingUnits !== undefined && !allCoolingUnits?.length);
 
   return (
     <React.Fragment>
-      <ScrollView
-        tw={cn('h-full pt-3 bg-white', HORIZONTAL_SPACING)}
+      <FlashList
+        data={datums}
+        contentContainerStyle={{ paddingTop: 12, paddingHorizontal: 16, paddingBottom: 32 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
@@ -147,72 +148,64 @@ function ShoppingCartRoot(props: ShoppingCartStackRouteProps<'Root'>) {
             onRefresh={async () => await recomputeCart(toast, t)}
           />
         }
-      >
-        <View tw="flex-1 pb-8">
-          <FlashList
-            data={datums}
-            nestedScrollEnabled={true}
-            scrollEnabled={true}
-            keyExtractor={(item) =>
-              `marketplace-shopping-cart-list-item-#${item.marketListedCrateId}`
-            }
-            renderItem={({ item }) => <CartItem item={item} />}
-            estimatedItemSize={120}
-            ListFooterComponent={
-              <View tw="flex-col w-full mt-6">
-                <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">
-                  <Button
-                    mode="outlined"
-                    tw="border border-green-primary mb-8"
-                    onPress={() => setIsModalOpen(true)}
-                  >
-                    {t('Dashboard.ShoppingCart.ownership', {
-                      name: contextualCartData?.ownedOnBehalfOfCompanyId
-                        ? `${user?.firstName ?? ''} ${user?.lastName ?? ''}`
-                        : (company?.name ?? ''),
-                    })}
-                  </Button>
-                </RBAC.ProtectedResource>
+        keyExtractor={(item) =>
+          `marketplace-shopping-cart-list-item-#${item.marketListedCrateId}`
+        }
+        renderItem={({ item }) => <CartItem item={item} />}
+        estimatedItemSize={120}
+        ListFooterComponent={
+          <View tw="flex-col w-full mt-6">
+            <RBAC.ProtectedResource action="SET" subject="MarketplaceBuyerOption">
+              <Button
+                mode="outlined"
+                tw="border border-green-primary mb-8"
+                onPress={() => setIsModalOpen(true)}
+              >
+                {t('Dashboard.ShoppingCart.ownership', {
+                  name: contextualCartData?.ownedOnBehalfOfCompanyId
+                    ? `${user?.firstName ?? ''} ${user?.lastName ?? ''}`
+                    : (company?.name ?? ''),
+                })}
+              </Button>
+            </RBAC.ProtectedResource>
 
-                <View tw="flex-row items-center justify-between">
-                  <Text tw="text-lg">{t('Dashboard.ShoppingCart.subtotal')}</Text>
-                  <Text tw="text-lg">
-                    {formatCurrencyWithSymbol(
-                      DEFAULT_CURRENCY_CODE,
-                      contextualCartData.totalProduceAmount
-                    )}
-                  </Text>
-                </View>
+            <View tw="flex-row items-center justify-between">
+              <Text tw="text-lg">{t('Dashboard.ShoppingCart.subtotal')}</Text>
+              <Text tw="text-lg">
+                {formatCurrencyWithSymbol(
+                  DEFAULT_CURRENCY_CODE,
+                  contextualCartData.totalProduceAmount
+                )}
+              </Text>
+            </View>
 
-                <Divider tw="bg-zinc-400 my-3" />
+            <Divider tw="bg-zinc-400 my-3" />
 
-                <Button
-                  tw="w-5/6 self-center my-4"
-                  mode="contained"
-                  uppercase
-                  disabled={orderDisabled || !!cannotProceedWithoutUnits}
-                  onPress={(evt) => {
-                    evt.stopPropagation();
-                    if (cannotProceedWithoutUnits) {
-                      fetchCoolingUnits();
-                      toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
-                      return;
-                    }
-                    props.navigation.navigate('OrderDetails');
-                  }}
-                >
-                  {t('actions.continue')}
-                </Button>
-                {orderDisabled ? (
-                  <Text tw="text-red-700 self-center mb-4">
-                    {t('Dashboard.ShoppingCart.errors.minimumCartValue')}
-                  </Text>
-                ) : null}
-              </View>
-            }
-          />
-        </View>
-      </ScrollView>
+            <Button
+              tw="w-5/6 self-center my-4"
+              mode="contained"
+              uppercase
+              disabled={orderDisabled || !!cannotProceedWithoutUnits}
+              onPress={(evt) => {
+                evt.stopPropagation();
+                if (cannotProceedWithoutUnits) {
+                  fetchCoolingUnits();
+                  toast.show(t('navigation.error.errorMessage'), { type: 'md_danger' });
+                  return;
+                }
+                props.navigation.navigate('OrderDetails');
+              }}
+            >
+              {t('actions.continue')}
+            </Button>
+            {orderDisabled ? (
+              <Text tw="text-red-700 self-center mb-4">
+                {t('Dashboard.ShoppingCart.errors.minimumCartValue')}
+              </Text>
+            ) : null}
+          </View>
+        }
+      />
 
       <_PortalsWrapper />
       <OwnershipModal isVisible={isModalOpen} close={() => setIsModalOpen(false)} />

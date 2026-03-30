@@ -92,7 +92,7 @@ export function useAnalysis(
   const isDataSkippable = !selectedUnits?.length || !user?.id;
 
   const {
-    data: usage,
+    data: rawUsage,
     isLoading: isUsageDataLoading,
     isValidating: isValidatingUsage,
     refetch: refetchUsage,
@@ -106,8 +106,10 @@ export function useAnalysis(
     }
   );
 
+  const usage = (Array.isArray(rawUsage) ? rawUsage : ((rawUsage as any)?.results || [])) as GetMovementsHistoryResponse;
+
   const {
-    data: revenue,
+    data: rawRevenue,
     isLoading: isRevenueDataLoading,
     isValidating: isValidatingRevenue,
     refetch: refetchRevenue,
@@ -123,6 +125,8 @@ export function useAnalysis(
       defaultData: [],
     }
   );
+
+  const revenue = (Array.isArray(rawRevenue) ? rawRevenue : ((rawRevenue as any)?.results || [])) as GetMovementsHistoryResponse;
 
   const { data: users, isLoading: areUsersLoading } = useApiCall(
     'getUsageUsers',

@@ -32,32 +32,36 @@ export function SectionAccordion({
   };
 
   return (
-    <View tw="space-y-2 my-2 w-full">
+    <View tw="my-2 w-full">
       <TouchableWithoutFeedback onPress={toggleExpand}>
         <View
           tw={cn(
-            'flex flex-row items-center justify-between h-16 px-3 py-1 items-center justify-between rounded-lg w-full',
-            color
+            'flex flex-row items-center justify-between h-14 px-4 rounded-xl w-full bg-white border border-gray-100 shadow-sm',
+            expanded && 'rounded-b-none'
           )}
         >
-          <Text variant="TitleMedium" tw="text-base font-bold">
+          <Text variant="TitleSmall" tw="text-gray-800 font-bold">
             {title}
           </Text>
-          <Icon
-            source={expanded ? 'chevron-up' : 'chevron-down'}
-            size={20}
-            color={colors.gray[500]}
-          />
+          <View tw="p-1 bg-gray-50 rounded-full">
+            <Icon
+              source={expanded ? 'chevron-up' : 'chevron-down'}
+              size={20}
+              color={colors.gray[500]}
+            />
+          </View>
         </View>
       </TouchableWithoutFeedback>
       {expanded ? (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle="w-full"
-        >
-          {content}
-        </ScrollView>
+        <View tw="bg-white border-x border-b border-gray-100 shadow-sm rounded-b-xl overflow-hidden">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle="w-full"
+          >
+            {content}
+          </ScrollView>
+        </View>
       ) : null}
     </View>
   );

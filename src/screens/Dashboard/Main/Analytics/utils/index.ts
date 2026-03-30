@@ -13,11 +13,14 @@ export const getMetricValue = (
     return metric;
   }
 
-  if (!isNil(index) && (metric as Array<ImpactMetricType>).length) {
-    return (metric as Array<ImpactMetricType>)?.[index].value as number;
+  if (Array.isArray(metric)) {
+    if (!isNil(index) && metric.length > index) {
+      return (metric[index]?.value as number) ?? 0;
+    }
+    return (metric[0]?.value as number) ?? 0;
   }
 
-  return (metric as ImpactMetricType)?.value as number;
+  return ((metric as ImpactMetricType)?.value as number) ?? 0;
 };
 
 export const getMetricName = (

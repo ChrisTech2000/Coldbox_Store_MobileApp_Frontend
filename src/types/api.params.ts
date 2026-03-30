@@ -314,13 +314,13 @@ export interface AddCoolingUnitParams extends JsonObject {
 export type GetCoolingUnitParams = {
   coolingUnitId: number;
 } & (
-  | {
+    | {
       operatorId: number;
     }
-  | {
+    | {
       companyId: number;
     }
-);
+  );
 
 export type GetCoolingUnitSensorDataParams = {
   coolingUnitId: number;
@@ -426,6 +426,8 @@ export interface AddItemToCartParams extends JsonObject {
 export interface UpdateListedCrateParams extends JsonObject {
   crateIds: Array<number>;
   producePricePerKg: number;
+  totalListedWeight?: number;
+  picture?: { uri: string; type: string; name: string } | null;
 }
 
 export interface ListedCratesBaseParams {

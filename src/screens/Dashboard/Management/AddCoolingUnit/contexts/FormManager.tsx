@@ -279,7 +279,7 @@ export default function FormManager(props: FormManagerProps) {
 
   const callbackProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    submitHandler: form.handleSubmit(props.onSubmit as any),
+    submitHandler: form.handleSubmit(props.onSubmit as any, (errors) => console.warn('Form Validation Errors:', errors)),
     isSubmitting: form.formState.isSubmitting,
   } satisfies CallbackProps;
 

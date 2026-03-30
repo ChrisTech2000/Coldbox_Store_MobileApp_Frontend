@@ -48,6 +48,7 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
     handleSubmit,
     watch,
     setValue,
+    setError,
     formState: { errors },
     getValues,
   } = useForm<SignUpCoolingUserSchemaType>({
@@ -119,8 +120,39 @@ function SignUpCoolingUser(props: AuthRouteProps<'SignUpCoolingUser'>) {
           recaptchaToken
         );
       } catch (exception) {
-        if (exception instanceof CustomError && exception.originalError.response.status >= 500) {
-          toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+        if (exception instanceof CustomError) {
+          const status = exception.originalError?.response?.status;
+          const errorData = exception.originalError?.response?.data as any;
+
+          if (status === 400 && errorData) {
+            let handled = false;
+
+            if (errorData.user) {
+              if (Array.isArray(errorData.user)) {
+                // Usually means duplicate user, fallback to phone field since CoolingUser uses phone primarily
+                setError('phone', { type: 'server', message: errorData.user[0] });
+                handled = true;
+              } else if (typeof errorData.user === 'object') {
+                if (errorData.user.phone && Array.isArray(errorData.user.phone)) {
+                  setError('phone', { type: 'server', message: errorData.user.phone[0] });
+                  handled = true;
+                }
+              }
+            }
+
+            if (handled) {
+              return;
+            }
+          }
+
+          if (status && status >= 500) {
+            toast.show(t('navigation.error.serverErrorMessage'), { type: 'md_danger' });
+          } else {
+            toast.show(t('Auth.SignUp.toasts.error'), {
+              type: 'md_danger',
+              style: { marginBottom: 55 },
+            });
+          }
         } else {
           toast.show(t('Auth.SignUp.toasts.error'), {
             type: 'md_danger',

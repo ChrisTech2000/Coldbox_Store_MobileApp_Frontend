@@ -61,7 +61,7 @@ export class CropPricingManager {
 
     for (const unitCrop of cloneDeep(unitCrops)) {
       const pricing = unitCrop?.pricing;
-      if (typeof pricing === 'undefined') continue; // safe guard
+      if (!pricing) continue; // safe guard
 
       if (pricing.pricingType === PRICING_TYPE.PER_DAY) {
         const safeValue: number =

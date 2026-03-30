@@ -1004,13 +1004,15 @@ class ColdtivateService extends HttpClient {
     coolingUnits: number | number[]
   ): Promise<GetMovementsHistoryResponse> => {
     try {
-      const { data } = await this.get<GetMovementsHistoryResponse>(
-        query(EOperationEndpoints.GET_COOLING_UNIT_USAGE, { coolingUnits })
-      );
+      const url = query(EOperationEndpoints.GET_COOLING_UNIT_USAGE, { cooling_units: coolingUnits });
+      console.warn("DEBUG getUsageAnalysis URL:", url);
+
+      const { data } = await this.get<GetMovementsHistoryResponse>(url);
+      console.warn("DEBUG getUsageAnalysis RETURNED:", data?.length, "items, initiated_for values:", data?.map((m: any) => m.initiatedFor));
       return data;
     } catch (error) {
       const customError: CustomError = ErrorUtil.handleAxiosError(error as AxiosError);
-      console.log(JSON.stringify(customError));
+      console.warn("DEBUG getUsageAnalysis ERROR:", JSON.stringify(customError));
       throw customError;
     }
   };
@@ -1021,8 +1023,8 @@ class ColdtivateService extends HttpClient {
     try {
       const { coolingUnits, paymentMethods } = params;
       const _params = {
-        coolingUnits: typeof coolingUnits === 'number' ? coolingUnits : coolingUnits.join(','),
-        paymentMethods: paymentMethods.join(','),
+        cooling_units: typeof coolingUnits === 'number' ? coolingUnits : coolingUnits.join(','),
+        payment_methods: paymentMethods.join(','),
       };
 
       const { data } = await this.get<GetMovementsHistoryResponse>(

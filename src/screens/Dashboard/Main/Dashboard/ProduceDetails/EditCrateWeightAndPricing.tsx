@@ -80,6 +80,7 @@ function EditCrateWeightAndPricing(
 
   const [isSettingUp, toggleIsSettingUp] = useToggle(true);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
+  const [picture, setPicture] = React.useState<{ uri: string; type: string; name: string } | null>(null);
 
   const { data: owner, isLoading: isLoadingFarmer } = useApiCall(
     'getUser',
@@ -174,12 +175,12 @@ function EditCrateWeightAndPricing(
       const operatorParams =
         user?.role === ERoles.OPERATOR
           ? ({
-              ...(_produce.ownedOnBehalfOfCompanyId
-                ? { operatorOnBehalfOfSellerCompanyId: _produce.ownedOnBehalfOfCompanyId }
-                : owner.role === ERoles.COOLING_USER
-                  ? { operatorOnBehalfOfSellerFarmerId: _produce.ownedByUserId }
-                  : { operatorOnBehalfOfSellerUserId: _produce.ownedByUserId }),
-            } satisfies ListedCratesBaseParams)
+            ...(_produce.ownedOnBehalfOfCompanyId
+              ? { operatorOnBehalfOfSellerCompanyId: _produce.ownedOnBehalfOfCompanyId }
+              : owner.role === ERoles.COOLING_USER
+                ? { operatorOnBehalfOfSellerFarmerId: _produce.ownedByUserId }
+                : { operatorOnBehalfOfSellerUserId: _produce.ownedByUserId }),
+          } satisfies ListedCratesBaseParams)
           : {};
 
       if (cratesToList.length > 0) {
@@ -193,6 +194,7 @@ function EditCrateWeightAndPricing(
           MarketplaceService.upsertListedCrate({
             crateIds: cratesToList,
             producePricePerKg: currentPrice,
+            ...(picture ? { picture } : {}),
             ...operatorParams,
           })
         );
@@ -207,6 +209,7 @@ function EditCrateWeightAndPricing(
           MarketplaceService.upsertListedCrate({
             crateIds: previous.sellableCrates,
             producePricePerKg: currentPrice,
+            ...(picture ? { picture } : {}),
             ...operatorParams,
           })
         );
@@ -259,16 +262,16 @@ function EditCrateWeightAndPricing(
       const result = isTutorialActive
         ? { nodes: [] }
         : await MarketplaceService.getSellerListedCrates(
-            user?.role === ERoles.OPERATOR
-              ? {
-                  ...(companyOwnerId
-                    ? { operatorOnBehalfOfSellerCompanyId: companyOwnerId }
-                    : owner.role === ERoles.COOLING_USER
-                      ? { operatorOnBehalfOfSellerFarmerId: ownerId }
-                      : { operatorOnBehalfOfSellerUserId: ownerId }),
-                }
-              : undefined
-          );
+          user?.role === ERoles.OPERATOR
+            ? {
+              ...(companyOwnerId
+                ? { operatorOnBehalfOfSellerCompanyId: companyOwnerId }
+                : owner.role === ERoles.COOLING_USER
+                  ? { operatorOnBehalfOfSellerFarmerId: ownerId }
+                  : { operatorOnBehalfOfSellerUserId: ownerId }),
+            }
+            : undefined
+        );
 
       const initialCrates: FormValues['crates'] = params.produce.checkedInCrates.map((crate) => ({
         id: crate.id,
@@ -445,9 +448,9 @@ function EditCrateWeightAndPricing(
                       #&nbsp;
                       {areCrateTagsSet
                         ? item.tag ||
-                          t(
-                            'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.unavailableId'
-                          )
+                        t(
+                          'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.unavailableId'
+                        )
                         : index + 1}
                     </Text>
                   </View>
@@ -588,6 +591,31 @@ function EditCrateWeightAndPricing(
                 </View>
               )}
             />
+
+            {/* Image Picker */}
+            <View tw="space-y-2 pt-6">
+              <Text tw="text-base font-semibold text-gray-800">
+                Add a picture of the produce (Optional)
+              </Text>
+              <View tw="flex-row items-center space-x-3">
+                <Button
+                  onPress={() => {
+                    const { launchImageLibrary } = require('react-native-image-picker');
+                    launchImageLibrary({ mediaType: 'photo', quality: 0.8 }, (res: any) => {
+                      if (res.assets?.[0]) {
+                        const { uri, type, fileName } = res.assets[0];
+                        setPicture({ uri, type, name: fileName });
+                      }
+                    });
+                  }}
+                >
+                  {picture ? 'Change Picture' : 'Select Picture'}
+                </Button>
+                {picture ? (
+                  <Text tw="text-green-600 font-medium">Image selected ✓</Text>
+                ) : null}
+              </View>
+            </View>
           </View>
         ) : null}
       </KeyboardAwareScrollView>

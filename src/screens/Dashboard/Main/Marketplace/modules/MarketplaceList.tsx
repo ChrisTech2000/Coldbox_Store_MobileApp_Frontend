@@ -55,6 +55,7 @@ export default function MarketplaceList() {
                   produceInfo={item.produceInfo}
                   movementCode={item.movementCode}
                   cropImageUri={`${API_BASE_URL}media/${item.crop.image}`}
+                  picture={item.picture}
                   owner={item.owner}
                 />
                 <MarketplaceItemWrapper.CompanyAction
@@ -116,16 +117,16 @@ type UnitMapValue = Pick<AvailableListingDatum, 'company' | 'coolingUnit'>;
 
 type NearbyMeListItem =
   | {
-      kind: 'sectionHeader';
-      sectionKey: number;
-      distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
-    }
+    kind: 'sectionHeader';
+    sectionKey: number;
+    distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
+  }
   | {
-      kind: 'row';
-      sectionKey: number;
-      distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
-      datum: AvailableListingDatum;
-    };
+    kind: 'row';
+    sectionKey: number;
+    distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
+    datum: AvailableListingDatum;
+  };
 
 function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
   const { listing } = props;

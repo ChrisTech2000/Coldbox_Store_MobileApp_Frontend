@@ -30,8 +30,8 @@ function SelectCropType({ navigation }: CheckInStackRouteProps<'SelectCropType'>
         name: t('Dashboard.CrateManagement.CheckIn.SelectCropType.vegetables'),
       },
       {
-        id: ECropType.ROOT_VEGETABLES,
-        name: t('Dashboard.CrateManagement.CheckIn.SelectCropType.rootVegetables'),
+        id: ECropType.MEAT,
+        name: t('Dashboard.CrateManagement.CheckIn.SelectCropType.meat'),
       },
       {
         id: ECropType.OTHER,
