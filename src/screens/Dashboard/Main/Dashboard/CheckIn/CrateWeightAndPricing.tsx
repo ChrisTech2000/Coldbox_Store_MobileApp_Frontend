@@ -22,10 +22,12 @@ import { useTranslationUtils } from '#i18n/utils';
 import type { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
+import { useAuthStore } from '#stores/auth';
 import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
 import type { CheckMarketplaceEligibilityResponse } from '#types/api.responses';
 import type { User } from '#types/global';
+import { ERoles } from '#types/global';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import { InfoModal } from './CrateSetup/InfoModal';
@@ -42,7 +44,12 @@ type FormValues = {
   price: string;
 };
 
-type StoreState = { crates: CrateData[]; price: number | undefined; totalListedWeight: number | undefined; picture?: { uri: string; type: string; name: string } | null; };
+type StoreState = {
+  crates: CrateData[];
+  price: number | undefined;
+  totalListedWeight: number | undefined;
+  picture?: { uri: string; type: string; name: string } | null;
+};
 type StoreActions = { mutate: (values: StoreState) => void };
 
 const useCrateWeightPricingStore = create<StoreState & StoreActions>((set) => ({
@@ -65,7 +72,9 @@ export function useCrateWeightPricingBridge(cb: (values: StoreState) => void) {
 }
 
 export function resetCrateWeightPricingBridge() {
-  useCrateWeightPricingStore.getState().mutate({ crates: [], price: undefined, totalListedWeight: undefined, picture: undefined });
+  useCrateWeightPricingStore
+    .getState()
+    .mutate({ crates: [], price: undefined, totalListedWeight: undefined, picture: undefined });
 }
 
 /**
@@ -96,9 +105,12 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
 
   const user = useCheckInStore((store) => store.user);
   const company = useManagementStore((store) => store.company);
+  const loggedInUser = useAuthStore((store) => store.user);
 
   const [infoVisible, setInfoVisible] = React.useState(false);
-  const [picture, setPicture] = React.useState<{ uri: string; type: string; name: string } | null>(null);
+  const [picture, setPicture] = React.useState<{ uri: string; type: string; name: string } | null>(
+    null
+  );
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   const isUserWithoutPhone = user?.user.firstName === USER_WITHOUT_PHONE && !user.user.phone;
@@ -111,11 +123,11 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
     'checkMarketplaceEligibility',
     MarketplaceService.checkMarketplaceEligibility,
     {
-      userIds: [user!.user.id],
-      companyIds: [company!.id],
+      userIds: user ? [user.user.id] : [],
+      companyIds: company?.id ? [company.id] : params.companyId ? [params.companyId] : [],
     },
     {
-      skip: !user || !company || isUserWithoutPhone,
+      skip: !user || (!company?.id && !params.companyId) || isUserWithoutPhone,
       defaultData: {} as CheckMarketplaceEligibilityResponse,
     }
   );
@@ -182,7 +194,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
     }
   }
 
-  const companyEligible = eligibility.companies?.[company?.id ?? ''];
+  const companyEligible = eligibility?.companies?.[company?.id ?? params.companyId ?? ''];
   const farmerEligible = eligibility.users?.[user?.user.id ?? ''];
   const allowedToSetPricing =
     guard('SET', 'MarketplaceListForSale') && companyEligible && farmerEligible;
@@ -208,7 +220,24 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
         {isUserWithoutPhone ? (
           <Text tw="mx-4">{t('Dashboard.ProduceDetails.userWithoutPhone')}</Text>
         ) : !companyEligible ? (
-          <Text tw="mx-4">{t('Dashboard.ProduceDetails.operatorNoCompanyBankAccount')}</Text>
+          loggedInUser?.role === ERoles.EMPLOYEE ? (
+            <View tw="mx-4">
+              <Text>{t('Dashboard.ProduceDetails.employeeNoBankAccount')}</Text>
+              <Button
+                tw="self-end mt-2"
+                onPress={() => {
+                  props.navigation.navigate('Management', {
+                    screen: 'PayoutSettings',
+                    params: { isCompanyView: true },
+                  });
+                }}
+              >
+                {t('Dashboard.ProduceDetails.addBankAccountButton')}
+              </Button>
+            </View>
+          ) : (
+            <Text tw="mx-4">{t('Dashboard.ProduceDetails.operatorNoCompanyBankAccount')}</Text>
+          )
         ) : !farmerEligible ? (
           <View tw="mx-4">
             <Text>
@@ -237,7 +266,6 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
         showsVerticalScrollIndicator={false}
       >
         <View tw="flex-1 space-y-6">
-
           {/* Total available kg badge */}
           <View tw="bg-green-50 border border-green-100 rounded-2xl p-5">
             <Text tw="text-xs text-green-700 font-bold uppercase tracking-widest mb-1">
@@ -261,9 +289,7 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                     How many kg do you want to list for the market?
                   </Text>
                   <View tw="flex-row items-center space-x-1 mb-1">
-                    <Text tw="text-xs text-gray-500">
-                      Max available:
-                    </Text>
+                    <Text tw="text-xs text-gray-500">Max available:</Text>
                     <Text tw="text-xs text-green-700 font-semibold">
                       {totalAvailableKg} {t('Dashboard.ProduceDetails.kilogram').toLowerCase()}
                     </Text>
@@ -295,10 +321,13 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                   <View tw="space-y-2 pb-20">
                     <View tw="flex-row items-center space-x-1">
                       <Text tw="text-base font-semibold text-gray-800">
-                        {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.sellingPrice')}
+                        {t(
+                          'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.sellingPrice'
+                        )}
                       </Text>
                       <Sup>
-                        ({params.companyCurrency}/{t('Dashboard.ProduceDetails.kilogram').toUpperCase()})
+                        ({params.companyCurrency}/
+                        {t('Dashboard.ProduceDetails.kilogram').toUpperCase()})
                       </Sup>
                     </View>
                     <Controller
@@ -323,16 +352,52 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
                     <Text tw="text-base font-semibold text-gray-800">
                       Add a picture of the produce (Optional)
                     </Text>
-                    <View tw="flex-row items-center space-x-3">
+                    <View tw="flex-row items-center space-x-3 mt-2">
                       <Button
+                        mode="outlined"
+                        icon="camera"
+                        tw="border-gray-400 rounded-lg"
                         onPress={() => {
-                          const { launchImageLibrary } = require('react-native-image-picker');
-                          launchImageLibrary({ mediaType: 'photo', quality: 0.8 }, (res: any) => {
+                          // eslint-disable-next-line @typescript-eslint/no-var-requires
+                          const {
+                            launchCamera,
+                            launchImageLibrary,
+                          } = require('react-native-image-picker');
+
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          const handleResponse = (res: any) => {
                             if (res.assets?.[0]) {
                               const { uri, type, fileName } = res.assets[0];
                               setPicture({ uri, type, name: fileName });
                             }
-                          });
+                          };
+
+                          Alert.alert(
+                            'Add Picture',
+                            'Choose an option to add a picture of the produce:',
+                            [
+                              {
+                                text: 'Take Photo',
+                                onPress: () =>
+                                  launchCamera(
+                                    { mediaType: 'photo', quality: 0.8 },
+                                    handleResponse
+                                  ),
+                              },
+                              {
+                                text: 'Choose from Gallery',
+                                onPress: () =>
+                                  launchImageLibrary(
+                                    { mediaType: 'photo', quality: 0.8 },
+                                    handleResponse
+                                  ),
+                              },
+                              {
+                                text: 'Cancel',
+                                style: 'cancel',
+                              },
+                            ]
+                          );
                         }}
                       >
                         {picture ? 'Change Picture' : 'Select Picture'}
@@ -346,7 +411,6 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
               </View>
             ) : null}
           </RBAC.ProtectedResource>
-
         </View>
       </KeyboardAwareScrollView>
 
@@ -354,7 +418,9 @@ function CrateWeightAndPricing(props: CheckInStackRouteProps<'CrateWeightAndPric
         {potentialPrice > 0 ? (
           <View tw="flex flex-row items-center justify-between bg-teal-50 p-4">
             <Text tw="text-lg">
-              {t('Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.potentialSellingPrice')}
+              {t(
+                'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.potentialSellingPrice'
+              )}
             </Text>
             <Text tw="text-lg text-green-primary">
               {formatCurrencyWithSymbol(params.companyCurrency, potentialPrice.toFixed(2))}

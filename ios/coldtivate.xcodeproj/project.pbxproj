@@ -646,10 +646,10 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.manamuz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "b80883a4-0eb5-49c1-9574-6d391cf7a24e";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.base.coldtivate";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.manamuz.coldboxstore";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/coldtivate.app/coldtivate";
 			};
 			name = Debug;
@@ -674,10 +674,10 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.manamuz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "b80883a4-0eb5-49c1-9574-6d391cf7a24e";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.base.coldtivate";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.manamuz.coldboxstore";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/coldtivate.app/coldtivate";
 			};
 			name = Release;
@@ -799,10 +799,10 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.base.coldtivate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.manamuz.coldboxstore;
 				PRODUCT_NAME = coldtivate;
 				PROVISIONING_PROFILE = "b80883a4-0eb5-49c1-9574-6d391cf7a24e";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.base.coldtivate";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.manamuz.coldboxstore";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -926,10 +926,10 @@
 					"$(inherited)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.base.coldtivate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.manamuz.coldboxstore;
 				PRODUCT_NAME = coldtivate;
 				PROVISIONING_PROFILE = "b80883a4-0eb5-49c1-9574-6d391cf7a24e";
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.base.coldtivate";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.manamuz.coldboxstore";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

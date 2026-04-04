@@ -46,6 +46,7 @@ export default function MarketplaceList() {
             data={data}
             ListEmptyComponent={<GenericEmptyState />}
             keyExtractor={(item) => `marketplace-list-item-#${item.id}`}
+            scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <MarketplaceItemWrapper shelfLife={item.shelfLife}>
@@ -117,16 +118,16 @@ type UnitMapValue = Pick<AvailableListingDatum, 'company' | 'coolingUnit'>;
 
 type NearbyMeListItem =
   | {
-    kind: 'sectionHeader';
-    sectionKey: number;
-    distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
-  }
+      kind: 'sectionHeader';
+      sectionKey: number;
+      distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
+    }
   | {
-    kind: 'row';
-    sectionKey: number;
-    distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
-    datum: AvailableListingDatum;
-  };
+      kind: 'row';
+      sectionKey: number;
+      distance: keyof typeof DISTANCE_BUCKETS_TRANSLATIONS;
+      datum: AvailableListingDatum;
+    };
 
 function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
   const { listing } = props;
@@ -268,6 +269,7 @@ function _NearbyMeSection(props: { listing: Array<AvailableListingDatum> }) {
                     produceInfo={datum.produceInfo}
                     movementCode={datum.movementCode}
                     cropImageUri={`${API_BASE_URL}media/${datum.crop.image}`}
+                    picture={datum.picture}
                     owner={datum.owner}
                   />
                   <MarketplaceItemWrapper.BuyAction

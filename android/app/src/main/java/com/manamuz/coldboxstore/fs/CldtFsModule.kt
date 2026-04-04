@@ -1,4 +1,4 @@
-package com.base.coldtivate.fs
+package com.manamuz.coldboxstore.fs
 
 import com.facebook.react.bridge.*
 import com.facebook.react.module.annotations.ReactModule

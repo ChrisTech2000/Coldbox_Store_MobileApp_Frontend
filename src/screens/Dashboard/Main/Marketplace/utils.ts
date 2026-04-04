@@ -65,8 +65,11 @@ function groupListingsByMovement(listings: AvailableListingDatum[]): AvailableLi
     const key = `${item.movementCode}::${item.crop.id}::${item.price}`;
     const existing = groups.get(key);
     if (existing) {
-      // Accumulate weight — keep all other fields from the first crate in the group
+      // Accumulate weight — keep all other fields from the first crate in the group, but grab picture if missing
       existing.crateWeight = Math.round((existing.crateWeight + item.crateWeight) * 100) / 100;
+      if (!existing.picture && item.picture) {
+        existing.picture = item.picture;
+      }
     } else {
       groups.set(key, { ...item });
     }
@@ -130,6 +133,8 @@ export function useMarketplaceListing() {
               ? await DataloaderService.users.getById(node.ownedByUserId)
               : null;
 
+          const priceWithCommission = node.producePricePerKg * 1.035;
+
           return {
             id: node.id,
             distance: _convertMilesToKm(node.distance),
@@ -137,8 +142,8 @@ export function useMarketplaceListing() {
             produceInfo: node.produceInfo,
             crateWeight: node.availableWeightInKg,
             shelfLife: node.relCrateRemainingShelfLife,
-            price: node.producePricePerKg,
-            picture: (node as any).picture,
+            price: priceWithCommission,
+            picture: node.picture,
             owner: {
               name: node.ownedOnBehalfOfCompanyId
                 ? ((owner as Company)?.name ?? '')
@@ -164,7 +169,7 @@ export function useMarketplaceListing() {
               image: contextualCrop?.image ?? getDefaultCropValues(t).imageUri,
             },
             movementCode: node.relCheckInMovementCode,
-            currencyValue: formatCurrencyWithSymbol(node.currency, node.producePricePerKg),
+            currencyValue: formatCurrencyWithSymbol(node.currency, priceWithCommission),
           } satisfies AvailableListingDatum;
         })
       );

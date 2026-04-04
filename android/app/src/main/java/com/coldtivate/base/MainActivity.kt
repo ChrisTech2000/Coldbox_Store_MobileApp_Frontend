@@ -1,4 +1,4 @@
-package com.base.coldtivate
+package com.manamuz.coldboxstore
 
 import android.os.Build
 import android.os.Bundle

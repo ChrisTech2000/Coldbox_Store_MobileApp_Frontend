@@ -1,4 +1,4 @@
-package com.base.coldtivate.fs
+package com.manamuz.coldboxstore.fs
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule

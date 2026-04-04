@@ -1,4 +1,4 @@
-package com.base.coldtivate
+package com.manamuz.coldboxstore
 
 import android.app.Application
 import com.facebook.react.PackageList
@@ -11,7 +11,7 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
-import com.base.coldtivate.fs.CldtFsPackage
+import com.manamuz.coldboxstore.fs.CldtFsPackage
 
 class MainApplication : Application(), ReactApplication {
 

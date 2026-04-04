@@ -496,6 +496,7 @@ export interface GetAvailableListingResponse {
     distance: number;
     id: number;
     lastUpdatedAt: string;
+    picture?: string | null;
     pendingInCoolingFees: number;
     pendingInCoolingFeesPricePerKg: number;
     producePricePerKg: number;

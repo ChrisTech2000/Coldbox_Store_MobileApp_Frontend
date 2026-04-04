@@ -229,13 +229,18 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
   }, [coolingUnit, user, checkOutCode]);
 
   async function handleCheckIn() {
-    console.warn('SENDING CHECK-IN PAYLOAD PRODUCES: ', JSON.stringify(cloneDeep(produces), null, 2));
+    console.warn(
+      'SENDING CHECK-IN PAYLOAD PRODUCES: ',
+      JSON.stringify(cloneDeep(produces), null, 2)
+    );
 
     return ColdtivateService.checkIn({
       farmerId: user.id,
       id: undefined,
       produces: cloneDeep(produces).map((produce) => {
         delete produce.price;
+        delete produce.picture;
+        delete produce.totalListedWeight;
         return {
           ...produce,
           crop: { id: produce.crop.id },
@@ -307,7 +312,10 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       console.log('[Marketplace] canList:', canList, '| hasMovement:', hasMovement);
 
       if (canList && hasMovement) {
-        const processedCrateListing = processMarketplaceCrateListing(produces, (result as CheckInResponse).produces);
+        const processedCrateListing = processMarketplaceCrateListing(
+          produces,
+          (result as CheckInResponse).produces
+        );
         console.log('[Marketplace] processedCrateListing:', JSON.stringify(processedCrateListing));
         const settled = await Promise.allSettled(
           processedCrateListing.map(({ crateIds, pricePerKg, totalListedWeight, picture }) =>
@@ -485,7 +493,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
             <Text variant="TextMedium" tw="text-lg font-bold text-green-primary">
               {formatCurrencyWithSymbol(company?.currency || DEFAULT_CURRENCY_CODE, total)}
               {coolingUnit.commonPricingType?.type === EPricingType.PERIODICITY &&
-                !allHavePlannedDays
+              !allHavePlannedDays
                 ? ` / ${t('Dashboard.CrateManagement.CheckIn.day')}`
                 : ''}
             </Text>

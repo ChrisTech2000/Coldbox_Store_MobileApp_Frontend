@@ -29,15 +29,16 @@ export type CheckInStackRoutes = {
   SelectCropType: undefined;
   CropList: { type: ECropType };
   CrateSetup:
-  | {
-    crop: Crop;
-    additionalInfo: string;
-  }
-  | {
-    contextualProduce: ProduceCrate;
-  };
+    | {
+        crop: Crop;
+        additionalInfo: string;
+      }
+    | {
+        contextualProduce: ProduceCrate;
+      };
   CrateWeightAndPricing: {
     companyCurrency: string;
+    companyId: number;
     crates: Array<{
       weight: number;
       isSellable: boolean;
@@ -87,9 +88,9 @@ export default function CheckInStack() {
     const translationPath = NAVIGATOR_HEADERS[routeName];
     const routeTitle = translationPath
       ? t(translationPath, {
-        cropType,
-        user: `${farmer?.firstName ?? ''} ${farmer?.lastName ?? ''}`,
-      })
+          cropType,
+          user: `${farmer?.firstName ?? ''} ${farmer?.lastName ?? ''}`,
+        })
       : undefined;
     return {
       ...props,

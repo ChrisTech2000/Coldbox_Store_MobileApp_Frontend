@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
 import { useWalkthroughStep } from 'react-native-interactive-walkthrough';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
@@ -42,7 +42,7 @@ import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import { useTutorialStore } from '#stores/tutorial';
 import type { ListedCratesBaseParams } from '#types/api.params';
-import { ERoles, User } from '#types/global';
+import { ERoles, type User } from '#types/global';
 
 import { formatFloat } from '../../components/FarmerSurveyModal/schema';
 import { useMarketplaceListing } from '../../Marketplace/utils';
@@ -80,7 +80,9 @@ function EditCrateWeightAndPricing(
 
   const [isSettingUp, toggleIsSettingUp] = useToggle(true);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
-  const [picture, setPicture] = React.useState<{ uri: string; type: string; name: string } | null>(null);
+  const [picture, setPicture] = React.useState<{ uri: string; type: string; name: string } | null>(
+    null
+  );
 
   const { data: owner, isLoading: isLoadingFarmer } = useApiCall(
     'getUser',
@@ -175,12 +177,12 @@ function EditCrateWeightAndPricing(
       const operatorParams =
         user?.role === ERoles.OPERATOR
           ? ({
-            ...(_produce.ownedOnBehalfOfCompanyId
-              ? { operatorOnBehalfOfSellerCompanyId: _produce.ownedOnBehalfOfCompanyId }
-              : owner.role === ERoles.COOLING_USER
-                ? { operatorOnBehalfOfSellerFarmerId: _produce.ownedByUserId }
-                : { operatorOnBehalfOfSellerUserId: _produce.ownedByUserId }),
-          } satisfies ListedCratesBaseParams)
+              ...(_produce.ownedOnBehalfOfCompanyId
+                ? { operatorOnBehalfOfSellerCompanyId: _produce.ownedOnBehalfOfCompanyId }
+                : owner.role === ERoles.COOLING_USER
+                  ? { operatorOnBehalfOfSellerFarmerId: _produce.ownedByUserId }
+                  : { operatorOnBehalfOfSellerUserId: _produce.ownedByUserId }),
+            } satisfies ListedCratesBaseParams)
           : {};
 
       if (cratesToList.length > 0) {
@@ -262,16 +264,16 @@ function EditCrateWeightAndPricing(
       const result = isTutorialActive
         ? { nodes: [] }
         : await MarketplaceService.getSellerListedCrates(
-          user?.role === ERoles.OPERATOR
-            ? {
-              ...(companyOwnerId
-                ? { operatorOnBehalfOfSellerCompanyId: companyOwnerId }
-                : owner.role === ERoles.COOLING_USER
-                  ? { operatorOnBehalfOfSellerFarmerId: ownerId }
-                  : { operatorOnBehalfOfSellerUserId: ownerId }),
-            }
-            : undefined
-        );
+            user?.role === ERoles.OPERATOR
+              ? {
+                  ...(companyOwnerId
+                    ? { operatorOnBehalfOfSellerCompanyId: companyOwnerId }
+                    : owner.role === ERoles.COOLING_USER
+                      ? { operatorOnBehalfOfSellerFarmerId: ownerId }
+                      : { operatorOnBehalfOfSellerUserId: ownerId }),
+                }
+              : undefined
+          );
 
       const initialCrates: FormValues['crates'] = params.produce.checkedInCrates.map((crate) => ({
         id: crate.id,
@@ -357,7 +359,24 @@ function EditCrateWeightAndPricing(
         {isUserWithoutPhone ? (
           <Text tw="mx-4">{t('Dashboard.ProduceDetails.userWithoutPhone')}</Text>
         ) : !companyEligible ? (
-          <Text tw="mx-4">{t('Dashboard.ProduceDetails.operatorNoCompanyBankAccount')}</Text>
+          user?.role === ERoles.EMPLOYEE ? (
+            <View tw="mx-4">
+              <Text>{t('Dashboard.ProduceDetails.employeeNoBankAccount')}</Text>
+              <Button
+                tw="self-end mt-2"
+                onPress={() => {
+                  props.navigation.navigate('Management', {
+                    screen: 'PayoutSettings',
+                    params: { isCompanyView: true },
+                  });
+                }}
+              >
+                {t('Dashboard.ProduceDetails.addBankAccountButton')}
+              </Button>
+            </View>
+          ) : (
+            <Text tw="mx-4">{t('Dashboard.ProduceDetails.operatorNoCompanyBankAccount')}</Text>
+          )
         ) : !farmerEligible ? (
           user?.role === ERoles.COOLING_USER ? (
             <View tw="mx-4">
@@ -448,9 +467,9 @@ function EditCrateWeightAndPricing(
                       #&nbsp;
                       {areCrateTagsSet
                         ? item.tag ||
-                        t(
-                          'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.unavailableId'
-                        )
+                          t(
+                            'Dashboard.CrateManagement.CheckIn.Setup.crateWeightAndPricing.unavailableId'
+                          )
                         : index + 1}
                     </Text>
                   </View>
@@ -597,23 +616,54 @@ function EditCrateWeightAndPricing(
               <Text tw="text-base font-semibold text-gray-800">
                 Add a picture of the produce (Optional)
               </Text>
-              <View tw="flex-row items-center space-x-3">
+              <View tw="flex-row items-center space-x-3 mt-2">
                 <Button
+                  mode="outlined"
+                  icon="camera"
+                  tw="border-gray-400 rounded-lg"
                   onPress={() => {
-                    const { launchImageLibrary } = require('react-native-image-picker');
-                    launchImageLibrary({ mediaType: 'photo', quality: 0.8 }, (res: any) => {
+                    // eslint-disable-next-line @typescript-eslint/no-var-requires
+                    const {
+                      launchCamera,
+                      launchImageLibrary,
+                    } = require('react-native-image-picker');
+
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const handleResponse = (res: any) => {
                       if (res.assets?.[0]) {
                         const { uri, type, fileName } = res.assets[0];
                         setPicture({ uri, type, name: fileName });
                       }
-                    });
+                    };
+
+                    Alert.alert(
+                      'Add Picture',
+                      'Choose an option to add a picture of the produce:',
+                      [
+                        {
+                          text: 'Take Photo',
+                          onPress: () =>
+                            launchCamera({ mediaType: 'photo', quality: 0.8 }, handleResponse),
+                        },
+                        {
+                          text: 'Choose from Gallery',
+                          onPress: () =>
+                            launchImageLibrary(
+                              { mediaType: 'photo', quality: 0.8 },
+                              handleResponse
+                            ),
+                        },
+                        {
+                          text: 'Cancel',
+                          style: 'cancel',
+                        },
+                      ]
+                    );
                   }}
                 >
                   {picture ? 'Change Picture' : 'Select Picture'}
                 </Button>
-                {picture ? (
-                  <Text tw="text-green-600 font-medium">Image selected ✓</Text>
-                ) : null}
+                {picture ? <Text tw="text-green-600 font-medium">Image selected ✓</Text> : null}
               </View>
             </View>
           </View>

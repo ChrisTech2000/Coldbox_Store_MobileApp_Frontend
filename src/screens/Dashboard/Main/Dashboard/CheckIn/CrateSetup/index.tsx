@@ -56,6 +56,8 @@ export type SetupSchema = {
   dateHarvested: EDateCropped;
   price: number | undefined;
   totalListedWeight: number | undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  picture: any;
 };
 
 function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>) {
@@ -90,15 +92,15 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
   } = useForm<SetupSchema>({
     ...('contextualProduce' in route.params
       ? {
-        defaultValues: {
-          numberOfCrates: route.params.contextualProduce.crates.length,
-          generalCrateWeight: coolingUnit?.crateWeight ?? 25,
-          crates: route.params.contextualProduce.crates ?? [],
-          plannedDays: route.params.contextualProduce.crates[0].plannedDays,
-          price: route.params.contextualProduce.price,
-          dateHarvested: route.params.contextualProduce.harvestDate,
-        },
-      }
+          defaultValues: {
+            numberOfCrates: route.params.contextualProduce.crates.length,
+            generalCrateWeight: coolingUnit?.crateWeight ?? 25,
+            crates: route.params.contextualProduce.crates ?? [],
+            plannedDays: route.params.contextualProduce.crates[0].plannedDays,
+            price: route.params.contextualProduce.price,
+            dateHarvested: route.params.contextualProduce.harvestDate,
+          },
+        }
       : {}),
     resolver: zodResolver((z, t) =>
       z.object({
@@ -123,6 +125,8 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
           .array(),
         plannedDays: z.number().optional(),
         price: z.number().optional(),
+        totalListedWeight: z.number().optional(),
+        picture: z.any().optional(),
         dateHarvested: z
           .enum([
             EDateCropped.TODAY,
@@ -151,12 +155,12 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
       numberOfCrates: values.crates.length,
       price: values.price,
       totalListedWeight: values.totalListedWeight,
+      picture: values.picture,
     }));
   });
 
   const plannedDays = watch('plannedDays');
   const numberOfCrates = watch('numberOfCrates');
-  const generalCrateWeight = watch('generalCrateWeight');
   const crates = watch('crates');
 
   const effectivePricing = useMemo(() => {
@@ -244,22 +248,19 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         let newCrates =
           !crates || crates.length === 0
             ? Array.from({ length: numCrates }, () => ({
-              weight: perCrateWeight,
-              tag: undefined,
-              isSellable: false,
-            }))
+                weight: perCrateWeight,
+                tag: undefined,
+                isSellable: false,
+              }))
             : [...crates];
 
         if (newCrates.length !== numCrates) {
           if (newCrates.length < numCrates) {
-            const additionalCrates = Array.from(
-              { length: numCrates - newCrates.length },
-              () => ({
-                weight: perCrateWeight,
-                tag: undefined,
-                isSellable: false,
-              })
-            );
+            const additionalCrates = Array.from({ length: numCrates - newCrates.length }, () => ({
+              weight: perCrateWeight,
+              tag: undefined,
+              isSellable: false,
+            }));
             newCrates = [...newCrates, ...additionalCrates];
           } else {
             newCrates = newCrates.slice(0, numCrates);
@@ -269,7 +270,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         // Recalculate weights for *all* crates since the denominator changed
         setValue(
           'crates',
-          newCrates.map(crate => ({ ...crate, weight: perCrateWeight }))
+          newCrates.map((crate) => ({ ...crate, weight: perCrateWeight }))
         );
       }
     },
@@ -310,6 +311,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
         hasPicture: false, // TODO: confirm this in the future, but sending true returns a 500 error
         price: values.price,
         totalListedWeight: values.totalListedWeight,
+        picture: values.picture,
       });
 
       resetCrateWeightPricingBridge();
@@ -367,6 +369,7 @@ function CrateSetup({ route, navigation }: CheckInStackRouteProps<'CrateSetup'>)
                   }));
                   navigation.navigate('CrateWeightAndPricing', {
                     companyCurrency: company?.currency?.toUpperCase() ?? DEFAULT_CURRENCY_CODE,
+                    companyId: coolingUnit?.location?.company?.id ?? (company?.id as number),
                     crates: contextualCrates,
                     sellingPrice: isNaN(sellingPrice) ? 0 : sellingPrice,
                     applyToAll: contextualCrates.every(

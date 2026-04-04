@@ -2,6 +2,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import truncate from 'lodash/truncate';
 import React, { useState, type PropsWithChildren } from 'react';
 import { TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { API_BASE_URL } from '#constants/environment';
 import FastImage from 'react-native-fast-image';
 import { Divider } from 'react-native-paper';
 import {
@@ -55,6 +56,7 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
   picture?: string | null;
   owner: { name: string; contact: string; isPhonePublic: boolean };
 }) {
+  console.log('MARKETPLACE RENDER TRACE:', props.picture, props.cropImageUri);
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
@@ -121,7 +123,17 @@ MarketplaceItemWrapper.Body = function _MarketplaceItemBody(props: {
         </View>
       </View>
 
-      <FastImage tw="w-14 h-14" resizeMode="contain" source={{ uri: props.picture ? (props.picture.startsWith('http') ? props.picture : `${API_BASE_URL}${props.picture.startsWith('/') ? props.picture.slice(1) : props.picture}`) : props.cropImageUri }} />
+      <FastImage
+        style={{ width: 96, height: 96, borderRadius: 12, borderWidth: 1, borderColor: '#e5e7eb' }}
+        resizeMode={props.picture ? 'cover' : 'contain'}
+        source={{
+          uri: props.picture
+            ? props.picture.startsWith('http')
+              ? props.picture
+              : `${API_BASE_URL}${props.picture.startsWith('/') ? props.picture.slice(1) : props.picture}`
+            : props.cropImageUri,
+        }}
+      />
     </View>
   );
 };
@@ -211,7 +223,9 @@ MarketplaceItemWrapper.BuyAction = function _BuyAction(props: {
       <Divider tw="bg-gray-400 my-0.5" />
 
       <View tw="flex-row items-center py-1 justify-between w-[98%]">
-        <View tw={cn('flex-row items-center justify-between pr-2 flex-1', hasAction ? '' : 'w-full')}>
+        <View
+          tw={cn('flex-row items-center justify-between pr-2 flex-1', hasAction ? '' : 'w-full')}
+        >
           <TouchableOpacity
             tw="flex flex-row items-center space-x-1 flex-shrink-0"
             onPress={() => {
