@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, View, Image } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 
-//import Logo from '#assets/images/coldtivate_logo.svg';
+//import Logo from '#assets/images/coldboxstore_logo.svg';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useAuthStore } from '#stores/auth';

@@ -15,7 +15,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { MarketPriceOverlay } from '#screens/Dashboard/Tutorial/MarketPriceOverlay';
 import { EFarmerTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type { PredictionCrop, PredictionMarket, PredictionState } from '#types/global';
 import { cn } from '#ui/lib/cn';
@@ -54,7 +54,7 @@ function MarketPriceTrend() {
   const { data: predictionParams, isLoading: loadingPredictionParams } = useApiCall(
     'getPredictionParams',
     async (param: QueryCountry) => {
-      const predictionParams = await ColdtivateService.getPredictionParams(param);
+      const predictionParams = await coldboxstoreService.getPredictionParams(param);
       setPredictionParams(predictionParams);
       return predictionParams;
     },

@@ -14,7 +14,7 @@ import * as BottomSheet from '#ui/components/BottomSheet';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore, type ManagementCompany } from '#stores/management';
 import { type GetMovementsHistoryResponse } from '#types/api.responses';
@@ -168,7 +168,7 @@ export function Movement({
             {
               label: t('Dashboard.History.optionsMenu.checkOut.smsReceipt'),
               action: async () => {
-                await ColdtivateService.sendCheckOutSmsReport(movement.id);
+                await coldboxstoreService.sendCheckOutSmsReport(movement.id);
                 setIsOptionsModalOpen(false);
                 toast.show(t('actions.done'), {
                   type: 'md_success',

@@ -20,7 +20,7 @@ import reportCrash from '#ui/lib/reportCrash';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRoutes } from '#navigation/Dashboard/Main/HistoryTabStack';
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
 import { useTranslatedCrops } from '#screens/Dashboard/Management/CompanyDetails/utils';
@@ -41,7 +41,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
 
   const { data: cropsResult, isLoading: isCropsLoading } = useApiCall(
     'getAllCrops',
-    ColdtivateService.getAllCrops,
+    coldboxstoreService.getAllCrops,
     undefined
   );
 
@@ -80,7 +80,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
   const onSubmit: SubmitHandler<BaseSurveySchemaType> = useCallback(
     async (values) => {
       try {
-        const result = await ColdtivateService.updateFarmerSurveys({
+        const result = await coldboxstoreService.updateFarmerSurveys({
           farmer: farmerId as number,
           userType: values.occupation,
           experience: values.experience === EExperience.OLD ? 'yes' : 'no',
@@ -113,7 +113,7 @@ function BaseSurvey(props: MarketSurveyStackRouteProps<'BaseSurvey'>) {
           cropId = farmerSurveys[openFarmersSurveyModal].cropId;
         }
 
-        const result = await ColdtivateService.updateFarmerSurveys({
+        const result = await coldboxstoreService.updateFarmerSurveys({
           farmer: farmerId as number,
           userType: surveys[0]?.userType ?? '',
           experience: !!surveys[0]?.experience,

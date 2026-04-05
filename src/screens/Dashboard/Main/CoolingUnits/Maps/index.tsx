@@ -15,7 +15,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { useTranslationUtils } from '#i18n/utils';
 import { CoolingUnitsMapOverlay } from '#screens/Dashboard/Tutorial/CoolingUnitsMapOverlay';
 import { EFarmerTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { LocationGeocoder } from '#services/LocationGeocoder';
@@ -46,7 +46,7 @@ function CoolingUnitsMaps() {
 
   const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
-    ColdtivateService.getAllCrops,
+    coldboxstoreService.getAllCrops,
     undefined,
     { skip: !farmerId, defaultData: [] }
   );
@@ -63,8 +63,8 @@ function CoolingUnitsMaps() {
     'getCoolingUnitsLocationMarkers',
     async () => {
       const [locations, coolingUnits] = await Promise.allSettled([
-        ColdtivateService.getPublicAndVisitedLocations(farmerId!),
-        ColdtivateService.getPublicAndVisitedCoolingUnits(farmerId!),
+        coldboxstoreService.getPublicAndVisitedLocations(farmerId!),
+        coldboxstoreService.getPublicAndVisitedCoolingUnits(farmerId!),
       ]);
       return processLocationMarkers({
         crops,

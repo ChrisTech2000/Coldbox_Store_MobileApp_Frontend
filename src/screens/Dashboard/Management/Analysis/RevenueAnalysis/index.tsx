@@ -29,7 +29,7 @@ import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
@@ -75,7 +75,7 @@ function RevenueAnalysis(props: ManagementRouteProps<'RevenueAnalysis'>) {
 
   const { data: coolingUnits, isLoading: coolingUnitsLoading } = useApiCall(
     'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
+    coldboxstoreService.getCoolingUnits,
     {
       ...(user?.role === ERoles.EMPLOYEE
         ? { company: company?.id as number }

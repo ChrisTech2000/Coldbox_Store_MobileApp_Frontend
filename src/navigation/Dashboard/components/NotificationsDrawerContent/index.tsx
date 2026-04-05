@@ -17,7 +17,7 @@ import type { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/ap
 import { type CoolingUnit, type Crop, type FarmerSurvey } from '#types/global';
 import InAppNotifications from '#common/InAppNotifications';
 import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { APP_EVENTS, emitter } from '#ui/lib/emitter';
 
 import type { ProcessedNotifications } from '../../lib/notifications';
@@ -150,7 +150,7 @@ function NotificationsDrawerContent(props: { notifications: Notifications }) {
           initialCropSelection={farmerSurveyDatums.contextualCrop}
           onSubmit={async (values) => {
             try {
-              await ColdtivateService.updateFarmerSurveys({
+              await coldboxstoreService.updateFarmerSurveys({
                 farmer: farmerSurveyDatums.farmerId,
                 userType: farmerSurveyDatums.userType,
                 experience: farmerSurveyDatums.experience ? 'yes' : 'no',

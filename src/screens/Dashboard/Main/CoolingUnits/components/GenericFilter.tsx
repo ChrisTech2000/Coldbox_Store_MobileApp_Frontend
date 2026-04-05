@@ -7,7 +7,7 @@ import SelectWithStore, { createSelectStore } from '#ui/components/SelectWithSto
 import { type Company, ERoles, type CoolingUnit } from '#types/global';
 import { useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { useDashboardStore } from '#stores/dashboard';
@@ -60,7 +60,7 @@ Filter.CoolingUnits = function _CoolingUnitsFilter() {
 
   const { data } = useApiCall(
     'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
+    coldboxstoreService.getCoolingUnits,
     {
       ...(userRole === ERoles.OPERATOR
         ? { operator: userId as number }

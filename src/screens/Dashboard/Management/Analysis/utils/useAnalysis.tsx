@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import moize from 'moize';
 import ms from 'ms';
 
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import DataloaderService from '#services/DataloaderService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { GetAllCropsResponse, GetMovementsHistoryResponse } from '#types/api.responses';
@@ -98,7 +98,7 @@ export function useAnalysis(
     refetch: refetchUsage,
   } = useApiCall(
     'getUsageAnalysis',
-    ColdtivateService.getUsageAnalysis,
+    coldboxstoreService.getUsageAnalysis,
     selectedUnits.map((unit) => unit.id),
     {
       skip: isDataSkippable || !!paymentMethods,
@@ -115,7 +115,7 @@ export function useAnalysis(
     refetch: refetchRevenue,
   } = useApiCall(
     'getRevenueAnalysis',
-    ColdtivateService.getRevenueAnalysis,
+    coldboxstoreService.getRevenueAnalysis,
     {
       coolingUnits: selectedUnits.map((unit) => unit.id),
       paymentMethods: (paymentMethods ?? []).flatMap((method) => method.value),

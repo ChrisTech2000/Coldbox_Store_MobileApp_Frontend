@@ -10,7 +10,7 @@ import { API_BASE_URL } from '#constants/environment';
 import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useCheckInStore } from '#stores/checkIn';
 import { useManagementStore } from '#stores/management';
@@ -44,7 +44,7 @@ function CropList({ route, navigation }: CheckInStackRouteProps<'CropList'>) {
 
   const { data, isLoading } = useApiCall(
     'getCoolingUnitCrops',
-    ColdtivateService.getCoolingUnitCrops,
+    coldboxstoreService.getCoolingUnitCrops,
     {
       crop: type,
       coolingUnitId: coolingUnit?.id as number,

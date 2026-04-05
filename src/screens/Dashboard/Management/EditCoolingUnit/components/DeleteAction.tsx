@@ -13,7 +13,7 @@ import { paperTheme } from '#ui/lib/theme';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { CustomError } from '#services/utils/ErrorUtil';
 import { useAuthStore } from '#stores/auth';
@@ -48,7 +48,7 @@ export default function DeleteAction(props: Props) {
     evt.stopPropagation();
     toggleProcessing();
     try {
-      await ColdtivateService.deleteCoolingUnit(props.coolingUnitId);
+      await coldboxstoreService.deleteCoolingUnit(props.coolingUnitId);
 
       await Promise.allSettled([
         mutate(getQueryKey('getLocations', props.companyId)),

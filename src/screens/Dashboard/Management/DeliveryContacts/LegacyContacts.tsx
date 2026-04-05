@@ -19,7 +19,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useManagementStore } from '#stores/management';
@@ -46,7 +46,7 @@ function LegacyContacts() {
 
   const { data: coolingUnits, isLoading: isLoadingCoolingUnits } = useApiCall(
     'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
+    coldboxstoreService.getCoolingUnits,
     { company: company!.id },
     {
       skip: !company?.id,
@@ -64,7 +64,7 @@ function LegacyContacts() {
   });
   const { data: locations, isLoading: isLoadingLocations } = useApiCall(
     'getLocations',
-    ColdtivateService.getLocations,
+    coldboxstoreService.getLocations,
     company?.id as number,
     {
       skip: !company?.id,
@@ -100,7 +100,7 @@ function LegacyContacts() {
 
         const [, updatedCompany] = await Promise.all([
           refetch(),
-          ColdtivateService.getCompanyById(company!.id),
+          coldboxstoreService.getCompanyById(company!.id),
         ]);
         setCompany(updatedCompany);
 
@@ -167,7 +167,7 @@ function LegacyContacts() {
 
       const [, updatedCompany] = await Promise.all([
         refetch(),
-        ColdtivateService.getCompanyById(company!.id),
+        coldboxstoreService.getCompanyById(company!.id),
       ]);
       setCompany(updatedCompany);
 

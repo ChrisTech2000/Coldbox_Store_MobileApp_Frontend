@@ -12,7 +12,7 @@ import type { TranslationLocales } from '#i18n/constants';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import AuthService from '#services/AuthService';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { normalizePhone } from '#services/utils/phoneUtils';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
@@ -51,7 +51,7 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
     try {
       // assign existing cooling user to the company if he already has an account, fyk: added by code
       if (typeof farmer !== 'undefined') {
-        await ColdtivateService.updateFarmerCompany({
+        await coldboxstoreService.updateFarmerCompany({
           farmerId: farmer.id,
           companyId: company.id,
         });
@@ -73,7 +73,7 @@ function AddCoolingUser(props: ManagementRouteProps<'AddCoolingUser'>) {
         parentName: values.parentName,
       });
 
-      await ColdtivateService.updateFarmerCompany({
+      await coldboxstoreService.updateFarmerCompany({
         farmerId: result!.id,
         companyId: company.id,
       });

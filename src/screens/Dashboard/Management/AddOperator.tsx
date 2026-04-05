@@ -26,7 +26,7 @@ import { useRecaptcha } from '#hooks/useRecaptcha';
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
@@ -46,7 +46,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
 
   const { data, isLoading } = useApiCall(
     'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
+    coldboxstoreService.getCoolingUnits,
     {
       company: company?.id as number,
     },
@@ -130,7 +130,7 @@ function AddOperator(props: ManagementRouteProps<'AddOperator'>) {
     const normalizedPhone = normalizePhone(values.phoneNumber, company?.country);
 
     try {
-      await ColdtivateService.sendOperatorInvitation({
+      await coldboxstoreService.sendOperatorInvitation({
         phone: normalizedPhone,
         coolingUnits: values.coolingUnits,
         userId,

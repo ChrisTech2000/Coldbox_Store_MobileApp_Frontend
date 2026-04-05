@@ -6,7 +6,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { StoreApi, UseBoundStore } from 'zustand';
 
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
@@ -88,7 +88,7 @@ export function Filters(props: FilterProps) {
     refetch,
   } = useApiCall(
     'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
+    coldboxstoreService.getCoolingUnits,
     {
       ...(user?.role === ERoles.COOLING_USER || user?.role === ERoles.EMPLOYEE
         ? { company: (company?.id || _company?.id) as number }

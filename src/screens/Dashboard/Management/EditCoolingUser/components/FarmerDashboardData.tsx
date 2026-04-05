@@ -10,7 +10,7 @@ import { useApiCache, useApiCall, useLazyApiCall } from '#services/hooks/useAPiC
 import type { Farmer } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import { FileUtility } from '#ui/lib/file';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import reportCrash from '#ui/lib/reportCrash';
 
 import { GET_FARMER_RECORD_SWR_KEY } from '../index';
@@ -30,7 +30,7 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
 
   const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
-    ColdtivateService.getAllCrops,
+    coldboxstoreService.getAllCrops,
     undefined,
     {
       skip: typeof contextualFarmer === 'undefined',
@@ -42,7 +42,7 @@ export default function FarmerDashboardData(props: { farmerId: number }) {
 
   const { data: companies, isLoading: isLoadingCompanies } = useApiCall(
     'getCompanies',
-    ColdtivateService.getCompanies,
+    coldboxstoreService.getCompanies,
     undefined,
     { skip: typeof contextualFarmer === 'undefined', defaultData: [] }
   );

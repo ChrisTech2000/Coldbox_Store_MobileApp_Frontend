@@ -694,7 +694,7 @@ export enum ERefrigerantType {
 
 export enum EPaymentThrough {
   DIRECT = 'DIRECT',
-  COLDTIVATE = 'COLDTIVATE',
+  COLDBOXSTORE = 'COLDBOXSTORE',
 }
 
 export enum EPaymentGateway {

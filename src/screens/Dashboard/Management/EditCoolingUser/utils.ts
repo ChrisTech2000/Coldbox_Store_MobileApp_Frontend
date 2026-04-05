@@ -4,7 +4,7 @@ import set from 'lodash/set';
 
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { dateFmt, type Translator } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import MarketplaceService from '#services/MarketplaceService';
 import { useManagementStore } from '#stores/management';
@@ -62,12 +62,12 @@ export class DataLoader {
   //
   public static async loadFarmerRecord(farmerId: number): Promise<ContextualFarmer> {
     // load farmer record
-    const farmer = await ColdtivateService.getFarmerById(farmerId);
+    const farmer = await coldboxstoreService.getFarmerById(farmerId);
     if (!farmer) throw new Error(CONSTRAINT_EXCEPTIONS.FARMER_NOT_FOUND);
 
     const [payoutDetailsResult, farmerResultsResult] = await Promise.allSettled([
       MarketplaceService.getFarmerBankAccounts(farmer.user.id),
-      ColdtivateService.getFarmerByUserId(farmer.user.id),
+      coldboxstoreService.getFarmerByUserId(farmer.user.id),
     ]);
 
     const payoutDetails =
@@ -202,7 +202,7 @@ export class DataLoader {
   }
 
   private static async _loadFarmerCoolingUnits(farmer: Farmer, companyId: number) {
-    const allCoolingUnits = await ColdtivateService.getCoolingUnits({ company: companyId });
+    const allCoolingUnits = await coldboxstoreService.getCoolingUnits({ company: companyId });
 
     const unitsSet = new Set<number>(farmer.coolingUnits);
     return (allCoolingUnits ?? []).filter((unit) => unitsSet.has(unit.id));

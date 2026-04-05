@@ -23,7 +23,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { parsePoint } from '#screens/Dashboard/Management/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 
 import type { CompanyBottomSheetDatum } from './CompanyBottomSheet';
 
@@ -146,7 +146,7 @@ MarketplaceItemWrapper.CompanyAction = function _CompanyAction(props: {
 }) {
   const onPressHandler = useDebouncedCallback(async () => {
     if (!props.company.locationId) return;
-    const result = await ColdtivateService.getLocation({
+    const result = await coldboxstoreService.getLocation({
       companyId: props.company.id,
       locationId: props.company.locationId,
     });

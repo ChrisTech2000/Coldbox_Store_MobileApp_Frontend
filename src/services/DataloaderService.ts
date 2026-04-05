@@ -2,7 +2,7 @@ import moize from 'moize';
 
 import HttpClient from './HttpClient';
 
-import ColdtivateService from './ColdtivateService';
+import coldboxstoreService from './coldboxstoreService';
 
 // eslint-disable-next-line
 // @ts-ignore
@@ -48,25 +48,25 @@ class DataloaderService extends HttpClient {
   ///
 
   // Dataloader based getters
-  readonly users = EntireDatasetPreloader(async () => await ColdtivateService.getUsers());
+  readonly users = EntireDatasetPreloader(async () => await coldboxstoreService.getUsers());
   readonly companies = EntireDatasetPreloader(async () => {
-    const companies = await ColdtivateService.getCompanies();
+    const companies = await coldboxstoreService.getCompanies();
     return companies ?? [];
   });
   readonly marketplaceCompanies = EntireDatasetPreloader(async () => {
-    const companies = await ColdtivateService.getCompanies({ isMarketplace: true });
+    const companies = await coldboxstoreService.getCompanies({ isMarketplace: true });
     return companies ?? [];
   });
   readonly crops = EntireDatasetPreloader(async () => {
-    const crops = await ColdtivateService.getAllCrops();
+    const crops = await coldboxstoreService.getAllCrops();
     return crops ?? [];
   });
   readonly coolingUnits = EntireDatasetPreloader(async () => {
-    const coolingUnits = await ColdtivateService.getCoolingUnits({});
+    const coolingUnits = await coldboxstoreService.getCoolingUnits({});
     return coolingUnits ?? [];
   });
   readonly farmers = EntireDatasetPreloader(async () => {
-    const farmers = await ColdtivateService.getFarmers();
+    const farmers = await coldboxstoreService.getFarmers();
     return farmers ?? [];
   });
 

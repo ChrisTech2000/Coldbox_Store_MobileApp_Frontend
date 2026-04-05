@@ -8,7 +8,7 @@ import { View, Image as RNImage } from 'react-native';
 import { Drawer } from 'react-native-paper';
 import { useSWRConfig } from 'swr';
 
-//import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
+//import ColdtivateLogo from '#assets/images/coldboxstore_logo.svg';
 
 import { Image } from '#ui/components/Image';
 

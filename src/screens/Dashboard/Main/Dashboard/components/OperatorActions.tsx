@@ -13,7 +13,7 @@ import CratesManagement from '#assets/icons/crates-management.svg';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { DashboardRoutes } from '#navigation/Dashboard';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import type { CoolingUnit, Farmer } from '#types/global';
@@ -85,7 +85,7 @@ export function OperatorActions({
 
   const { data, isLoading } = useApiCall(
     'getOperatorFarmers',
-    ColdtivateService.getOperatorFarmers,
+    coldboxstoreService.getOperatorFarmers,
     { operator: user?.id as number },
     {
       skip: !isModalOpen || !user?.id || !coolingUnit,

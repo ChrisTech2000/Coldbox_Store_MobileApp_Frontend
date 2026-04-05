@@ -14,7 +14,7 @@ import { Text } from '#ui/components/Text';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import type { GetCoolingUnitResponse } from '#types/api.responses';
@@ -61,7 +61,7 @@ export default function ScreenContainer(props: Props) {
     refetch,
   } = useApiCall(
     'getCoolingUnit',
-    ColdtivateService.getCoolingUnit,
+    coldboxstoreService.getCoolingUnit,
     {
       coolingUnitId,
       companyId: companyId as number,
@@ -78,7 +78,7 @@ export default function ScreenContainer(props: Props) {
     refetch: refetchSensorData,
   } = useApiCall(
     'getCoolingUnit',
-    ColdtivateService.getCoolingUnitSensorData,
+    coldboxstoreService.getCoolingUnitSensorData,
     {
       coolingUnitId,
     },
@@ -105,7 +105,7 @@ export default function ScreenContainer(props: Props) {
 
   async function onSubmit(values: PreprocessedFormValues): Promise<void> {
     try {
-      await ColdtivateService.editCoolingUnit(
+      await coldboxstoreService.editCoolingUnit(
         {
           name: values.name,
           location: values.location as number,

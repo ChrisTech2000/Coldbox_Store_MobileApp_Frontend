@@ -11,7 +11,7 @@ import { Text } from '#ui/components/Text';
 import { EExperience, EOccupation } from '#screens/Dashboard/Main/History/MarketSurvey/schema';
 import type { NotificationOpenSurveyEventDatums } from '#navigation/Dashboard/lib/notifications';
 import InAppNotifications from '#common/InAppNotifications';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import DataloaderService from '#services/DataloaderService';
 import NotificationService from '#services/NotificationService';
 import { useManagementStore } from '#stores/management';
@@ -165,7 +165,7 @@ export function FarmerSurveyNotification(props: {
     const farmer = notification.ctx.farmer;
     if (!farmer) throw new Error(NOTIFICATION_EXCEPTIONS.FARMER_REQUIRED);
 
-    const surveys = await ColdtivateService.getFarmerSurveys({ farmerId: farmer.id });
+    const surveys = await coldboxstoreService.getFarmerSurveys({ farmerId: farmer.id });
 
     const { buildMap, find } = cropTranslationLookup();
     const lookupMap = buildMap();
@@ -253,7 +253,7 @@ export function MarketSurveyNotification(props: {
     const coolingUnit = notification.ctx.coolingUnit;
     if (!farmer || !coolingUnit) throw new Error(NOTIFICATION_EXCEPTIONS.MARKEY_SURVEY_INCOMPLETE);
 
-    const movements = await ColdtivateService.getMovementsHistory({ coolingUnit: coolingUnit.id });
+    const movements = await coldboxstoreService.getMovementsHistory({ coolingUnit: coolingUnit.id });
     if (!movements) throw new Error(NOTIFICATION_EXCEPTIONS.HISTORY_MOVEMENT_NOT_FOUND);
 
     const movementDetails = movements.find(
@@ -290,7 +290,7 @@ export function MarketSurveyNotification(props: {
 
     if (areAllCropsInSurvey) throw new Error(NOTIFICATION_EXCEPTIONS.SURVEY_FILLED_IN);
 
-    const owner = await ColdtivateService.getUser(
+    const owner = await coldboxstoreService.getUser(
       movementDetails.checkout.crates[0].ownedByUserId!
     );
 
@@ -331,7 +331,7 @@ export function OrderRequiresMovementNotification(props: {
     const coolingUnit = notification.ctx.coolingUnit;
     if (!coolingUnit) throw new Error(NOTIFICATION_EXCEPTIONS.UNIT_REQUIRED);
 
-    const movements = await ColdtivateService.getMovementsHistory({ coolingUnit: coolingUnit.id });
+    const movements = await coldboxstoreService.getMovementsHistory({ coolingUnit: coolingUnit.id });
     const movement = movements.find((movement) => movement.id === notification.datum.specificId);
     if (!movement) throw new Error(NOTIFICATION_EXCEPTIONS.MOVEMENT_NOT_FOUND);
 

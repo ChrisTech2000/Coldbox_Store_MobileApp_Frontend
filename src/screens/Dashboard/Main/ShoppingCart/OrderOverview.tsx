@@ -191,7 +191,7 @@ function OrderOverview(props: ShoppingCartStackRouteProps<'OrderOverview'>) {
                 <Text tw="text-base">
                   {formatCurrencyWithSymbol(
                     order.currency ?? DEFAULT_CURRENCY_CODE,
-                    order.totalColdtivateAmount
+                    order.totalcoldboxstoreAmount
                   )}
                 </Text>
               </View>

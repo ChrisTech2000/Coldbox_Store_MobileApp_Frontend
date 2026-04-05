@@ -14,7 +14,7 @@ import type {
 } from '#navigation/Dashboard/Management';
 import { useManagementStore } from '#stores/management';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { paperTheme } from '#ui/lib/theme';
 import type { User } from '#types/global';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
@@ -36,7 +36,7 @@ function RegisteredEmployee(props: ManagementRouteProps<'RegisteredEmployee'>) {
     refetch: revalidateEmployees,
   } = useApiCall(
     'getCompanyEmployees',
-    ColdtivateService.getCompanyEmployees,
+    coldboxstoreService.getCompanyEmployees,
     company?.id as number,
     {
       skip: !company?.id,
@@ -46,7 +46,7 @@ function RegisteredEmployee(props: ManagementRouteProps<'RegisteredEmployee'>) {
 
   const { data: invitations, refetch: revalidateInvitations } = useApiCall(
     'getInvitedCompanyEmployees',
-    ColdtivateService.getInvitedCompanyEmployees,
+    coldboxstoreService.getInvitedCompanyEmployees,
     company?.id as number,
     {
       skip: !company?.id,

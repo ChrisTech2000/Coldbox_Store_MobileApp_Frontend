@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { GetAllCropsResponse } from '#types/api.responses';
 import { type Company, type CoolingUnit, type Farmer } from '#types/global';
 import reportCrash from '#ui/lib/reportCrash';
@@ -52,9 +52,9 @@ export const useDashboardStore = create<State & Actions>((set) => ({
   fetchGlobalInformation: async (userId: number) => {
     try {
       const [farmerResult, companiesResult, allCropsResult] = await Promise.allSettled([
-        ColdtivateService.getFarmerByUserId(userId),
-        ColdtivateService.getCompanies(),
-        ColdtivateService.getAllCrops(),
+        coldboxstoreService.getFarmerByUserId(userId),
+        coldboxstoreService.getCompanies(),
+        coldboxstoreService.getAllCrops(),
       ]);
 
       const farmer =

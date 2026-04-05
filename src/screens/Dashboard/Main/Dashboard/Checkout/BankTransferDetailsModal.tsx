@@ -7,7 +7,7 @@ import { Text } from '#ui/components/Text';
 import { paperTheme } from '#ui/lib/theme';
 
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 
@@ -23,7 +23,7 @@ export function BankTransferModal(props: BankTransferModalProps) {
 
   const { data, isLoading } = useApiCall(
     'getLocations',
-    ColdtivateService.getLocations,
+    coldboxstoreService.getLocations,
     company?.id as number,
     {
       skip: !company?.id,

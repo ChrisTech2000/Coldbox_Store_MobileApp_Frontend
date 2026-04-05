@@ -15,7 +15,7 @@ import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckInStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckInTabStack';
 import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import MarketplaceService from '#services/MarketplaceService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { type ProduceCrate, useCheckInStore } from '#stores/checkIn';
@@ -92,7 +92,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
 
   const { data: surveys } = useApiCall(
     'getFarmerSurveys',
-    ColdtivateService.getFarmerSurveys,
+    coldboxstoreService.getFarmerSurveys,
     { farmerId: user.id as number },
     {
       skip: !user.id || isTutorialActive || isTutorial,
@@ -234,7 +234,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       JSON.stringify(cloneDeep(produces), null, 2)
     );
 
-    return ColdtivateService.checkIn({
+    return coldboxstoreService.checkIn({
       farmerId: user.id,
       id: undefined,
       produces: cloneDeep(produces).map((produce) => {
@@ -283,7 +283,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       let result: CheckInWitCodeResponse | CheckInResponse | undefined;
 
       if (typeof checkOutCode === 'string') {
-        result = await ColdtivateService.checkInWithCode({
+        result = await coldboxstoreService.checkInWithCode({
           params: {
             code: checkOutCode,
             farmer: user.id,
@@ -298,7 +298,7 @@ function CheckIn({ route, navigation }: CheckInStackRouteProps<'CheckIn'>) {
       } else {
         result = await handleCheckIn();
 
-        await ColdtivateService.updateFarmer({
+        await coldboxstoreService.updateFarmer({
           farmerId: user.id,
           coolingUnitId: coolingUnit.id,
           updateCoolingUnits: true,

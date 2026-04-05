@@ -20,7 +20,7 @@ import { USER_WITHOUT_PHONE } from '#constants/general';
 import type { TranslationLocales } from '#i18n/constants';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
@@ -106,7 +106,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
 
   async function onSubmit(values: FormValues): Promise<void> {
     try {
-      const userDatum = await ColdtivateService.updateUser({
+      const userDatum = await coldboxstoreService.updateUser({
         userId: farmer?.user?.id as number,
         firstName: values.firstName ?? '',
         lastName: values.lastName ?? '',
@@ -117,7 +117,7 @@ function EditCoolingUser(props: EditCoolingUserStackRouteProps<'Root'>) {
       });
 
       if (typeof userDatum !== 'undefined' && typeof farmer !== 'undefined') {
-        await ColdtivateService.updateFarmer({
+        await coldboxstoreService.updateFarmer({
           farmerId: farmer.id,
           country: farmer.country,
           parentName: values.parentName,

@@ -5,7 +5,7 @@ import { Modal, View, Image } from 'react-native';
 import { IOverlayComponentProps } from 'react-native-interactive-walkthrough';
 import { useShallow } from 'zustand/react/shallow';
 
-//import Logo from '#assets/images/coldtivate_logo.svg';
+//import Logo from '#assets/images/coldboxstore_logo.svg';
 
 import { DEFAULT_CUSTOMER_TYPE_COUNTRY } from '#common/RBAC/abilities';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';

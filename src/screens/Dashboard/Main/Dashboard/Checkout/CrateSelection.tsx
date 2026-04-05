@@ -15,7 +15,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
@@ -75,7 +75,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
 
   const { data, isLoading, refetch } = useApiCall(
     'getFarmerCrates',
-    ColdtivateService.getFarmerCrates,
+    coldboxstoreService.getFarmerCrates,
     {
       coolingUnit: coolingUnit?.id as number,
       farmer: user?.id as number,
@@ -92,7 +92,7 @@ function CrateSelection({ route, navigation }: CheckOutStackRouteProps<'CrateSel
     isLoading: isLoadingDashboardProduces,
   } = useApiCall(
     'getDashboardProduces',
-    ColdtivateService.getDashboardProduces,
+    coldboxstoreService.getDashboardProduces,
     {
       coolingUnit: coolingUnit?.id as number,
     },

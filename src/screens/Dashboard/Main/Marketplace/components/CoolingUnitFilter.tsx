@@ -10,7 +10,7 @@ import { Button } from '#ui/components/Button';
 
 import { useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import type { CoolingUnit } from '#types/global';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { cn } from '#ui/lib/cn';
@@ -36,7 +36,7 @@ export default function CoolingUnitFilters() {
   const { data, isLoading } = useApiCall(
     'getMarketplaceCoolingUnitFilterOptions',
     async () => {
-      const result = await ColdtivateService.getCoolingUnits({});
+      const result = await coldboxstoreService.getCoolingUnits({});
       return new Map<number, CoolingUnit>(result?.map((item) => [item.id, item]));
     },
     undefined,

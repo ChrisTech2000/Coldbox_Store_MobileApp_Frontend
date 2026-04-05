@@ -14,7 +14,7 @@ import { useAnalyticsData } from '../../store';
 import { Icon } from 'react-native-paper';
 
 import { EPaymentMethod, ECoolingUnitType } from '#types/global';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 
 export function GeneralContent() {
@@ -26,7 +26,7 @@ export function GeneralContent() {
 
   const { data: revenueData, refetch: refetchRevenue } = useApiCall(
     'getRevenueAnalysis',
-    ColdtivateService.getRevenueAnalysis,
+    coldboxstoreService.getRevenueAnalysis,
     {
       coolingUnits: coolingUnits.map((u) => u.id),
       paymentMethods: [

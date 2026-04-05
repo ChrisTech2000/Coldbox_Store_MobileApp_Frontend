@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { create } from 'zustand';
 
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
@@ -32,7 +32,7 @@ export function usePriceTrendsStore() {
 
   const { data: farmer, isLoading: loadingFarmer } = useApiCall(
     'getFarmerByUserId',
-    ColdtivateService.getFarmerByUserId,
+    coldboxstoreService.getFarmerByUserId,
     user?.id as number,
     {
       skip: !user?.id || user.role !== ERoles.COOLING_USER,

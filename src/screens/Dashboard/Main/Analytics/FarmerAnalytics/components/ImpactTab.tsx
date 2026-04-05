@@ -6,7 +6,7 @@ import { ActivityIndicator, DataTable, Icon } from 'react-native-paper';
 import colors from 'tailwindcss/colors';
 
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import FarmerImpactService from '#services/FarmerImpactService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
@@ -71,7 +71,7 @@ export function ImpactTab() {
 
   const { data: company } = useApiCall(
     'getCompanyById',
-    ColdtivateService.getCompanyById,
+    coldboxstoreService.getCompanyById,
     farmer?.companies[0] as number,
     {
       skip: !farmer,
@@ -80,7 +80,7 @@ export function ImpactTab() {
 
   const { data: surveysData, refetch } = useApiCall(
     'getFarmerSurveys',
-    ColdtivateService.getFarmerSurveys,
+    coldboxstoreService.getFarmerSurveys,
     {
       farmerId: farmer?.id as number,
     },

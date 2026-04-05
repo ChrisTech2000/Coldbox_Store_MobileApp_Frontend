@@ -18,7 +18,7 @@ import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import type { CommodityInfo } from '#types/global';
 import { useManagementStore } from '#stores/management';
@@ -87,7 +87,7 @@ export default function TemperatureAlert() {
 
   async function onSubmit(values: LocalState<number>) {
     try {
-      await ColdtivateService.addCoolingUnitTemperature({
+      await coldboxstoreService.addCoolingUnitTemperature({
         value: values.temperature,
         specificationType: 'TEMPERATURE',
         datetimeStamp: new Date().toISOString(),
@@ -109,7 +109,7 @@ export default function TemperatureAlert() {
     APP_EVENTS.DISPATCH_CHECK_IN_TEMPERATURE_ALERT,
     async ({ coolingUnitId, companyId, showCompleteInfo }) => {
       try {
-        const result = await ColdtivateService.getCoolingUnit({ coolingUnitId, companyId });
+        const result = await coldboxstoreService.getCoolingUnit({ coolingUnitId, companyId });
         const { buildMap, find } = cropTranslationLookup();
         const translationMap = buildMap();
         form.reset({

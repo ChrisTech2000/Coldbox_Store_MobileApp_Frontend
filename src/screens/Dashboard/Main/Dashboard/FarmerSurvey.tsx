@@ -10,7 +10,7 @@ import { cn } from '#ui/lib/cn';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useManagementStore } from '#stores/management';
 import { GetFarmerSurveysResponse } from '#types/api.responses';
 
@@ -36,7 +36,7 @@ export function FarmerSurvey({ cropId, cropName, farmerId, surveys, disabled }: 
 
   const onSubmit: SubmitHandler<FarmerSurveySchemaType> = useCallback(
     async (values) => {
-      const result = await ColdtivateService.updateFarmerSurveys({
+      const result = await coldboxstoreService.updateFarmerSurveys({
         farmer: farmerId,
         userType: '',
         experience: 'no',

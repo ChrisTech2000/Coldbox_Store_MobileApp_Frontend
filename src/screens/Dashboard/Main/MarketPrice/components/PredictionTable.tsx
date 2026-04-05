@@ -13,7 +13,7 @@ import { SkiaShadow } from '#ui/primitives/SkiaShadow';
 import { ScrollView } from '#ui/components/ScrollView';
 
 import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type {
   PredictionCrop,
@@ -64,7 +64,7 @@ export function PredictionTable({ commodity, states, dates, markets }: Predictio
 
   const { data: predictionData, isLoading: loadingPredictionData } = useApiCall(
     'getPredictionTable',
-    ColdtivateService.getPredictionTable,
+    coldboxstoreService.getPredictionTable,
     {
       cropId: commodity.id,
       statesIds: states?.map(({ id }) => id),

@@ -24,7 +24,7 @@ import { getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { useTranslationUtils } from '#i18n/utils';
 import { countriesDict } from '#screens/Dashboard/Management/CompanyDetails/utils';
 import { parsePoint } from '#screens/Dashboard/Management/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import DataloaderService from '#services/DataloaderService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
@@ -69,7 +69,7 @@ export function CartItem({ item }: CartItemProps) {
 
   const { data: owner, isLoading: isLoadingOwner } = useApiCall(
     'getUser',
-    ColdtivateService.getUser,
+    coldboxstoreService.getUser,
     item.ownedByUserId as number,
     {
       defaultData: undefined,
@@ -85,12 +85,12 @@ export function CartItem({ item }: CartItemProps) {
   );
 
   const openCompanyDetailsModal = useDebouncedCallback(async () => {
-    const unit = await ColdtivateService.getCoolingUnit({
+    const unit = await coldboxstoreService.getCoolingUnit({
       companyId: item.relCompanyId,
       coolingUnitId: item.relCoolingUnitId,
     });
 
-    const result = await ColdtivateService.getLocation({
+    const result = await coldboxstoreService.getLocation({
       companyId: item.relCompanyId,
       locationId: unit.location,
     });

@@ -18,7 +18,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { AddLocationOverlay } from '#screens/Dashboard/Tutorial/AddLocationOverlay';
 import { EEmployeeTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 import { LocationGeocoder } from '#services/LocationGeocoder';
@@ -97,7 +97,7 @@ function AddLocation(props: ManagementRouteProps<'AddLocation'>) {
           break;
       }
 
-      await ColdtivateService.addLocation(datums);
+      await coldboxstoreService.addLocation(datums);
 
       toast.show(t('Dashboard.Management.Location.toasts.addLocationSuccess'), {
         type: 'md_success',

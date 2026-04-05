@@ -32,7 +32,7 @@ import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { cropTranslationLookup, getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { OrdersRouteProps } from '#navigation/Dashboard/Main/OrdersStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useDashboardStore } from '#stores/dashboard';
@@ -85,7 +85,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
 
   const { data: crops, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
-    ColdtivateService.getAllCrops,
+    coldboxstoreService.getAllCrops,
     undefined,
     { defaultData: [] }
   );
@@ -328,7 +328,7 @@ function OrdersDetails(props: OrdersRouteProps<'OrdersDetails'>) {
                 <Text tw="text-base">
                   {CurrencyStandardization.currencyCode({
                     code: order.currency ?? DEFAULT_CURRENCY_CODE,
-                    value: order.totalColdtivateAmount,
+                    value: order.totalcoldboxstoreAmount,
                   }).getValueFormated()}
                 </Text>
               </View>

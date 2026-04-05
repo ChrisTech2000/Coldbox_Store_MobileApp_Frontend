@@ -8,7 +8,7 @@ import { Text } from '#ui/components/Text';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useToggle } from '#ui/hooks/useToggle';
 import { cn } from '#ui/lib/cn';
 
@@ -39,7 +39,7 @@ export default function TemperatureModal(props: Props) {
 
   async function onSubmit(values: PreprocessedFormValues): Promise<void> {
     try {
-      await ColdtivateService.addCoolingUnitTemperature({
+      await coldboxstoreService.addCoolingUnitTemperature({
         value: values.temperature,
         specificationType: 'TEMPERATURE',
         datetimeStamp: new Date().toISOString(),

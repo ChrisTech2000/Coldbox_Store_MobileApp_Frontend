@@ -16,7 +16,7 @@ import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import { useTranslationUtils } from '#i18n/utils';
 import { AddCoolingUnitOverlay } from '#screens/Dashboard/Tutorial/AddCoolingUnitOverlay';
 import { EEmployeeTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { ERoles } from '#types/global';
@@ -69,7 +69,7 @@ export default function ScreenContainer(props: Props) {
 
   async function onSubmit(values: PreprocessedFormValues): Promise<void> {
     try {
-      await ColdtivateService.addCoolingUnit({
+      await coldboxstoreService.addCoolingUnit({
         name: values.name,
         location: values.location as number,
         metric: values.metricUnit,

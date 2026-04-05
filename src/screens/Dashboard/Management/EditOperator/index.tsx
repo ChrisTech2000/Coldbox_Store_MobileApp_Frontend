@@ -12,7 +12,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 import { EApiGender } from '#types/global';
@@ -42,7 +42,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
 
   const { data: operator, isLoading: isLoadingOperator } = useApiCall(
     'getOperatorByUserId',
-    ColdtivateService.getOperatorByUserId,
+    coldboxstoreService.getOperatorByUserId,
     userId,
     {
       skip: !userId,
@@ -52,7 +52,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
 
   const { data: coolingUnits, isLoading: isLoadingCoolingUnits } = useApiCall(
     'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
+    coldboxstoreService.getCoolingUnits,
     {
       company: company?.id as number,
     },
@@ -75,7 +75,7 @@ function EditOperator(props: ManagementRouteProps<'EditOperator'>) {
 
   async function onSubmit(values: FormValues) {
     try {
-      await ColdtivateService.updateUser({
+      await coldboxstoreService.updateUser({
         gender: values.gender,
         coolingUnits: values.coolingUnits,
         userId,

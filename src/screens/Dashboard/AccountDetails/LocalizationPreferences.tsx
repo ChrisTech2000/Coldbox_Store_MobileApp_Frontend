@@ -14,7 +14,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import RBAC from '#common/RBAC';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import reportCrash from '#ui/lib/reportCrash';
 import { waitFor } from '#ui/lib/waitFor';
@@ -39,7 +39,7 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
   const [isProcessing, toggleProcessing] = useToggle(false);
 
   async function onSubmit(values: FormValues) {
-    const userDatum = await ColdtivateService.updateUser({
+    const userDatum = await coldboxstoreService.updateUser({
       userId,
       firstName: values.firstName,
       lastName: values.lastName,
@@ -50,7 +50,7 @@ function LocalizationPreferences(props: AccountDetailsRouteProps<'LocalizationPr
     });
 
     if (guard('VIEW', 'FarmerFields')) {
-      const farmerDatum = await ColdtivateService.updateFarmer({
+      const farmerDatum = await coldboxstoreService.updateFarmer({
         farmerId,
         country: values.country,
         parentName: values.parentName,

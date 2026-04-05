@@ -8,7 +8,7 @@ import { Button } from '#ui/components/Button';
 import { Text } from '#ui/components/Text';
 
 import { dateFmt, useTranslationUtils, type TranslationPaths, LanguageManager } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { GetMovementsHistoryResponse } from '#types/api.responses';
 import { EInitiatedFor, EPaymentMethod, MovementCrate } from '#types/global';
@@ -45,7 +45,7 @@ export function DetailsModal({ isOpen, movement, dismiss }: DetailsModalProps) {
 
   const { data } = useApiCall(
     'getMovementOperators',
-    ColdtivateService.getMovementOperators,
+    coldboxstoreService.getMovementOperators,
     movement.id,
     { defaultData: [], skip: !isOpen }
   );

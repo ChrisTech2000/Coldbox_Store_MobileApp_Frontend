@@ -292,7 +292,7 @@ function OrderDetails(props: ShoppingCartStackRouteProps<'OrderDetails'>) {
               <Text tw="text-base">
                 {formatCurrencyWithSymbol(
                   cartData.currency ?? DEFAULT_CURRENCY_CODE,
-                  cartData.totalColdtivateAmount
+                  cartData.totalcoldboxstoreAmount
                 )}
               </Text>
             </View>

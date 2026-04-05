@@ -12,7 +12,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import RBAC from '#common/RBAC';
 import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { cn } from '#ui/lib/cn';
 
@@ -41,7 +41,7 @@ function CoolingUnitsRoomConditions() {
     refetch: revalidateTemperatures,
   } = useApiCall(
     'getCoolingUnitTemperatures',
-    ColdtivateService.getCoolingUnitTemperatures,
+    coldboxstoreService.getCoolingUnitTemperatures,
     selectedCoolingUnit?.id as number,
     {
       skip: !selectedCoolingUnit?.id,

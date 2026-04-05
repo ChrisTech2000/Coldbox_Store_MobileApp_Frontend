@@ -11,7 +11,7 @@ import { withErrorBoundary } from '#ui/primitives/error-boundary';
 import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { ShoppingCartStackRouteProps } from '#navigation/Dashboard/Main/ShoppingCartStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
 import useCartStore from '#stores/shoppingCart';
@@ -49,7 +49,7 @@ function PaystackPayment(props: ShoppingCartStackRouteProps<'PaystackPayment'>) 
       if (user?.role === ERoles.COOLING_USER && coolingUnitIds?.length > 0) {
         for (const id of coolingUnitIds) {
           promises.push(
-            ColdtivateService.updateFarmer({
+            coldboxstoreService.updateFarmer({
               farmerId: farmerId!,
               coolingUnitId: id,
               updateCoolingUnits: true,

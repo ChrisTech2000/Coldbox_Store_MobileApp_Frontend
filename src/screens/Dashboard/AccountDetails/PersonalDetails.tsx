@@ -16,7 +16,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import RBAC from '#common/RBAC';
 import InAppNotifications from '#common/InAppNotifications';
 import { useAuthStore } from '#stores/auth';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey } from '#services/hooks/useAPiCall';
 import reportCrash from '#ui/lib/reportCrash';
 import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
@@ -38,7 +38,7 @@ function PersonalDetails(props: AccountDetailsRouteProps<'PersonalDetails'>) {
 
   const onSubmit = useCallback(async function (values: FormValues) {
     try {
-      const userDatum = await ColdtivateService.updateUser({
+      const userDatum = await coldboxstoreService.updateUser({
         userId,
         firstName: values.firstName,
         lastName: values.lastName,

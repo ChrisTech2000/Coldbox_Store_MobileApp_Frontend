@@ -10,7 +10,7 @@ import { Select, VIRTUAL_LIST_SIZE_WIDTH } from '#ui/components/Select';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type { Company } from '#types/global';
 import { Checkbox } from '#ui/components/Checkbox';
@@ -36,7 +36,7 @@ export default function CompanyFilters() {
   const { data, isLoading } = useApiCall(
     'getMarketplaceCompanyFilterOptions',
     async () => {
-      const result = await ColdtivateService.getCompanies({ isMarketplace: true });
+      const result = await coldboxstoreService.getCompanies({ isMarketplace: true });
       return new Map<number, Company>(result?.map((item) => [item.id, item]));
     },
     undefined,

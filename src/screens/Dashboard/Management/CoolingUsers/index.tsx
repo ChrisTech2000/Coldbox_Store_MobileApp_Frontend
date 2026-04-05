@@ -25,7 +25,7 @@ import type {
   ManagementRouteProps,
   ManagementRoutes,
 } from '#navigation/Dashboard/Management';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
@@ -51,7 +51,7 @@ function CoolingUsers(props: ManagementRouteProps<'CoolingUsers'>) {
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getOperatorFarmers',
-    ColdtivateService.getOperatorFarmers,
+    coldboxstoreService.getOperatorFarmers,
     { operator: user?.id as number },
     {
       skip: !user?.id,

@@ -12,7 +12,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useManagementStore } from '#stores/management';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { paperTheme } from '#ui/lib/theme';
 import { useTranslationUtils } from '#i18n/utils';
 import reportCrash from '#ui/lib/reportCrash';
@@ -42,7 +42,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
 
   const { data: companyDetails, isLoading: isLoadingCompanyDetails } = useApiCall(
     'getCompanyById',
-    ColdtivateService.getCompanyById,
+    coldboxstoreService.getCompanyById,
     company?.id as number,
     {
       skip: !company?.id,
@@ -52,7 +52,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
 
   const { data: cropsResult, isLoading: isLoadingAllCrops } = useApiCall(
     'getAllCrops',
-    ColdtivateService.getAllCrops,
+    coldboxstoreService.getAllCrops,
     undefined,
     {
       skip: !company?.id,
@@ -66,7 +66,7 @@ function CompanyDetails(props: ManagementRouteProps<'CompanyDetails'>) {
   async function onSubmit(values: FormValues) {
     if (!company?.id) return; // safe guard
     try {
-      await ColdtivateService.updateCompany({
+      await coldboxstoreService.updateCompany({
         name: subjects.companyName,
         country: values.country,
         crop: values.commodities,

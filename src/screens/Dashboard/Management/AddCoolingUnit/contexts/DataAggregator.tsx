@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo, type PropsWithChildren } from 'react';
 
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useTranslatedCrops } from '../../CompanyDetails/utils';
 
@@ -25,7 +25,7 @@ const DataAggregatorContext = createContext<Context>({
 export default function DataAggregator(props: PropsWithChildren<{ companyId?: number }>) {
   const { data: locations, isLoading: isLoadingLocations } = useApiCall(
     'getLocations',
-    ColdtivateService.getLocations,
+    coldboxstoreService.getLocations,
     props?.companyId as number,
     {
       skip: !props?.companyId,
@@ -35,7 +35,7 @@ export default function DataAggregator(props: PropsWithChildren<{ companyId?: nu
 
   const { data: companyDetails, isLoading: isLoadingCompanyDetails } = useApiCall(
     'getCompanyById',
-    ColdtivateService.getCompanyById,
+    coldboxstoreService.getCompanyById,
     props?.companyId as number,
     {
       skip: !props?.companyId,
@@ -45,7 +45,7 @@ export default function DataAggregator(props: PropsWithChildren<{ companyId?: nu
 
   const { data: cropsResult, isLoading: isLoadingAllCrops } = useApiCall(
     'getAllCrops',
-    ColdtivateService.getAllCrops,
+    coldboxstoreService.getAllCrops,
     undefined,
     {
       skip: !props?.companyId,
@@ -55,7 +55,7 @@ export default function DataAggregator(props: PropsWithChildren<{ companyId?: nu
 
   const { data: operators, isLoading: isLoadingOperators } = useApiCall(
     'getOperators',
-    ColdtivateService.getOperators,
+    coldboxstoreService.getOperators,
     props?.companyId as number,
     {
       skip: !props?.companyId,

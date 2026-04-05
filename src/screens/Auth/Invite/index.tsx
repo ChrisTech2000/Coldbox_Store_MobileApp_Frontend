@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from 'react';
 import { Dimensions, View, Image } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-//import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
+//import ColdtivateLogo from '#assets/images/coldboxstore_logo.svg';
 import { Button } from '#ui/components/Button';
 import { KeyboardAwareScrollView } from '#ui/components/KeyboardAwareScrollView';
 import type { RecaptchaModalRef } from '#ui/components/RecaptchaModal';

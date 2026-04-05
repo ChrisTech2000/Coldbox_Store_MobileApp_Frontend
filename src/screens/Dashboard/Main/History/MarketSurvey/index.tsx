@@ -16,7 +16,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 import { getDefaultCropValues } from '#i18n/transl/misc/crops';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
 
@@ -28,7 +28,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
 
   const { data: farmers, isLoading: loadingFarmers } = useApiCall(
     'getFarmers',
-    ColdtivateService.getFarmers,
+    coldboxstoreService.getFarmers,
     undefined,
     {
       defaultData: [],
@@ -46,7 +46,7 @@ function MarketSurveyBase(props: MarketSurveyStackRouteProps<'MarketSurveyBase'>
     refetch,
   } = useApiCall(
     'getFarmerSurveys',
-    ColdtivateService.getFarmerSurveys,
+    coldboxstoreService.getFarmerSurveys,
     {
       farmerId: farmerId as number,
     },

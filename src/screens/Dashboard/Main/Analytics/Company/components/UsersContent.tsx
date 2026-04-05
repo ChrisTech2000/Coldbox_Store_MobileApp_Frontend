@@ -9,7 +9,7 @@ import { useCompanyData } from '../store';
 import { UserSection } from '../../components/UserSection';
 import { useManagementStore } from '#stores/management';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 
 export function UsersContent() {
   const { t } = useTranslationUtils();
@@ -18,21 +18,21 @@ export function UsersContent() {
 
   const { data: companyEmployees, refetch: refetchEmployees } = useApiCall(
     'getCompanyEmployees',
-    ColdtivateService.getCompanyEmployees,
+    coldboxstoreService.getCompanyEmployees,
     company?.id as number,
     { skip: !company?.id }
   );
 
   const { data: operatorUsers, refetch: refetchOperators } = useApiCall(
     'getOperators',
-    ColdtivateService.getOperators,
+    coldboxstoreService.getOperators,
     company?.id as number,
     { skip: !company?.id }
   );
 
   const { data: farmersData, refetch: refetchFarmers } = useApiCall(
     'getFarmers',
-    ColdtivateService.getFarmers,
+    coldboxstoreService.getFarmers,
     undefined,
     { skip: !company?.id }
   );

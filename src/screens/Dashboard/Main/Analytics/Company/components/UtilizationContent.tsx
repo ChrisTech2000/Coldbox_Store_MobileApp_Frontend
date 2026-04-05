@@ -19,7 +19,7 @@ import { Icon } from 'react-native-paper';
 import { cn } from '#ui/lib/cn';
 
 import { useAnalyticsData } from '../../store';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { EInitiatedFor } from '#types/global';
 import { useManagementStore } from '#stores/management';
 
@@ -39,13 +39,13 @@ export function UtilizationContent() {
       let cuIds: number[] = storeCoolingUnits.map((u) => u.id);
 
       if (cuIds.length === 0 && company?.id) {
-        const units = await ColdtivateService.getCoolingUnits({ company: company.id });
+        const units = await coldboxstoreService.getCoolingUnits({ company: company.id });
         cuIds = (units || []).map((u: any) => u.id);
       }
 
       if (cuIds.length === 0) return;
 
-      const data = await ColdtivateService.getUsageAnalysis(cuIds);
+      const data = await coldboxstoreService.getUsageAnalysis(cuIds);
       const arr = Array.isArray(data) ? data : (data as any)?.results || [];
       setUsageData(arr);
     } catch (err) {

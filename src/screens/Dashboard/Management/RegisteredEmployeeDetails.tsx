@@ -12,7 +12,7 @@ import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
 import { useTranslationUtils, type TranslationPaths, LanguageManager } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { paperTheme } from '#ui/lib/theme';
 import { cn } from '#ui/lib/cn';
 
@@ -25,7 +25,7 @@ function RegisteredEmployeeDetails(props: ManagementRouteProps<'RegisteredEmploy
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getCompanyEmployee',
-    ColdtivateService.getCompanyEmployee,
+    coldboxstoreService.getCompanyEmployee,
     { registeredEmployeeId, companyId: company?.id as number },
     {
       skip: !registeredEmployeeId || !company?.id,

@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
-import ColdtivateLogo from '#assets/images/coldtivate_logo.svg';
+import ColdtivateLogo from '#assets/images/coldboxstore_logo.svg';
 
 import { Text } from '#ui/components/Text';
 import { cn } from '#ui/lib/cn';

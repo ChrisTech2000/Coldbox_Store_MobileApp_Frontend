@@ -16,7 +16,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { parsePoint } from '#screens/Dashboard/Management/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import useCartStore from '#stores/shoppingCart';
@@ -242,7 +242,7 @@ function PickupModalModal({ isVisible, close, version, cu, companyId }: PickupMo
 
   const { data, isLoading } = useApiCall(
     'getLocation',
-    ColdtivateService.getLocation,
+    coldboxstoreService.getLocation,
     {
       companyId: companyId,
       locationId: cu?.location,

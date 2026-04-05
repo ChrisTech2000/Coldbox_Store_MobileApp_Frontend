@@ -10,7 +10,7 @@ import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { MainTabStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import MarketplaceService from '#services/MarketplaceService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
@@ -161,7 +161,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     isValidating: isValidatingFarmerProduces,
   } = useApiCall(
     'getFarmerDashboardProduces',
-    ColdtivateService.getFarmerDashboardProduces,
+    coldboxstoreService.getFarmerDashboardProduces,
     {
       coolingUnit: coolingUnit?.id as number,
       farmerId: farmerId as number,
@@ -179,7 +179,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
     isValidating: isValidatingProduces,
   } = useApiCall(
     'getDashboardProduces',
-    ColdtivateService.getDashboardProduces,
+    coldboxstoreService.getDashboardProduces,
     {
       coolingUnit: coolingUnit?.id as number,
     },
@@ -191,7 +191,7 @@ function DashboardMain(props: MainTabStackRouteProps<'RootMainTabStack'>) {
 
   const { data: farmers, isLoading: loadingFarmers } = useApiCall(
     'getFarmers',
-    ColdtivateService.getFarmers,
+    coldboxstoreService.getFarmers,
     undefined,
     { defaultData: [] }
   );

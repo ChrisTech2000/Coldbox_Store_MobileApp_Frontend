@@ -17,7 +17,7 @@ import HideWithKeyboardView from '#ui/components/HideWithKeyboardView';
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
 import { LocationGeocoder } from '#services/LocationGeocoder';
 
@@ -50,7 +50,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
 
   const { data, isLoading } = useApiCall(
     'getLocation',
-    ColdtivateService.getLocation,
+    coldboxstoreService.getLocation,
     { locationId, companyId },
     {
       skip: !locationId || !companyId,
@@ -113,7 +113,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
           break;
       }
 
-      await ColdtivateService.editLocation({ ...datums, locationId });
+      await coldboxstoreService.editLocation({ ...datums, locationId });
 
       toast.show(t('Dashboard.Management.Location.toasts.editLocationSuccess'), {
         type: 'md_success',
@@ -136,7 +136,7 @@ function EditLocation(props: ManagementRouteProps<'EditLocation'>) {
     try {
       toggleModalVisibility();
       toggleProcessing();
-      await ColdtivateService.deleteLocation(locationId);
+      await coldboxstoreService.deleteLocation(locationId);
 
       toast.show(
         t('Dashboard.Management.Location.toasts.removeLocationSuccess', { name: data.name }),

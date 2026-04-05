@@ -35,7 +35,7 @@ import {
   MarketplaceListing3ScreenOverlay,
 } from '#screens/Dashboard/Tutorial/MarketplaceOverlay';
 import { EMarketplaceTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constants';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import MarketplaceService from '#services/MarketplaceService';
 import { useAuthStore } from '#stores/auth';
@@ -86,7 +86,7 @@ function EditCrateWeightAndPricing(
 
   const { data: owner, isLoading: isLoadingFarmer } = useApiCall(
     'getUser',
-    ColdtivateService.getUser,
+    coldboxstoreService.getUser,
     params.produce.ownedByUserId,
     {
       skip: !params.produce.ownedByUserId,

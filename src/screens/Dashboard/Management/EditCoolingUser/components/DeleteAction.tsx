@@ -13,7 +13,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useApiCache } from '#services/hooks/useAPiCall';
 import { usePopup } from '#screens/Dashboard/AccountDetails/components/DeleteAccountAction/utils';
 import { useToggle } from '#ui/hooks/useToggle';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { paperTheme } from '#ui/lib/theme';
 import InAppNotifications from '#common/InAppNotifications';
 import reportCrash from '#ui/lib/reportCrash';
@@ -45,7 +45,7 @@ export default function DeleteAction(props: Props) {
     if (!company) return; // safe guard
     try {
       toggleProcessing();
-      const nonEmptyCoolingUnits = await ColdtivateService.getCoolingUnitsByStatus({
+      const nonEmptyCoolingUnits = await coldboxstoreService.getCoolingUnitsByStatus({
         userId,
         companyId: company.id,
         isFarmer: true,
@@ -75,8 +75,8 @@ export default function DeleteAction(props: Props) {
       // eslint-disable-next-line
       // @ts-ignore
       if (!contextualFarmer.userCode && !contextualFarmer.farmer?.userCode) {
-        await ColdtivateService.operatorProxyUserDelete(userId);
-      } else await ColdtivateService.removeCompany({ farmerId, companyId: company.id });
+        await coldboxstoreService.operatorProxyUserDelete(userId);
+      } else await coldboxstoreService.removeCompany({ farmerId, companyId: company.id });
       await revalidateCache();
       resetPopup();
       toggleProcessing();

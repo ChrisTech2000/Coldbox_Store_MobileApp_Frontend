@@ -13,7 +13,7 @@ import reportCrash from '#ui/lib/reportCrash';
 import InAppNotifications from '#common/InAppNotifications';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import ImpactService from '#services/ImpactService';
 import { useManagementStore } from '#stores/management';
@@ -52,7 +52,7 @@ export function CompanySection() {
 
   const { data: coolingUnits, isLoading: loadingCoolingUnits } = useApiCall(
     'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
+    coldboxstoreService.getCoolingUnits,
     { company: company?.id as number },
     {
       skip: !company?.id,

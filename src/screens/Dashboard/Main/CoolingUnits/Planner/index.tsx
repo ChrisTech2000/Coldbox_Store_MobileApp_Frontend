@@ -16,7 +16,7 @@ import { ECommonTutorialSteps } from '#screens/Dashboard/Tutorial/utils/constant
 import RBAC from '#common/RBAC';
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 
 import GenericFilter, { useCoolingUnitStore } from '../components/GenericFilter';
@@ -45,7 +45,7 @@ function CoolingUnitsPlanner() {
     refetch: revalidateCapacity,
   } = useApiCall(
     'getCoolingUnitCapacity',
-    ColdtivateService.getCoolingUnitCapacity,
+    coldboxstoreService.getCoolingUnitCapacity,
     selectedCoolingUnit?.id as number,
     {
       skip: !selectedCoolingUnit?.id,

@@ -14,7 +14,7 @@ import { paperTheme } from '#ui/lib/theme';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { useTranslationUtils } from '#i18n/utils';
 import { parsePoint } from '#screens/Dashboard/Management/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { EPickUpMethod, EPricingType, type CoolingUnit } from '#types/global';
 
@@ -36,7 +36,7 @@ export function PickupDetailsCard({
   const { t } = useTranslationUtils();
   const toast = InAppNotifications.useToast();
 
-  const { data: location } = useApiCall('getLocation', ColdtivateService.getLocation, {
+  const { data: location } = useApiCall('getLocation', coldboxstoreService.getLocation, {
     companyId,
     locationId: coolingUnit.location,
   });

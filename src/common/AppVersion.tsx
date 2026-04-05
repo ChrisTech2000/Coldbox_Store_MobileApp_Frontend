@@ -89,8 +89,8 @@ export default function AppVersionModal() {
 
               const APP_STORE_URLS = {
                 android:
-                  'https://play.google.com/store/apps/details?id=com.base.coldtivate&hl=en&gl=US&pli=1',
-                ios: 'https://apps.apple.com/sg/app/coldtivate/id1613730873',
+                  'https://play.google.com/store/apps/details?id=com.manamuz.coldboxstore&hl=en&gl=US&pli=1',
+                ios: 'https://apps.apple.com/app/coldboxstore/id1613730873',
               };
 
               const storeUrl =

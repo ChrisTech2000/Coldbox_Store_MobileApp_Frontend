@@ -13,7 +13,7 @@ import { Text } from '#ui/components/Text';
 
 import { SMALL_SCREEN_THRESHOLD } from '#constants/ui';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type { GetAllCropsResponse } from '#types/api.responses';
 import { cn } from '#ui/lib/cn';
@@ -44,7 +44,7 @@ export default function CropTypeFilters() {
   const { data, isLoading } = useApiCall(
     'getMarketplaceCropFilterOptions',
     async () => {
-      const result = await ColdtivateService.getAllCrops();
+      const result = await coldboxstoreService.getAllCrops();
       return new Map<number, GetAllCropsResponse>(result.map((item) => [item.id, item]));
     },
     undefined,

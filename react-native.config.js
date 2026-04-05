@@ -2,7 +2,7 @@ module.exports = {
   project: {
     ios: {},
     android: {
-      packageName: 'com.base.coldtivate',
+      packageName: 'com.manamuz.coldboxstore',
     },
   },
   assets: ['./src/assets/images/', './src/assets/icons/', './src/assets/fonts/'],

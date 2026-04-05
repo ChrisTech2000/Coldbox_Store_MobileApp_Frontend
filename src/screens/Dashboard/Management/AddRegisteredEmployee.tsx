@@ -21,7 +21,7 @@ import { useRecaptcha } from '#hooks/useRecaptcha';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
 import { useTranslationUtils } from '#i18n/utils';
 import { getQueryKey, useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import InAppNotifications from '#common/InAppNotifications';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
@@ -40,7 +40,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
 
   const { data, isLoading } = useApiCall(
     'getCoolingUnits',
-    ColdtivateService.getCoolingUnits,
+    coldboxstoreService.getCoolingUnits,
     {
       company: company?.id as number,
     },
@@ -99,7 +99,7 @@ function AddRegisteredEmployee(props: ManagementRouteProps<'AddRegisteredEmploye
     const coolingUnits = data?.map((coolingUnit) => coolingUnit.id) ?? [];
 
     try {
-      await ColdtivateService.sendEmployeeInvitation({
+      await coldboxstoreService.sendEmployeeInvitation({
         coolingUnits,
         phone: normalizePhone(values.phoneNumber, company?.country),
         userId,

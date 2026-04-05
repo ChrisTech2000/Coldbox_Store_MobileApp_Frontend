@@ -11,7 +11,7 @@ import FAQ from '#screens/Dashboard/FAQ';
 
 import RBAC from '#common/RBAC';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useManagementStore } from '#stores/management';
@@ -63,7 +63,7 @@ function DashboardNavigationRouter() {
 
   const { data } = useApiCall(
     'getCompanyById',
-    ColdtivateService.getCompanyById,
+    coldboxstoreService.getCompanyById,
     company?.id as number,
     {
       skip: user?.role === ERoles.COOLING_USER || !company?.id,

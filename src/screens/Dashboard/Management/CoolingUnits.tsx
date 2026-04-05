@@ -10,7 +10,7 @@ import { withSafeArea } from '#ui/primitives/withSafeArea';
 
 import { useTranslationUtils } from '#i18n/utils';
 import type { ManagementRouteProps } from '#navigation/Dashboard/Management';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 
@@ -22,7 +22,7 @@ function CoolingUnits(props: ManagementRouteProps<'CoolingUnits'>) {
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getLocations',
-    ColdtivateService.getLocations,
+    coldboxstoreService.getLocations,
     company?.id as number,
     { skip: !company?.id, defaultData: [] }
   );

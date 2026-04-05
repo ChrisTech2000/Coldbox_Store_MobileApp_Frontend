@@ -15,7 +15,7 @@ import type {
 import { useManagementStore } from '#stores/management';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import type { User } from '#types/global';
 import { paperTheme } from '#ui/lib/theme';
 import { ListItemArrow } from '../AccountDetails/components/ListItemArrow';
@@ -33,14 +33,14 @@ function Operators(props: ManagementRouteProps<'Operators'>) {
     isLoading,
     isValidating,
     refetch: revalidateOperators,
-  } = useApiCall('getOperators', ColdtivateService.getOperators, company?.id as number, {
+  } = useApiCall('getOperators', coldboxstoreService.getOperators, company?.id as number, {
     skip: !company?.id,
     defaultData: [],
   });
 
   const { data: invites, refetch: revalidateInvites } = useApiCall(
     'getInvitedOperators',
-    ColdtivateService.getInvitedOperators,
+    coldboxstoreService.getInvitedOperators,
     company?.id as number,
     {
       skip: !company?.id,

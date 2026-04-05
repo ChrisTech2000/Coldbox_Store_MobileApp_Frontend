@@ -6,7 +6,7 @@ import { Portal } from 'react-native-paper';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { CustomError } from '#services/utils/ErrorUtil';
 import { useCheckInStore } from '#stores/checkIn';
 import { CheckOut } from '#types/api.responses';
@@ -71,7 +71,7 @@ export function CheckInWithCodeModal({ isModalOpen, closeModal }: CheckInWithCod
       if (!coolingUnit) return;
 
       try {
-        const result = await ColdtivateService.getCheckOut(values);
+        const result = await coldboxstoreService.getCheckOut(values);
 
         if (!isArray(result) && result.message) {
           toast.show(result.message, {

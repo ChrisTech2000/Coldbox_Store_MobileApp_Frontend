@@ -177,14 +177,14 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 29,
       title: 'How can I register new cooling users?',
       role: [ERoles.OPERATOR],
-      text: 'To register a new cooling user, in the Menu navigate to "Management" > "Cooling Users". Click on the "+" on the top right corner and choose whether to add an already registered user with a code, or add the user details. A cooling user who has a smartphone and has already registered in Coldtivate has a unique code, which he/she can find under "Menu" -> "Account details" -> "Personal Details" -> Cooling User Import Code. If the user has no smartphone, or is not registered yet, you can add the user by adding the name, gender and telephone number. If the user does not have his/her own number, the number of another person (e.g. friends, relatives) can be used, but please remember that one phone number can be used only once. Click "Save changes" to confirm. To complete the registration, you need to fill in a short survey by asking a few questions to the cooling user. The survey can also be completed at a later point by navigating to "Management" -> "Cooling Users" -> "Cooling User Survey".',
+      text: 'To register a new cooling user, in the Menu navigate to "Management" > "Cooling Users". Click on the "+" on the top right corner and choose whether to add an already registered user with a code, or add the user details. A cooling user who has a smartphone and has already registered in coldboxstore has a unique code, which he/she can find under "Menu" -> "Account details" -> "Personal Details" -> Cooling User Import Code. If the user has no smartphone, or is not registered yet, you can add the user by adding the name, gender and telephone number. If the user does not have his/her own number, the number of another person (e.g. friends, relatives) can be used, but please remember that one phone number can be used only once. Click "Save changes" to confirm. To complete the registration, you need to fill in a short survey by asking a few questions to the cooling user. The survey can also be completed at a later point by navigating to "Management" -> "Cooling Users" -> "Cooling User Survey".',
     },
     {
       id: 30,
       title:
         'The cooling user has no time to answer the survey questions at registration. What should I do?',
       role: [ERoles.OPERATOR],
-      text: 'You can skip the survey questions by clicking "Complete later". In this case, you will be prompted to complete the survey the first time you are creating a check in for that cooling user. It is recommended to take the time and answer the survey questions thoroughly: in this way the user can get a more tailored experience with the Coldtivate app!',
+      text: 'You can skip the survey questions by clicking "Complete later". In this case, you will be prompted to complete the survey the first time you are creating a check in for that cooling user. It is recommended to take the time and answer the survey questions thoroughly: in this way the user can get a more tailored experience with the coldboxstore app!',
     },
     {
       id: 31,
@@ -200,9 +200,9 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     },
     {
       id: 33,
-      title: 'I have temperature sensors in the cold room. Can they be connected to Coldtivate? ',
+      title: 'I have temperature sensors in the cold room. Can they be connected to coldboxstore? ',
       role: [ERoles.EMPLOYEE],
-      text: 'In order to connect a sensor to a cooling unit, the sensor needs to have an API setup. The API should use a username and password which are sent through a POST request of Content-Type: application/json. The response should include an accessToken, which can be used for another POST request. The POST request needs to include in the url the room-identifier, the type of value (temperature, humidity), and the token as a header with the key Authorization. The response should be the last recorded temperature in this room, in the format {date: dateTimeStamp, value: numerical}. The temperature should be in Celsius. At the moment, we are supporting the Ecozen, UbiBot, Figorr, and Victron Energy sensors APIs. If you have another type of sensors you would like to integrate with Coldtivate, please reach out to app@yourvcca.org.',
+      text: 'In order to connect a sensor to a cooling unit, the sensor needs to have an API setup. The API should use a username and password which are sent through a POST request of Content-Type: application/json. The response should include an accessToken, which can be used for another POST request. The POST request needs to include in the url the room-identifier, the type of value (temperature, humidity), and the token as a header with the key Authorization. The response should be the last recorded temperature in this room, in the format {date: dateTimeStamp, value: numerical}. The temperature should be in Celsius. At the moment, we are supporting the Ecozen, UbiBot, Figorr, and Victron Energy sensors APIs. If you have another type of sensors you would like to integrate with coldboxstore, please reach out to app@yourvcca.org.',
     },
     {
       id: 34,
@@ -376,7 +376,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 66,
       title: 'I have no time to answer the survey questions at sign up. What should I do?',
       role: [ERoles.COOLING_USER],
-      text: 'You can skip the survey questions by clicking "Complete later". You will find the survey as part of your Account Details and can complete it anytime. However, It is recommended to take the time to answer the survey questions thoroughly when you start using the room: in this way you can get a more tailored experience with the Coldtivate app!',
+      text: 'You can skip the survey questions by clicking "Complete later". You will find the survey as part of your Account Details and can complete it anytime. However, It is recommended to take the time to answer the survey questions thoroughly when you start using the room: in this way you can get a more tailored experience with the coldboxstore app!',
     },
     {
       id: 67,
@@ -388,13 +388,13 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 68,
       title: 'How do I connect the sensors in the room with the app?',
       role: [ERoles.OPERATOR],
-      text: 'If there are temperature sensors in the room that can be connected to the Coldtivate app, please communicate with your responsible. Only user with a Registered employee role can link sensors to cooling units created in Coldtivate.',
+      text: 'If there are temperature sensors in the room that can be connected to the coldboxstore app, please communicate with your responsible. Only user with a Registered employee role can link sensors to cooling units created in coldboxstore.',
     },
     {
       id: 69,
       title: 'What is the after-storage market survey and why should I fill it in?',
       role: [ERoles.COOLING_USER],
-      text: 'The market survey can be accessed by clicking on the three dots next to each check out in the "More" -> "History" tab and selecting "Fill in market survey". The survey is very short and asks for information about the selling price of the produce you had previously stored in the room, as well as about how much of it got spoiled. This information will be treated as confidential and solely used by the Coldtivate team to evaluate the impact of using cold storage. A red dot will identify the check outs for which the market survey has not been completed yet. You will be reminded about the check outs that need your attention in the notification panel and can click on the notification to open the survey. You can also access the surveys you need to fill in in the "Analytics" tab, and then clicking on "Impact". ',
+      text: 'The market survey can be accessed by clicking on the three dots next to each check out in the "More" -> "History" tab and selecting "Fill in market survey". The survey is very short and asks for information about the selling price of the produce you had previously stored in the room, as well as about how much of it got spoiled. This information will be treated as confidential and solely used by the coldboxstore team to evaluate the impact of using cold storage. A red dot will identify the check outs for which the market survey has not been completed yet. You will be reminded about the check outs that need your attention in the notification panel and can click on the notification to open the survey. You can also access the surveys you need to fill in in the "Analytics" tab, and then clicking on "Impact". ',
     },
     {
       id: 70,
@@ -454,7 +454,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 80,
       title: 'How can I delete a cooling user from the list?',
       role: [ERoles.OPERATOR],
-      text: 'To delete a cooling user from the list, navigate to "Management" -> "Cooling users", click on the cooling user name and then the button "Delete". Please note that only users with no pending check-ins can be deleted! If there are pending check-ins, please contact the user to pick up the produce. Note that this action cannot be reversed! If the user has a smartphone, this operation will remove him/her from your list, but the user will still be able to use Coldtivate. If the user has no smartphone, this operation deletes his/her account and frees the associated phone number.',
+      text: 'To delete a cooling user from the list, navigate to "Management" -> "Cooling users", click on the cooling user name and then the button "Delete". Please note that only users with no pending check-ins can be deleted! If there are pending check-ins, please contact the user to pick up the produce. Note that this action cannot be reversed! If the user has a smartphone, this operation will remove him/her from your list, but the user will still be able to use coldboxstore. If the user has no smartphone, this operation deletes his/her account and frees the associated phone number.',
     },
     {
       id: 81,
@@ -479,13 +479,13 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 84,
       title: 'I have received a notification. What should I do?',
       role: [ERoles.COOLING_USER],
-      text: 'You might receive different types of notifications: first, the app can inform you about the fact that some of the crates you have stored are about to get spolied. We advise you to collect the crates from the room as fast as possible. Another notification you might receive is to remind you to complete the after-storage market survey or the baseline survey.You can click on the notification to access the surveys. The information we collect there is very valuable for the Coldtivate team to monitor the benefit of using cold rooms compared to storing the produce outside. In you have crates listed "for sale" in the marketplace, you will also receive notifications when crates are sold, and in case the operator updates the selling price. In case you have not requested the price change, please talk to the operator immediately. ',
+      text: 'You might receive different types of notifications: first, the app can inform you about the fact that some of the crates you have stored are about to get spolied. We advise you to collect the crates from the room as fast as possible. Another notification you might receive is to remind you to complete the after-storage market survey or the baseline survey.You can click on the notification to access the surveys. The information we collect there is very valuable for the coldboxstore team to monitor the benefit of using cold rooms compared to storing the produce outside. In you have crates listed "for sale" in the marketplace, you will also receive notifications when crates are sold, and in case the operator updates the selling price. In case you have not requested the price change, please talk to the operator immediately. ',
     },
     {
       id: 85,
       title: 'What is displayed on the map of cooling units?',
       role: [ERoles.COOLING_USER],
-      text: 'On the map you can visualize your location (you will be asked for permission for Coldtivate to access your location), the location of the cooling units around you, and some information about the units (single or multicommodity, company, pricing). By going to the cold room, you can get more information from the cold room operator on operation of the unit and opportunity for storage.',
+      text: 'On the map you can visualize your location (you will be asked for permission for coldboxstore to access your location), the location of the cooling units around you, and some information about the units (single or multicommodity, company, pricing). By going to the cold room, you can get more information from the cold room operator on operation of the unit and opportunity for storage.',
     },
     {
       id: 86,
@@ -504,7 +504,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         "An operator is asking me for a code to add me to the company's list of cooling users. Where can I find the code?",
       role: [ERoles.COOLING_USER],
-      text: 'When you signed up in Coldtivate, you have received an unique identifier in form of a code. This code can be used by an operator to add you to the company"s list of cooling users, which is needed for the operators to check-in your crates. The code can be found under "Menu" -> "Account Details" -> "Personal Details" -> Cooling User Import Code.',
+      text: 'When you signed up in coldboxstore, you have received an unique identifier in form of a code. This code can be used by an operator to add you to the company"s list of cooling users, which is needed for the operators to check-in your crates. The code can be found under "Menu" -> "Account Details" -> "Personal Details" -> Cooling User Import Code.',
     },
     {
       id: 89,
@@ -515,7 +515,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 90,
       title:
-        'My temperature sensor type is supported by Coldtivate (Ecozen, UbiBot, Figorr, Victron Energy). How can I set up sensors?',
+        'My temperature sensor type is supported by coldboxstore (Ecozen, UbiBot, Figorr, Victron Energy). How can I set up sensors?',
       role: [ERoles.EMPLOYEE],
       text: 'In order to connect a sensor to a cooling unit, you can navigate to "Menu" -> "Management" -> "Cooling Units", select the unit for which the sensor should be set up, and then toggle "Sensor available". You can follow the instruction for each supported sensor type and authenticate. Remeber to clock "Save" at the bottom of the page for the changes to be saved. You should see temperature readings from your sensors in the next 6 hours under "More" -> "Cooling units" -> "Room conditions". ',
     },
@@ -524,19 +524,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         "What is the difference between the 'Company', 'Aggregated', and 'Comparison' view in the Analytics tab? ",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'The Analytics tab in the navigation bar provides summary statistics for all the company cold rooms. In the "Company" view, you see a data on users, utilisation, and impact for all cooling units since you start using Coldtivate. By clicking on "Aggregated", you are prompted to configure which cooling units and time period you are interested in. The displayed data for users, utilisation, and impact is aggregated across the selected cooling units in the chosen time period. If you would like to compare across units, you can use the "Comparison" tab. Here, the data is displayed in tables, where data from each cooling unit in teh chosen time period is dispalyed. You can sort the data and change the cooling units and time period anytime. ',
+      text: 'The Analytics tab in the navigation bar provides summary statistics for all the company cold rooms. In the "Company" view, you see a data on users, utilisation, and impact for all cooling units since you start using coldboxstore. By clicking on "Aggregated", you are prompted to configure which cooling units and time period you are interested in. The displayed data for users, utilisation, and impact is aggregated across the selected cooling units in the chosen time period. If you would like to compare across units, you can use the "Comparison" tab. Here, the data is displayed in tables, where data from each cooling unit in teh chosen time period is dispalyed. You can sort the data and change the cooling units and time period anytime. ',
     },
     {
       id: 92,
       title: 'How is the data displayed in the Analytics tab calculated?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'The goal of the Analytics tab is to offer a comprehensive view of what is happening at the cold rooms. User and utilisation data are calculated from the check-in and check-out information recorded in Coldtivate. You can thus understand how many users and operations are done, and what is the revenue or average occupancy of each cold room. The data of the impact section, on the other hand, is based on surveys that cooling users are asked to fill in when they are registered (ie. before they start using cold storage) and regularly as they check-out produce from the cold room. This data is crucial to estimate the evolution of postharvest loss and users" revenue as they use cooling. Finally, the CO2 estimation compares the emission associated with cooling the crops stored in the cold room with the predicted emissions the same crop would have caused when stored unrefrigerated. ',
+      text: 'The goal of the Analytics tab is to offer a comprehensive view of what is happening at the cold rooms. User and utilisation data are calculated from the check-in and check-out information recorded in coldboxstore. You can thus understand how many users and operations are done, and what is the revenue or average occupancy of each cold room. The data of the impact section, on the other hand, is based on surveys that cooling users are asked to fill in when they are registered (ie. before they start using cold storage) and regularly as they check-out produce from the cold room. This data is crucial to estimate the evolution of postharvest loss and users" revenue as they use cooling. Finally, the CO2 estimation compares the emission associated with cooling the crops stored in the cold room with the predicted emissions the same crop would have caused when stored unrefrigerated. ',
     },
     {
       id: 93,
       title: 'How is the data displayed in the Analytics tab calculated?',
       role: [ERoles.COOLING_USER],
-      text: 'The goal of the Analytics tab is to offer you a comprehensive view of the impact of cooling on your crops. Data displayed under "Crates" is calculated from the check-in and check-out information recorded in Coldtivate. You can thus how much you stored which crop and the average storage time. The data of the "Impact" section is based on surveys that you are asked to fill in when they you register (ie. before you start using cold storage) and regularly as you check-out produce from the cold room. This data is crucial to estimate the evolution of postharvest loss and revenue as you use cooling. A reminder to fill in the surveys is shown on top of the page, and we encourage you to fill them in whenever possible. In both section, you can use the "Configure" button on the top right to select specific cold rooms or a time period. If nothing is selected, you see all data available since you started using Coldtivate.',
+      text: 'The goal of the Analytics tab is to offer you a comprehensive view of the impact of cooling on your crops. Data displayed under "Crates" is calculated from the check-in and check-out information recorded in coldboxstore. You can thus how much you stored which crop and the average storage time. The data of the "Impact" section is based on surveys that you are asked to fill in when they you register (ie. before you start using cold storage) and regularly as you check-out produce from the cold room. This data is crucial to estimate the evolution of postharvest loss and revenue as you use cooling. A reminder to fill in the surveys is shown on top of the page, and we encourage you to fill them in whenever possible. In both section, you can use the "Configure" button on the top right to select specific cold rooms or a time period. If nothing is selected, you see all data available since you started using coldboxstore.',
     },
     {
       id: 94,
@@ -548,19 +548,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 95,
       title: 'What is the role of a cooling company in the marketplace? ',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'A cooling company and its employees can decide their level of involvement in the marketplace. As the functionality relies on crates being checked-in in the Coldtivate app, a marketplace can only work if the cold room operator regularly registers the check-in and check-out operations in the app. For produce bought via the marketplace, the cooling company is receiving the cooling fee as part of the digital transaction. It is thus crucial that a Registered Employee sets the company bank account details: to do so, you should navigate to "Menu" -> "Management" -> "Seller Settings (Company)" -> "Payout options". In addition, cooling companies can decide to buy produce from the farmers (playing the role of the buyer) and then re-selling those crops in the marketplace (playing the role of the seller). Both transactions can be done via Coldtivate marketplace. Note that both Operators and Registered Employees have the option to either buy for themselves (as individuals) or on behalf of the company they represent.   ',
+      text: 'A cooling company and its employees can decide their level of involvement in the marketplace. As the functionality relies on crates being checked-in in the coldboxstore app, a marketplace can only work if the cold room operator regularly registers the check-in and check-out operations in the app. For produce bought via the marketplace, the cooling company is receiving the cooling fee as part of the digital transaction. It is thus crucial that a Registered Employee sets the company bank account details: to do so, you should navigate to "Menu" -> "Management" -> "Seller Settings (Company)" -> "Payout options". In addition, cooling companies can decide to buy produce from the farmers (playing the role of the buyer) and then re-selling those crops in the marketplace (playing the role of the seller). Both transactions can be done via coldboxstore marketplace. Note that both Operators and Registered Employees have the option to either buy for themselves (as individuals) or on behalf of the company they represent.   ',
     },
     {
       id: 96,
       title: 'What is the role of a cold room operator in the marketplace? ',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Cold room operators in the marketplace have three main roles. 1) They help cooling users without a smartphone to set up their bank account (so that they can receive digital payments), list their crates "for sale" and their price. 2) They are responsible for keeping the produce in the cold room organized following the principle that all produce contained in a crate belongs to a single user: when some produce in a crate is bought (and thus belongs to a different owner), the operator receives a notification to move the bought produce to a separate crate. If an entire crate is bought, no action is required. 3) Cold room operators are responsible for all check-out operations, including those resulting from the marketplace: when a buyer (or a delivery representative) arrives at the cold room to pick up the bought produce, the operator should check-out that crate from Coldtivate. ',
+      text: 'Cold room operators in the marketplace have three main roles. 1) They help cooling users without a smartphone to set up their bank account (so that they can receive digital payments), list their crates "for sale" and their price. 2) They are responsible for keeping the produce in the cold room organized following the principle that all produce contained in a crate belongs to a single user: when some produce in a crate is bought (and thus belongs to a different owner), the operator receives a notification to move the bought produce to a separate crate. If an entire crate is bought, no action is required. 3) Cold room operators are responsible for all check-out operations, including those resulting from the marketplace: when a buyer (or a delivery representative) arrives at the cold room to pick up the bought produce, the operator should check-out that crate from coldboxstore. ',
     },
     {
       id: 97,
       title: 'How are cooling fees collected in the marketplace?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'When crates are bought in the marketplace, the cooling fee up to that day is deducted from the price the buyer is paying and transferred to the cooling company. In this way, the seller does not have to settle the cooling fee, as this is already done in the digital transaction. For this reason, it is crucial that both seller and cooling companies have a bank account set up in Coldtivate. For example, if a crate is bought for 20 USD, and a seller owes 3 USD of cooling fees, out of the 20 USD paid by the buyer, 17 USD will be transferred to the bank account of the seller, and 3 USD will be transferred to the bank account of the cooling company. If the buyer comes to pick up the produce on the same day as the purchase, no other cooling fee is due (because the daily fee is already paid by the seller). However, if the buyer decides to keep the produce in storage, the standard cooling fee applies, and the price will be calculated depending on the number of days the produce is kept in the cold room until the buyer picks it up. The cold room operator is responsible for collecting these cooling fees at check-out. Note that in case of delivery, the same logic applies. ',
+      text: 'When crates are bought in the marketplace, the cooling fee up to that day is deducted from the price the buyer is paying and transferred to the cooling company. In this way, the seller does not have to settle the cooling fee, as this is already done in the digital transaction. For this reason, it is crucial that both seller and cooling companies have a bank account set up in coldboxstore. For example, if a crate is bought for 20 USD, and a seller owes 3 USD of cooling fees, out of the 20 USD paid by the buyer, 17 USD will be transferred to the bank account of the seller, and 3 USD will be transferred to the bank account of the cooling company. If the buyer comes to pick up the produce on the same day as the purchase, no other cooling fee is due (because the daily fee is already paid by the seller). However, if the buyer decides to keep the produce in storage, the standard cooling fee applies, and the price will be calculated depending on the number of days the produce is kept in the cold room until the buyer picks it up. The cold room operator is responsible for collecting these cooling fees at check-out. Note that in case of delivery, the same logic applies. ',
     },
     {
       id: 98,
@@ -602,7 +602,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 104,
       title: 'What are the fees that are shown in the marketplace?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'The selling price of each item displayed in the marketplace is directly set by the seller and depends on how many kg are bought. On top of that amount, the marketplace includes two fees: the Marketplace fee is a 3.5% transaction fee collected by the Coldtivate team to host and maintain the application functional. The Payment fee is the fee that the digital payment system (PayStack in Nigeria) is charging to process the transaction. ',
+      text: 'The selling price of each item displayed in the marketplace is directly set by the seller and depends on how many kg are bought. On top of that amount, the marketplace includes two fees: the Marketplace fee is a 3.5% transaction fee collected by the coldboxstore team to host and maintain the application functional. The Payment fee is the fee that the digital payment system (PayStack in Nigeria) is charging to process the transaction. ',
     },
     {
       id: 105,
@@ -622,7 +622,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         "I received a notification in the app saying that 'Produce needs to be redistributed'. What is that? ",
       role: [ERoles.OPERATOR],
-      text: 'Because of the check-in procedure at the cold room, the content of one crate belong to a single farmer or trader. As, in the marketplace, a buyer can purchase some kg out of a crate belonging to a seller, the amount bought should be moved to a separate crate. This notification informs you that a purchase has been completed, and by clicking on it you can visualize from which crate the produce should be taken. Keeping crates organized is vital to ensure that crops are not checked-out by mistake, and that cooling fees are collected correctly. We recommend using the "Crate ID" functionality at check-in to tag crates in Coldtivate with physical crates and more easily track which crates require your attention based on the notification. ',
+      text: 'Because of the check-in procedure at the cold room, the content of one crate belong to a single farmer or trader. As, in the marketplace, a buyer can purchase some kg out of a crate belonging to a seller, the amount bought should be moved to a separate crate. This notification informs you that a purchase has been completed, and by clicking on it you can visualize from which crate the produce should be taken. Keeping crates organized is vital to ensure that crops are not checked-out by mistake, and that cooling fees are collected correctly. We recommend using the "Crate ID" functionality at check-in to tag crates in coldboxstore with physical crates and more easily track which crates require your attention based on the notification. ',
     },
     {
       id: 108,
@@ -816,14 +816,14 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 29,
       title: 'كيف يمكنني تسجيل مستخدمي التبريد الجدد؟',
       role: [ERoles.OPERATOR],
-      text: 'لتسجيل مستخدم تبريد جديد، انتقل في القائمة إلى "الإدارة" > "مستخدمو التبريد". انقر فوق "+" في الزاوية اليمنى العليا واختر ما إذا كنت تريد إضافة مستخدم مسجل بالفعل برمز، أو إضافة تفاصيل المستخدم. يمتلك مستخدم التبريد الذي لديه هاتف ذكي وقد سجل بالفعل في Coldtivate رمزًا فريدًا، والذي يمكنه العثور عليه ضمن "القائمة" -> "تفاصيل الحساب" -> "التفاصيل الشخصية" -> رمز استيراد مستخدم التبريد. إذا لم يكن لدى المستخدم هاتف ذكي، أو لم يتم تسجيله بعد، فيمكنك إضافة المستخدم عن طريق إضافة الاسم والجنس ورقم الهاتف. إذا لم يكن لدى المستخدم رقم خاص به، فيمكن استخدام رقم شخص آخر (مثل الأصدقاء والأقارب)، ولكن يرجى تذكر أنه لا يمكن استخدام رقم هاتف واحد إلا مرة واحدة. انقر فوق "حفظ التغييرات" للتأكيد. لإكمال التسجيل، تحتاج إلى ملء استبيان قصير عن طريق طرح بعض الأسئلة على مستخدم التبريد. يمكنك أيضًا إكمال الاستطلاع في وقت لاحق بالانتقال إلى "الإدارة" -> "تبريد المستخدمين" -> "استطلاع تبريد المستخدمين".',
+      text: 'لتسجيل مستخدم تبريد جديد، انتقل في القائمة إلى "الإدارة" > "مستخدمو التبريد". انقر فوق "+" في الزاوية اليمنى العليا واختر ما إذا كنت تريد إضافة مستخدم مسجل بالفعل برمز، أو إضافة تفاصيل المستخدم. يمتلك مستخدم التبريد الذي لديه هاتف ذكي وقد سجل بالفعل في coldboxstore رمزًا فريدًا، والذي يمكنه العثور عليه ضمن "القائمة" -> "تفاصيل الحساب" -> "التفاصيل الشخصية" -> رمز استيراد مستخدم التبريد. إذا لم يكن لدى المستخدم هاتف ذكي، أو لم يتم تسجيله بعد، فيمكنك إضافة المستخدم عن طريق إضافة الاسم والجنس ورقم الهاتف. إذا لم يكن لدى المستخدم رقم خاص به، فيمكن استخدام رقم شخص آخر (مثل الأصدقاء والأقارب)، ولكن يرجى تذكر أنه لا يمكن استخدام رقم هاتف واحد إلا مرة واحدة. انقر فوق "حفظ التغييرات" للتأكيد. لإكمال التسجيل، تحتاج إلى ملء استبيان قصير عن طريق طرح بعض الأسئلة على مستخدم التبريد. يمكنك أيضًا إكمال الاستطلاع في وقت لاحق بالانتقال إلى "الإدارة" -> "تبريد المستخدمين" -> "استطلاع تبريد المستخدمين".',
     },
     {
       id: 30,
       title:
         'ليس لدى مستخدم التبريد الوقت للإجابة على أسئلة الاستبيان عند التسجيل. ماذا يجب أن أفعل؟',
       role: [ERoles.OPERATOR],
-      text: 'يمكنك تخطي أسئلة الاستبيان بالنقر على "إكمال لاحقًا". في هذه الحالة، سيطلب منك إكمال الاستبيان في المرة الأولى التي تقوم فيها بإنشاء تسجيل دخول لمستخدم التبريد هذا. يوصى بأخذ الوقت والإجابة على أسئلة الاستبيان بشكل شامل: بهذه الطريقة يمكن للمستخدم الحصول على تجربة أكثر تخصيصًا مع تطبيق Coldtivate!',
+      text: 'يمكنك تخطي أسئلة الاستبيان بالنقر على "إكمال لاحقًا". في هذه الحالة، سيطلب منك إكمال الاستبيان في المرة الأولى التي تقوم فيها بإنشاء تسجيل دخول لمستخدم التبريد هذا. يوصى بأخذ الوقت والإجابة على أسئلة الاستبيان بشكل شامل: بهذه الطريقة يمكن للمستخدم الحصول على تجربة أكثر تخصيصًا مع تطبيق coldboxstore!',
     },
     {
       id: 31,
@@ -858,7 +858,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     },
     {
       id: 36,
-      title: 'لدي أجهزة استشعار درجة الحرارة في الغرفة الباردة. هل يمكن توصيلها بجهاز Coldtivate؟',
+      title: 'لدي أجهزة استشعار درجة الحرارة في الغرفة الباردة. هل يمكن توصيلها بجهاز coldboxstore؟',
       role: [ERoles.AUTH],
       text: 'مركز المعرفة هو صفحة يمكن الوصول إليها بالنقر على القائمة في الجزء العلوي الأيسر. يحتوي على معلومات مفيدة حول أفضل ممارسات التخزين للسلع المختلفة، بما في ذلك درجة الحرارة المثلى ووقت التخزين التقريبي تحت هذه الدرجة.',
     },
@@ -866,7 +866,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 37,
       title: 'كيف أقوم بربط أجهزة الاستشعار الموجودة في الغرفة بالتطبيق؟',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'إذا كانت هناك أجهزة استشعار لدرجة الحرارة في الغرفة يمكن توصيلها بتطبيق Coldtivate، فيرجى التواصل مع المسؤول. يمكن فقط للمستخدم الذي لديه دور موظف مسجل ربط أجهزة الاستشعار بوحدات التبريد التي تم إنشاؤها في Coldtivate.',
+      text: 'إذا كانت هناك أجهزة استشعار لدرجة الحرارة في الغرفة يمكن توصيلها بتطبيق coldboxstore، فيرجى التواصل مع المسؤول. يمكن فقط للمستخدم الذي لديه دور موظف مسجل ربط أجهزة الاستشعار بوحدات التبريد التي تم إنشاؤها في coldboxstore.',
     },
     {
       id: 38,
@@ -884,7 +884,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 40,
       title: 'ما هو مسح سوق ما بعد التخزين ولماذا يجب أن أقوم بملئه؟',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'يمكن الوصول إلى مسح السوق من خلال النقر على النقاط الثلاث بجوار كل عملية شراء في علامة التبويب "المزيد" -> "السجل" وتحديد "ملء مسح السوق". المسح قصير جدًا ويطلب معلومات حول سعر بيع المنتج الذي قمت بتخزينه سابقًا في الغرفة، بالإضافة إلى مقدار ما فسد منه. سيتم التعامل مع هذه المعلومات على أنها سرية وسيتم استخدامها حصريًا من قبل فريق Coldtivate لتقييم تأثير استخدام التخزين البارد. ستحدد النقطة الحمراء عمليات الشراء التي لم يتم إكمال مسح السوق لها بعد. سيتم تذكيرك بعمليات الشراء التي تحتاج إلى اهتمامك في لوحة الإشعارات ويمكنك النقر فوق الإشعار لفتح المسح. يمكنك أيضًا الوصول إلى الاستطلاعات التي تحتاج إلى تعبئتها في علامة التبويب "التحليلات"، ثم النقر فوق "التأثير".',
+      text: 'يمكن الوصول إلى مسح السوق من خلال النقر على النقاط الثلاث بجوار كل عملية شراء في علامة التبويب "المزيد" -> "السجل" وتحديد "ملء مسح السوق". المسح قصير جدًا ويطلب معلومات حول سعر بيع المنتج الذي قمت بتخزينه سابقًا في الغرفة، بالإضافة إلى مقدار ما فسد منه. سيتم التعامل مع هذه المعلومات على أنها سرية وسيتم استخدامها حصريًا من قبل فريق coldboxstore لتقييم تأثير استخدام التخزين البارد. ستحدد النقطة الحمراء عمليات الشراء التي لم يتم إكمال مسح السوق لها بعد. سيتم تذكيرك بعمليات الشراء التي تحتاج إلى اهتمامك في لوحة الإشعارات ويمكنك النقر فوق الإشعار لفتح المسح. يمكنك أيضًا الوصول إلى الاستطلاعات التي تحتاج إلى تعبئتها في علامة التبويب "التحليلات"، ثم النقر فوق "التأثير".',
     },
     {
       id: 41,
@@ -1023,7 +1023,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 66,
       title: 'لا أفهم أجزاء من التطبيق. من يجب أن أتواصل معه؟',
       role: [ERoles.COOLING_USER],
-      text: 'يمكنك تخطي أسئلة الاستبيان بالنقر على "إكمال لاحقًا". ستجد الاستبيان كجزء من تفاصيل حسابك ويمكنك إكماله في أي وقت. ومع ذلك، يوصى بأخذ الوقت للإجابة على أسئلة الاستبيان بشكل شامل عندما تبدأ في استخدام الغرفة: بهذه الطريقة يمكنك الحصول على تجربة أكثر تخصيصًا مع تطبيق Coldtivate!',
+      text: 'يمكنك تخطي أسئلة الاستبيان بالنقر على "إكمال لاحقًا". ستجد الاستبيان كجزء من تفاصيل حسابك ويمكنك إكماله في أي وقت. ومع ذلك، يوصى بأخذ الوقت للإجابة على أسئلة الاستبيان بشكل شامل عندما تبدأ في استخدام الغرفة: بهذه الطريقة يمكنك الحصول على تجربة أكثر تخصيصًا مع تطبيق coldboxstore!',
     },
     {
       id: 67,
@@ -1035,7 +1035,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 68,
       title: 'هناك شيء لا يعمل بشكل صحيح في التطبيق. من يجب أن أتصل به؟',
       role: [ERoles.OPERATOR],
-      text: 'إذا كانت هناك أجهزة استشعار لدرجة الحرارة في الغرفة يمكن توصيلها بتطبيق Coldtivate، يرجى التواصل مع المسؤول عنك. فقط المستخدم الذي لديه دور موظف مسجل يمكنه ربط أجهزة الاستشعار بوحدات التبريد التي تم إنشاؤها في Coldtivate.',
+      text: 'إذا كانت هناك أجهزة استشعار لدرجة الحرارة في الغرفة يمكن توصيلها بتطبيق coldboxstore، يرجى التواصل مع المسؤول عنك. فقط المستخدم الذي لديه دور موظف مسجل يمكنه ربط أجهزة الاستشعار بوحدات التبريد التي تم إنشاؤها في coldboxstore.',
     },
     {
       id: 69,
@@ -1101,7 +1101,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 80,
       title: 'أريد حذف حسابي ماذا يجب أن أفعل؟',
       role: [ERoles.OPERATOR],
-      text: 'لحذف مستخدم تبريد من القائمة، انتقل إلى "الإدارة" -> "مستخدمو التبريد"، انقر على اسم مستخدم التبريد ثم على زر "حذف". يرجى ملاحظة أنه يمكن حذف المستخدمين الذين ليس لديهم عمليات تسجيل دخول معلقة فقط! إذا كانت هناك عمليات تسجيل دخول معلقة، يرجى الاتصال بالمستخدم لاستلام المنتجات. لاحظ أنه لا يمكن التراجع عن هذا الإجراء! إذا كان المستخدم يمتلك هاتفًا ذكيًا، فإن هذه العملية ستزيله من قائمتك، لكن المستخدم سيظل قادرًا على استخدام Coldtivate. إذا لم يكن لدى المستخدم هاتف ذكي، فإن هذه العملية تحذف حسابه/ها وتحرر رقم الهاتف المرتبط به.',
+      text: 'لحذف مستخدم تبريد من القائمة، انتقل إلى "الإدارة" -> "مستخدمو التبريد"، انقر على اسم مستخدم التبريد ثم على زر "حذف". يرجى ملاحظة أنه يمكن حذف المستخدمين الذين ليس لديهم عمليات تسجيل دخول معلقة فقط! إذا كانت هناك عمليات تسجيل دخول معلقة، يرجى الاتصال بالمستخدم لاستلام المنتجات. لاحظ أنه لا يمكن التراجع عن هذا الإجراء! إذا كان المستخدم يمتلك هاتفًا ذكيًا، فإن هذه العملية ستزيله من قائمتك، لكن المستخدم سيظل قادرًا على استخدام coldboxstore. إذا لم يكن لدى المستخدم هاتف ذكي، فإن هذه العملية تحذف حسابه/ها وتحرر رقم الهاتف المرتبط به.',
     },
     {
       id: 81,
@@ -1149,7 +1149,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 88,
       title: 'ماذا يظهر على خريطة وحدات التبريد؟',
       role: [ERoles.COOLING_USER],
-      text: 'على الخريطة، يمكنك تصور موقعك (سيتم طلب الإذن لك لكي تتمكن Coldtivate من الوصول إلى موقعك)، وموقع وحدات التبريد من حولك، وبعض المعلومات حول الوحدات (سلعة واحدة أو متعددة، والشركة، والتسعير). من خلال الذهاب إلى غرفة التبريد، يمكنك الحصول على مزيد من المعلومات من مشغل غرفة التبريد حول تشغيل الوحدة وفرصة التخزين.',
+      text: 'على الخريطة، يمكنك تصور موقعك (سيتم طلب الإذن لك لكي تتمكن coldboxstore من الوصول إلى موقعك)، وموقع وحدات التبريد من حولك، وبعض المعلومات حول الوحدات (سلعة واحدة أو متعددة، والشركة، والتسعير). من خلال الذهاب إلى غرفة التبريد، يمكنك الحصول على مزيد من المعلومات من مشغل غرفة التبريد حول تشغيل الوحدة وفرصة التخزين.',
     },
     {
       id: 89,
@@ -1160,7 +1160,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 90,
       title:
-        'يدعم Coldtivate (Ecozen، UbiBot، Figorr، Victron Energy) نوع مستشعر درجة الحرارة الخاص بي. كيف يمكنني إعداد أجهزة الاستشعار؟',
+        'يدعم coldboxstore (Ecozen، UbiBot، Figorr، Victron Energy) نوع مستشعر درجة الحرارة الخاص بي. كيف يمكنني إعداد أجهزة الاستشعار؟',
       role: [ERoles.EMPLOYEE],
       text: 'لتوصيل جهاز استشعار بوحدة تبريد، يمكنك الانتقال إلى "القائمة" -> "الإدارة" -> "وحدات التبريد"، ثم تحديد الوحدة التي يجب إعداد جهاز الاستشعار لها، ثم تبديل "جهاز الاستشعار متاح". يمكنك اتباع التعليمات لكل نوع جهاز استشعار مدعوم والمصادقة. تذكر النقر على "حفظ" في أسفل الصفحة لحفظ التغييرات. يجب أن ترى قراءات درجة الحرارة من أجهزة الاستشعار الخاصة بك في غضون 6 ساعات القادمة ضمن "المزيد" -> "وحدات التبريد" -> "ظروف الغرفة".',
     },
@@ -1168,19 +1168,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 91,
       title: 'ما هو الفرق بين عرض "الشركة" و"المجمع" و"المقارنة" في علامة التبويب "التحليلات"؟',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'توفر علامة التبويب "التحليلات" في شريط التنقل إحصائيات موجزة لجميع غرف التبريد الخاصة بالشركة. في عرض "الشركة"، سترى بيانات حول المستخدمين والاستخدام والتأثير لجميع وحدات التبريد منذ أن بدأت في استخدام Coldtivate. بالنقر فوق "مجمع"، يُطلب منك تكوين وحدات التبريد والفترة الزمنية التي تهمك. يتم تجميع البيانات المعروضة للمستخدمين والاستخدام والتأثير عبر وحدات التبريد المحددة في الفترة الزمنية المختارة. إذا كنت ترغب في المقارنة بين الوحدات، فيمكنك استخدام علامة التبويب "مقارنة". هنا، يتم عرض البيانات في جداول، حيث يتم عرض البيانات من كل وحدة تبريد في الفترة الزمنية المختارة. يمكنك فرز البيانات وتغيير وحدات التبريد والفترة الزمنية في أي وقت.',
+      text: 'توفر علامة التبويب "التحليلات" في شريط التنقل إحصائيات موجزة لجميع غرف التبريد الخاصة بالشركة. في عرض "الشركة"، سترى بيانات حول المستخدمين والاستخدام والتأثير لجميع وحدات التبريد منذ أن بدأت في استخدام coldboxstore. بالنقر فوق "مجمع"، يُطلب منك تكوين وحدات التبريد والفترة الزمنية التي تهمك. يتم تجميع البيانات المعروضة للمستخدمين والاستخدام والتأثير عبر وحدات التبريد المحددة في الفترة الزمنية المختارة. إذا كنت ترغب في المقارنة بين الوحدات، فيمكنك استخدام علامة التبويب "مقارنة". هنا، يتم عرض البيانات في جداول، حيث يتم عرض البيانات من كل وحدة تبريد في الفترة الزمنية المختارة. يمكنك فرز البيانات وتغيير وحدات التبريد والفترة الزمنية في أي وقت.',
     },
     {
       id: 92,
       title: 'كيف يتم حساب البيانات المعروضة في علامة التبويب "التحليلات"؟',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'الهدف من علامة التبويب "التحليلات" هو تقديم رؤية شاملة لما يحدث في غرف التبريد. يتم حساب بيانات المستخدم والاستخدام من معلومات تسجيل الدخول والخروج المسجلة في Coldtivate. وبالتالي يمكنك فهم عدد المستخدمين والعمليات التي تم إجراؤها، وما هي الإيرادات أو متوسط الإشغال لكل غرفة تبريد. من ناحية أخرى، تستند بيانات قسم التأثير إلى الاستطلاعات التي يُطلب من مستخدمي التبريد ملؤها عند تسجيلهم (أي قبل أن يبدأوا في استخدام التخزين البارد) وبشكل منتظم أثناء تسجيلهم للمنتجات من غرفة التبريد. هذه البيانات ضرورية لتقدير تطور خسائر ما بعد الحصاد وإيرادات المستخدمين أثناء استخدامهم للتبريد. أخيرًا، يقارن تقدير ثاني أكسيد الكربون الانبعاثات المرتبطة بتبريد المحاصيل المخزنة في غرفة التبريد بالانبعاثات المتوقعة التي كان من الممكن أن يسببها نفس المحصول عند تخزينه بدون تبريد.',
+      text: 'الهدف من علامة التبويب "التحليلات" هو تقديم رؤية شاملة لما يحدث في غرف التبريد. يتم حساب بيانات المستخدم والاستخدام من معلومات تسجيل الدخول والخروج المسجلة في coldboxstore. وبالتالي يمكنك فهم عدد المستخدمين والعمليات التي تم إجراؤها، وما هي الإيرادات أو متوسط الإشغال لكل غرفة تبريد. من ناحية أخرى، تستند بيانات قسم التأثير إلى الاستطلاعات التي يُطلب من مستخدمي التبريد ملؤها عند تسجيلهم (أي قبل أن يبدأوا في استخدام التخزين البارد) وبشكل منتظم أثناء تسجيلهم للمنتجات من غرفة التبريد. هذه البيانات ضرورية لتقدير تطور خسائر ما بعد الحصاد وإيرادات المستخدمين أثناء استخدامهم للتبريد. أخيرًا، يقارن تقدير ثاني أكسيد الكربون الانبعاثات المرتبطة بتبريد المحاصيل المخزنة في غرفة التبريد بالانبعاثات المتوقعة التي كان من الممكن أن يسببها نفس المحصول عند تخزينه بدون تبريد.',
     },
     {
       id: 93,
       title: 'كيف يتم حساب البيانات المعروضة في علامة التبويب "التحليلات"؟',
       role: [ERoles.COOLING_USER],
-      text: 'الهدف من علامة التبويب "التحليلات" هو تزويدك برؤية شاملة لتأثير التبريد على محاصيلك. يتم حساب البيانات المعروضة تحت "الصناديق" من معلومات الدخول والخروج المسجلة في Coldtivate. وبالتالي يمكنك معرفة كمية المحصول المخزن ومتوسط وقت التخزين. تعتمد بيانات قسم "التأثير" على الاستطلاعات التي يُطلب منك تعبئتها عند التسجيل (أي قبل البدء في استخدام التخزين البارد) وبشكل منتظم عند إخراج المنتجات من الغرفة الباردة. هذه البيانات ضرورية لتقدير تطور خسائر ما بعد الحصاد والإيرادات عند استخدام التبريد. يتم عرض تذكير لملء الاستطلاعات في أعلى الصفحة، ونحن نشجعك على تعبئتها كلما أمكن ذلك. في كلا القسمين، يمكنك استخدام زر "تكوين" في أعلى اليمين لتحديد غرف تبريد معينة أو فترة زمنية. إذا لم يتم تحديد أي شيء، فسترى جميع البيانات المتاحة منذ أن بدأت في استخدام Coldtivate.',
+      text: 'الهدف من علامة التبويب "التحليلات" هو تزويدك برؤية شاملة لتأثير التبريد على محاصيلك. يتم حساب البيانات المعروضة تحت "الصناديق" من معلومات الدخول والخروج المسجلة في coldboxstore. وبالتالي يمكنك معرفة كمية المحصول المخزن ومتوسط وقت التخزين. تعتمد بيانات قسم "التأثير" على الاستطلاعات التي يُطلب منك تعبئتها عند التسجيل (أي قبل البدء في استخدام التخزين البارد) وبشكل منتظم عند إخراج المنتجات من الغرفة الباردة. هذه البيانات ضرورية لتقدير تطور خسائر ما بعد الحصاد والإيرادات عند استخدام التبريد. يتم عرض تذكير لملء الاستطلاعات في أعلى الصفحة، ونحن نشجعك على تعبئتها كلما أمكن ذلك. في كلا القسمين، يمكنك استخدام زر "تكوين" في أعلى اليمين لتحديد غرف تبريد معينة أو فترة زمنية. إذا لم يتم تحديد أي شيء، فسترى جميع البيانات المتاحة منذ أن بدأت في استخدام coldboxstore.',
     },
     {
       id: 94,
@@ -1192,19 +1192,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 95,
       title: 'ما هو دور شركة التبريد في السوق؟',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'يمكن لشركة التبريد وموظفيها تحديد مستوى مشاركتهم في السوق. نظرًا لأن الوظيفة تعتمد على تسجيل الصناديق في تطبيق Coldtivate، فلا يمكن للسوق أن يعمل إلا إذا سجل مشغل غرفة التبريد بانتظام عمليات تسجيل الدخول والخروج في التطبيق. بالنسبة للمنتجات التي يتم شراؤها عبر السوق، تتلقى شركة التبريد رسوم التبريد كجزء من المعاملة الرقمية. وبالتالي، من الأهمية بمكان أن يحدد الموظف المسجل تفاصيل حساب الشركة المصرفي: للقيام بذلك، يجب عليك الانتقال إلى "القائمة" -> "الإدارة" -> "إعدادات البائع (الشركة)" -> "خيارات الدفع". بالإضافة إلى ذلك، يمكن لشركات التبريد أن تقرر شراء المنتجات من المزارعين (تلعب دور المشتري) ثم إعادة بيع تلك المحاصيل في السوق (تلعب دور البائع). يمكن إجراء كلتا المعاملتين عبر سوق Coldtivate. لاحظ أن كل من المشغلين والموظفين المسجلين لديهم خيار الشراء لأنفسهم (كأفراد) أو نيابة عن الشركة التي يمثلونها.',
+      text: 'يمكن لشركة التبريد وموظفيها تحديد مستوى مشاركتهم في السوق. نظرًا لأن الوظيفة تعتمد على تسجيل الصناديق في تطبيق coldboxstore، فلا يمكن للسوق أن يعمل إلا إذا سجل مشغل غرفة التبريد بانتظام عمليات تسجيل الدخول والخروج في التطبيق. بالنسبة للمنتجات التي يتم شراؤها عبر السوق، تتلقى شركة التبريد رسوم التبريد كجزء من المعاملة الرقمية. وبالتالي، من الأهمية بمكان أن يحدد الموظف المسجل تفاصيل حساب الشركة المصرفي: للقيام بذلك، يجب عليك الانتقال إلى "القائمة" -> "الإدارة" -> "إعدادات البائع (الشركة)" -> "خيارات الدفع". بالإضافة إلى ذلك، يمكن لشركات التبريد أن تقرر شراء المنتجات من المزارعين (تلعب دور المشتري) ثم إعادة بيع تلك المحاصيل في السوق (تلعب دور البائع). يمكن إجراء كلتا المعاملتين عبر سوق coldboxstore. لاحظ أن كل من المشغلين والموظفين المسجلين لديهم خيار الشراء لأنفسهم (كأفراد) أو نيابة عن الشركة التي يمثلونها.',
     },
     {
       id: 96,
       title: 'ما هو دور مشغل غرفة التبريد في السوق؟',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'مشغلو الغرف الباردة في السوق لديهم ثلاثة أدوار رئيسية. 1) يساعدون مستخدمي التبريد الذين ليس لديهم هاتف ذكي في إعداد حسابهم المصرفي (حتى يتمكنوا من تلقي المدفوعات الرقمية)، وإدراج صناديقهم "للبيع" وسعرها. 2) هم مسؤولون عن الحفاظ على المنتجات في الغرفة الباردة منظمة وفقًا لمبدأ أن جميع المنتجات الموجودة في الصندوق تنتمي إلى مستخدم واحد: عندما يتم شراء بعض المنتجات في الصندوق (وبالتالي تنتمي إلى مالك مختلف)، يتلقى المشغل إشعارًا بنقل المنتجات المشتراة إلى صندوق منفصل. إذا تم شراء الصندوق بالكامل، فلا يلزم اتخاذ أي إجراء. 3) مشغلو الغرف الباردة مسؤولون عن جميع عمليات الدفع، بما في ذلك تلك الناتجة عن السوق: عندما يصل المشتري (أو مندوب التوصيل) إلى الغرفة الباردة لالتقاط المنتجات المشتراة، يجب على المشغل دفع ثمن هذا الصندوق من Coldtivate.',
+      text: 'مشغلو الغرف الباردة في السوق لديهم ثلاثة أدوار رئيسية. 1) يساعدون مستخدمي التبريد الذين ليس لديهم هاتف ذكي في إعداد حسابهم المصرفي (حتى يتمكنوا من تلقي المدفوعات الرقمية)، وإدراج صناديقهم "للبيع" وسعرها. 2) هم مسؤولون عن الحفاظ على المنتجات في الغرفة الباردة منظمة وفقًا لمبدأ أن جميع المنتجات الموجودة في الصندوق تنتمي إلى مستخدم واحد: عندما يتم شراء بعض المنتجات في الصندوق (وبالتالي تنتمي إلى مالك مختلف)، يتلقى المشغل إشعارًا بنقل المنتجات المشتراة إلى صندوق منفصل. إذا تم شراء الصندوق بالكامل، فلا يلزم اتخاذ أي إجراء. 3) مشغلو الغرف الباردة مسؤولون عن جميع عمليات الدفع، بما في ذلك تلك الناتجة عن السوق: عندما يصل المشتري (أو مندوب التوصيل) إلى الغرفة الباردة لالتقاط المنتجات المشتراة، يجب على المشغل دفع ثمن هذا الصندوق من coldboxstore.',
     },
     {
       id: 97,
       title: 'كيف يتم تحصيل رسوم التبريد في السوق؟',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'عند شراء الصناديق في السوق، يتم خصم رسوم التبريد حتى ذلك اليوم من السعر الذي يدفعه المشتري وتحويلها إلى شركة التبريد. وبهذه الطريقة، لا يتعين على البائع تسوية رسوم التبريد، حيث يتم ذلك بالفعل في المعاملة الرقمية. لهذا السبب، من الأهمية بمكان أن يكون لدى كل من البائع وشركات التبريد حساب مصرفي تم إنشاؤه في Coldtivate. على سبيل المثال، إذا تم شراء صندوق مقابل 20 دولارًا أمريكيًا، وكان البائع مدينًا برسوم تبريد قدرها 3 دولارات أمريكية، من أصل 20 دولارًا أمريكيًا يدفعها المشتري، سيتم تحويل 17 دولارًا أمريكيًا إلى الحساب المصرفي للبائع، وسيتم تحويل 3 دولارات أمريكية إلى الحساب المصرفي لشركة التبريد. إذا جاء المشتري لاستلام المنتج في نفس يوم الشراء، فلن تكون هناك رسوم تبريد أخرى مستحقة (لأن الرسوم اليومية مدفوعة بالفعل من قبل البائع). ومع ذلك، إذا قرر المشتري الاحتفاظ بالمنتج في المخزن، فسيتم تطبيق رسوم التبريد القياسية، وسيتم حساب السعر بناءً على عدد الأيام التي يتم فيها الاحتفاظ بالمنتج في الغرفة الباردة حتى يلتقطه المشتري. يقع على عاتق مشغل غرفة التبريد مسؤولية تحصيل رسوم التبريد هذه عند الخروج. يرجى ملاحظة أنه في حالة التسليم، ينطبق نفس المنطق.',
+      text: 'عند شراء الصناديق في السوق، يتم خصم رسوم التبريد حتى ذلك اليوم من السعر الذي يدفعه المشتري وتحويلها إلى شركة التبريد. وبهذه الطريقة، لا يتعين على البائع تسوية رسوم التبريد، حيث يتم ذلك بالفعل في المعاملة الرقمية. لهذا السبب، من الأهمية بمكان أن يكون لدى كل من البائع وشركات التبريد حساب مصرفي تم إنشاؤه في coldboxstore. على سبيل المثال، إذا تم شراء صندوق مقابل 20 دولارًا أمريكيًا، وكان البائع مدينًا برسوم تبريد قدرها 3 دولارات أمريكية، من أصل 20 دولارًا أمريكيًا يدفعها المشتري، سيتم تحويل 17 دولارًا أمريكيًا إلى الحساب المصرفي للبائع، وسيتم تحويل 3 دولارات أمريكية إلى الحساب المصرفي لشركة التبريد. إذا جاء المشتري لاستلام المنتج في نفس يوم الشراء، فلن تكون هناك رسوم تبريد أخرى مستحقة (لأن الرسوم اليومية مدفوعة بالفعل من قبل البائع). ومع ذلك، إذا قرر المشتري الاحتفاظ بالمنتج في المخزن، فسيتم تطبيق رسوم التبريد القياسية، وسيتم حساب السعر بناءً على عدد الأيام التي يتم فيها الاحتفاظ بالمنتج في الغرفة الباردة حتى يلتقطه المشتري. يقع على عاتق مشغل غرفة التبريد مسؤولية تحصيل رسوم التبريد هذه عند الخروج. يرجى ملاحظة أنه في حالة التسليم، ينطبق نفس المنطق.',
     },
     {
       id: 98,
@@ -1246,7 +1246,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 104,
       title: 'ما هي الرسوم التي تظهر في السوق؟',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'يتم تحديد سعر بيع كل عنصر معروض في السوق مباشرة من قبل البائع ويعتمد على عدد الكيلوجرامات المشتراة. بالإضافة إلى هذا المبلغ، يتضمن السوق رسمين: رسوم السوق هي رسوم معاملة بنسبة 3.5% يتم تحصيلها من قبل فريق Coldtivate لاستضافة التطبيق وصيانته. رسوم الدفع هي الرسوم التي يفرضها نظام الدفع الرقمي (PayStack في نيجيريا) لمعالجة المعاملة.',
+      text: 'يتم تحديد سعر بيع كل عنصر معروض في السوق مباشرة من قبل البائع ويعتمد على عدد الكيلوجرامات المشتراة. بالإضافة إلى هذا المبلغ، يتضمن السوق رسمين: رسوم السوق هي رسوم معاملة بنسبة 3.5% يتم تحصيلها من قبل فريق coldboxstore لاستضافة التطبيق وصيانته. رسوم الدفع هي الرسوم التي يفرضها نظام الدفع الرقمي (PayStack في نيجيريا) لمعالجة المعاملة.',
     },
     {
       id: 105,
@@ -1265,7 +1265,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 107,
       title: 'لقد تلقيت إشعارًا في التطبيق يفيد بأن "المنتج يحتاج إلى إعادة توزيعه". ما هذا؟',
       role: [ERoles.OPERATOR],
-      text: 'نظرًا لإجراءات تسجيل الدخول في الغرفة الباردة، فإن محتويات الصندوق الواحد تنتمي إلى مزارع أو تاجر واحد. وكما هو الحال في السوق، يمكن للمشتري شراء بعض الكيلوجرامات من صندوق مملوك لبائع، فيجب نقل الكمية المشتراة إلى صندوق منفصل. يخبرك هذا الإشعار بأن عملية الشراء قد اكتملت، ومن خلال النقر عليه، يمكنك تصور الصندوق الذي يجب أخذ المنتجات منه. يعد الحفاظ على تنظيم الصناديق أمرًا حيويًا لضمان عدم تسجيل خروج المحاصيل عن طريق الخطأ، وتحصيل رسوم التبريد بشكل صحيح. نوصي باستخدام وظيفة "معرف الصندوق" عند تسجيل الدخول لوضع علامة على الصناديق في Coldtivate بصناديق مادية وتتبع الصناديق التي تتطلب انتباهك بسهولة أكبر بناءً على الإشعار.',
+      text: 'نظرًا لإجراءات تسجيل الدخول في الغرفة الباردة، فإن محتويات الصندوق الواحد تنتمي إلى مزارع أو تاجر واحد. وكما هو الحال في السوق، يمكن للمشتري شراء بعض الكيلوجرامات من صندوق مملوك لبائع، فيجب نقل الكمية المشتراة إلى صندوق منفصل. يخبرك هذا الإشعار بأن عملية الشراء قد اكتملت، ومن خلال النقر عليه، يمكنك تصور الصندوق الذي يجب أخذ المنتجات منه. يعد الحفاظ على تنظيم الصناديق أمرًا حيويًا لضمان عدم تسجيل خروج المحاصيل عن طريق الخطأ، وتحصيل رسوم التبريد بشكل صحيح. نوصي باستخدام وظيفة "معرف الصندوق" عند تسجيل الدخول لوضع علامة على الصناديق في coldboxstore بصناديق مادية وتتبع الصناديق التي تتطلب انتباهك بسهولة أكبر بناءً على الإشعار.',
     },
     {
       id: 108,
@@ -1462,14 +1462,14 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 29,
       title: 'Como posso registar novos utilizadores de unidade de refrigeração?',
       role: [ERoles.OPERATOR],
-      text: 'Para registar um novo utilizador de unidade de refrigeração, aceda ao menu "Gestão" > "Utilizadores de unidades de refrigeração". Clique em "Mais" no canto superior direito e escolha se pretende adicionar um utilizador que já se tenha registado com um código, ou introduzir manualmente os seus dados. Um utilizador de unidade de refrigeração com smartphone já está registado na aplicação Coldtivate e possui um código único, disponível em "Menu" -> "Detalhes da conta" -> "Informações pessoais" -> "Código de importação do utilizador". Se o utilizador não tiver smartphone ou ainda não estiver registado, pode adicioná-lo manualmente introduzindo o nome, sexo e número de telefone. Se não tiver um número pessoal, pode usar o número de um familiar ou amigo. Note que um número de telefone só pode ser utilizado uma vez. Clique em “Registar alterações” para confirmar. Para concluir o registo, deverá responder a um breve questionário com algumas perguntas ao utilizador. Pode também completá-lo mais tarde através de "Gestão" -> "Utilizadores de unidades de refrigeração" -> "Questionário ao utilizador".',
+      text: 'Para registar um novo utilizador de unidade de refrigeração, aceda ao menu "Gestão" > "Utilizadores de unidades de refrigeração". Clique em "Mais" no canto superior direito e escolha se pretende adicionar um utilizador que já se tenha registado com um código, ou introduzir manualmente os seus dados. Um utilizador de unidade de refrigeração com smartphone já está registado na aplicação coldboxstore e possui um código único, disponível em "Menu" -> "Detalhes da conta" -> "Informações pessoais" -> "Código de importação do utilizador". Se o utilizador não tiver smartphone ou ainda não estiver registado, pode adicioná-lo manualmente introduzindo o nome, sexo e número de telefone. Se não tiver um número pessoal, pode usar o número de um familiar ou amigo. Note que um número de telefone só pode ser utilizado uma vez. Clique em “Registar alterações” para confirmar. Para concluir o registo, deverá responder a um breve questionário com algumas perguntas ao utilizador. Pode também completá-lo mais tarde através de "Gestão" -> "Utilizadores de unidades de refrigeração" -> "Questionário ao utilizador".',
     },
     {
       id: 30,
       title:
         'O utilizador de unidade de refrigeração não tem tempo para responder ao questionário durante o registo. O que devo fazer?',
       role: [ERoles.OPERATOR],
-      text: 'Pode saltar o questionário clicando em "Completar mais tarde". Nesse caso, ser-lhe-á pedido que complete o questionário na primeira vez que fizer o check-in desse utilizador. É recomendável dedicar algum tempo a responder ao questionário com o utilizador, pois isso permite oferecer uma experiência mais personalizada dentro da aplicação Coldtivate.',
+      text: 'Pode saltar o questionário clicando em "Completar mais tarde". Nesse caso, ser-lhe-á pedido que complete o questionário na primeira vez que fizer o check-in desse utilizador. É recomendável dedicar algum tempo a responder ao questionário com o utilizador, pois isso permite oferecer uma experiência mais personalizada dentro da aplicação coldboxstore.',
     },
     {
       id: 31,
@@ -1486,9 +1486,9 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 33,
       title:
-        'Tenho sensores de temperatura na unidade de refrigeração. Podem ser ligados ao Coldtivate?',
+        'Tenho sensores de temperatura na unidade de refrigeração. Podem ser ligados ao coldboxstore?',
       role: [ERoles.EMPLOYEE],
-      text: 'Para ligar um sensor a uma unidade de refrigeração, é necessário que o sensor tenha uma API configurada. A API deve utilizar um nome de utilizador e uma palavra-passe enviados através de um pedido POST com o Content-Type: application/json. A resposta deve incluir um accessToken, que será usado num segundo pedido POST. Este segundo pedido deve incluir no URL o identificador da unidade, o tipo de valor (temperatura, humidade) e o token no cabeçalho com a chave Authorization. A resposta deverá conter a última temperatura registada na unidade, no formato {date: dateTimeStamp, value: numérico}. A temperatura deve estar em graus Celsius. Atualmente, suportamos as APIs dos sensores Ecozen, UbiBot, Figorr e Victron Energy. Se tiver outro tipo de sensores que gostaria de integrar com o Coldtivate, por favor contacte-nos através do e-mail app@yourvcca.org.',
+      text: 'Para ligar um sensor a uma unidade de refrigeração, é necessário que o sensor tenha uma API configurada. A API deve utilizar um nome de utilizador e uma palavra-passe enviados através de um pedido POST com o Content-Type: application/json. A resposta deve incluir um accessToken, que será usado num segundo pedido POST. Este segundo pedido deve incluir no URL o identificador da unidade, o tipo de valor (temperatura, humidade) e o token no cabeçalho com a chave Authorization. A resposta deverá conter a última temperatura registada na unidade, no formato {date: dateTimeStamp, value: numérico}. A temperatura deve estar em graus Celsius. Atualmente, suportamos as APIs dos sensores Ecozen, UbiBot, Figorr e Victron Energy. Se tiver outro tipo de sensores que gostaria de integrar com o coldboxstore, por favor contacte-nos através do e-mail app@yourvcca.org.',
     },
     {
       id: 34,
@@ -1662,7 +1662,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 66,
       title: 'Não tenho tempo para responder ao questionário durante o registo. O que devo fazer?',
       role: [ERoles.COOLING_USER],
-      text: 'Pode ignorar as perguntas do questionário clicando em "Completar mais tarde". Irá encontrar o questionário na secção Detalhes da Conta e pode completá-lo a qualquer momento. No entanto, recomenda-se que responda com atenção ao iniciar a utilização da unidade, para ter uma experiência mais personalizada com a aplicação Coldtivate.',
+      text: 'Pode ignorar as perguntas do questionário clicando em "Completar mais tarde". Irá encontrar o questionário na secção Detalhes da Conta e pode completá-lo a qualquer momento. No entanto, recomenda-se que responda com atenção ao iniciar a utilização da unidade, para ter uma experiência mais personalizada com a aplicação coldboxstore.',
     },
     {
       id: 67,
@@ -1675,13 +1675,13 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 68,
       title: 'Como posso ligar os sensores da unidade à aplicação?',
       role: [ERoles.OPERATOR],
-      text: 'Se existirem sensores de temperatura na unidade que possam ser ligados à aplicação Coldtivate, por favor comunique com o seu responsável. Apenas utilizadores com o perfil de Funcionário Registado podem associar sensores a unidades de refrigeração criadas no Coldtivate.',
+      text: 'Se existirem sensores de temperatura na unidade que possam ser ligados à aplicação coldboxstore, por favor comunique com o seu responsável. Apenas utilizadores com o perfil de Funcionário Registado podem associar sensores a unidades de refrigeração criadas no coldboxstore.',
     },
     {
       id: 69,
       title: 'O que é o inquérito de mercado pós-armazenamento e porque devo preenchê-lo?',
       role: [ERoles.COOLING_USER],
-      text: 'O inquérito de mercado pode ser acedido clicando nos três pontos ao lado de cada check-out na aba "Mais" -> "Histórico" e selecionando "Preencher inquérito de mercado". O inquérito é muito curto e pede informações sobre o preço de venda do produto que armazenou anteriormente na unidade, bem como a quantidade que se estragou. Esta informação será tratada como confidencial e usada exclusivamente pela equipa do Coldtivate para avaliar o impacto da utilização de armazenamento refrigerado. Um ponto vermelho irá identificar os check-outs para os quais o inquérito ainda não foi preenchido. Será lembrado dos check-outs que requerem a sua atenção no painel de notificações e pode clicar na notificação para abrir o inquérito. Também pode aceder aos inquéritos por preencher na aba "Análises" e depois clicar em "Impacto".',
+      text: 'O inquérito de mercado pode ser acedido clicando nos três pontos ao lado de cada check-out na aba "Mais" -> "Histórico" e selecionando "Preencher inquérito de mercado". O inquérito é muito curto e pede informações sobre o preço de venda do produto que armazenou anteriormente na unidade, bem como a quantidade que se estragou. Esta informação será tratada como confidencial e usada exclusivamente pela equipa do coldboxstore para avaliar o impacto da utilização de armazenamento refrigerado. Um ponto vermelho irá identificar os check-outs para os quais o inquérito ainda não foi preenchido. Será lembrado dos check-outs que requerem a sua atenção no painel de notificações e pode clicar na notificação para abrir o inquérito. Também pode aceder aos inquéritos por preencher na aba "Análises" e depois clicar em "Impacto".',
     },
     {
       id: 70,
@@ -1741,7 +1741,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 80,
       title: 'Como posso eliminar um utilizador de refrigeração da lista?',
       role: [ERoles.OPERATOR],
-      text: 'Para eliminar um utilizador de refrigeração da lista, vá a "Gestão" -> "Utilizadores de refrigeração", clique no nome do utilizador e depois no botão "Eliminar". Atenção: apenas utilizadores sem check-ins pendentes podem ser eliminados! Se houver check-ins pendentes, contacte o utilizador para recolher o produto. Esta ação não pode ser revertida! Se o utilizador tiver um smartphone, esta operação irá removê-lo da sua lista, mas ele continuará a poder usar o Coldtivate. Se o utilizador não tiver smartphone, esta operação elimina a conta e liberta o número de telefone associado.',
+      text: 'Para eliminar um utilizador de refrigeração da lista, vá a "Gestão" -> "Utilizadores de refrigeração", clique no nome do utilizador e depois no botão "Eliminar". Atenção: apenas utilizadores sem check-ins pendentes podem ser eliminados! Se houver check-ins pendentes, contacte o utilizador para recolher o produto. Esta ação não pode ser revertida! Se o utilizador tiver um smartphone, esta operação irá removê-lo da sua lista, mas ele continuará a poder usar o coldboxstore. Se o utilizador não tiver smartphone, esta operação elimina a conta e liberta o número de telefone associado.',
     },
     {
       id: 81,
@@ -1767,13 +1767,13 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 84,
       title: 'Recebi uma notificação. O que devo fazer?',
       role: [ERoles.COOLING_USER],
-      text: 'Pode receber diferentes tipos de notificações: primeiro, a aplicação pode informá-lo de que algumas das caixas que armazenou estão prestes a estragar-se. Recomendamos que recolha as caixas da unidade o mais rápido possível. Outra notificação que pode receber serve para lembrar que deve completar o inquérito de mercado pós-armazenamento ou o inquérito de base. Pode clicar na notificação para aceder aos inquéritos. A informação recolhida é muito valiosa para a equipa do Coldtivate monitorizar os benefícios de usar unidades de refrigeração em comparação com o armazenamento ao ar livre. Se tiver caixas listadas como "à venda" no marketplace, também receberá notificações quando forem vendidas ou se o operador atualizar o preço de venda. Se não tiver solicitado a alteração do preço, fale imediatamente com o operador.',
+      text: 'Pode receber diferentes tipos de notificações: primeiro, a aplicação pode informá-lo de que algumas das caixas que armazenou estão prestes a estragar-se. Recomendamos que recolha as caixas da unidade o mais rápido possível. Outra notificação que pode receber serve para lembrar que deve completar o inquérito de mercado pós-armazenamento ou o inquérito de base. Pode clicar na notificação para aceder aos inquéritos. A informação recolhida é muito valiosa para a equipa do coldboxstore monitorizar os benefícios de usar unidades de refrigeração em comparação com o armazenamento ao ar livre. Se tiver caixas listadas como "à venda" no marketplace, também receberá notificações quando forem vendidas ou se o operador atualizar o preço de venda. Se não tiver solicitado a alteração do preço, fale imediatamente com o operador.',
     },
     {
       id: 85,
       title: 'O que é apresentado no mapa de unidades de refrigeração?',
       role: [ERoles.COOLING_USER],
-      text: 'No mapa pode visualizar a sua localização (será pedido que autorize o Coldtivate a aceder à sua localização), a localização das unidades de refrigeração à sua volta e algumas informações sobre essas unidades (monocultura ou multicultura, empresa, preços). Ao dirigir-se à unidade, pode obter mais informações com o operador sobre o funcionamento e a possibilidade de armazenar os seus produtos.',
+      text: 'No mapa pode visualizar a sua localização (será pedido que autorize o coldboxstore a aceder à sua localização), a localização das unidades de refrigeração à sua volta e algumas informações sobre essas unidades (monocultura ou multicultura, empresa, preços). Ao dirigir-se à unidade, pode obter mais informações com o operador sobre o funcionamento e a possibilidade de armazenar os seus produtos.',
     },
     {
       id: 86,
@@ -1794,7 +1794,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         'Um operador está a pedir-me um código para me adicionar à lista de utilizadores de refrigeração da empresa. Onde posso encontrar esse código?',
       role: [ERoles.COOLING_USER],
-      text: 'Quando se registou no Coldtivate, recebeu um identificador único em forma de código. Este código pode ser utilizado por um operador para o adicionar à lista de utilizadores de refrigeração da empresa, o que é necessário para que os operadores façam check-in das suas caixas. O código pode ser encontrado em "Menu" -> "Detalhes da conta" -> "Dados pessoais" -> Código de importação do utilizador de refrigeração.',
+      text: 'Quando se registou no coldboxstore, recebeu um identificador único em forma de código. Este código pode ser utilizado por um operador para o adicionar à lista de utilizadores de refrigeração da empresa, o que é necessário para que os operadores façam check-in das suas caixas. O código pode ser encontrado em "Menu" -> "Detalhes da conta" -> "Dados pessoais" -> Código de importação do utilizador de refrigeração.',
     },
     {
       id: 89,
@@ -1805,7 +1805,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 90,
       title:
-        'O meu tipo de sensor de temperatura é suportado pelo Coldtivate (Ecozen, UbiBot, Figorr, Victron Energy). Como posso configurar os sensores?',
+        'O meu tipo de sensor de temperatura é suportado pelo coldboxstore (Ecozen, UbiBot, Figorr, Victron Energy). Como posso configurar os sensores?',
       role: [ERoles.EMPLOYEE],
       text: 'Para ligar um sensor a uma unidade de refrigeração, vá a "Menu" -> "Gestão" -> "Unidades de refrigeração", selecione a unidade para a qual pretende configurar o sensor e ative a opção "Sensor disponível". Pode seguir as instruções específicas para cada tipo de sensor suportado e fazer a autenticação. Lembre-se de clicar em "Guardar" no final da página para que as alterações sejam salvas. As leituras de temperatura dos sensores devem aparecer nas próximas 6 horas em "Mais" -> "Unidades de refrigeração" -> "Condições ambientais".',
     },
@@ -1814,19 +1814,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         'Qual é a diferença entre as vistas "Empresa", "Agregado" e "Comparação" na aba Análises?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'A aba Análises na barra de navegação fornece estatísticas resumidas de todas as câmaras frigoríficas da empresa. Na vista "Empresa", vê os dados sobre utilizadores, utilização e impacto de todas as unidades de refrigeração desde que começou a usar o Coldtivate. Ao clicar em "Agregado", pode configurar quais as unidades e o período de tempo de interesse. Os dados exibidos sobre utilizadores, utilização e impacto são agregados nas unidades selecionadas e no intervalo de tempo escolhido. Se quiser comparar entre unidades, pode usar a vista "Comparação". Aqui, os dados são apresentados em tabelas, onde cada unidade tem uma linha com os dados referentes ao período escolhido. Pode ordenar os dados e mudar as unidades e o período a qualquer momento.',
+      text: 'A aba Análises na barra de navegação fornece estatísticas resumidas de todas as câmaras frigoríficas da empresa. Na vista "Empresa", vê os dados sobre utilizadores, utilização e impacto de todas as unidades de refrigeração desde que começou a usar o coldboxstore. Ao clicar em "Agregado", pode configurar quais as unidades e o período de tempo de interesse. Os dados exibidos sobre utilizadores, utilização e impacto são agregados nas unidades selecionadas e no intervalo de tempo escolhido. Se quiser comparar entre unidades, pode usar a vista "Comparação". Aqui, os dados são apresentados em tabelas, onde cada unidade tem uma linha com os dados referentes ao período escolhido. Pode ordenar os dados e mudar as unidades e o período a qualquer momento.',
     },
     {
       id: 92,
       title: 'Como são calculados os dados exibidos na aba Análises?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'O objetivo da aba Análises é oferecer uma visão abrangente do que está a acontecer nas câmaras frigoríficas. Os dados de utilizadores e utilização são calculados com base nas informações de check-in e check-out registadas no Coldtivate. Assim, pode perceber quantos utilizadores e operações foram realizados, bem como a receita ou ocupação média de cada câmara. Já os dados da secção de impacto são baseados em inquéritos que os utilizadores de refrigeração são convidados a preencher no registo (antes de começarem a usar a refrigeração) e regularmente após cada check-out. Estes dados são essenciais para estimar a evolução das perdas pós-colheita e da receita dos utilizadores ao longo do tempo. Por fim, a estimativa de CO2 compara as emissões associadas ao uso de refrigeração com as emissões previstas que a mesma cultura causaria se fosse armazenada sem refrigeração.',
+      text: 'O objetivo da aba Análises é oferecer uma visão abrangente do que está a acontecer nas câmaras frigoríficas. Os dados de utilizadores e utilização são calculados com base nas informações de check-in e check-out registadas no coldboxstore. Assim, pode perceber quantos utilizadores e operações foram realizados, bem como a receita ou ocupação média de cada câmara. Já os dados da secção de impacto são baseados em inquéritos que os utilizadores de refrigeração são convidados a preencher no registo (antes de começarem a usar a refrigeração) e regularmente após cada check-out. Estes dados são essenciais para estimar a evolução das perdas pós-colheita e da receita dos utilizadores ao longo do tempo. Por fim, a estimativa de CO2 compara as emissões associadas ao uso de refrigeração com as emissões previstas que a mesma cultura causaria se fosse armazenada sem refrigeração.',
     },
     {
       id: 93,
       title: 'Como são calculados os dados exibidos na aba Análises?',
       role: [ERoles.COOLING_USER],
-      text: 'O objetivo da aba Análises é oferecer-lhe uma visão completa do impacto da refrigeração nas suas culturas. Os dados apresentados em "Caixas" são calculados com base nas informações de check-in e check-out registadas no Coldtivate. Assim, pode ver quanto armazenou de cada cultura e o tempo médio de armazenamento. Os dados da secção "Impacto" baseiam-se em inquéritos que lhe são pedidos no momento do registo (antes de começar a usar refrigeração) e regularmente ao fazer check-out de produtos armazenados. Estes dados são cruciais para estimar a evolução das perdas pós-colheita e da sua receita ao longo do tempo. Um lembrete para preencher os inquéritos é exibido no topo da página e incentivamos que os preencha sempre que possível. Em ambas as secções, pode usar o botão "Configurar" no canto superior direito para selecionar câmaras ou períodos de tempo específicos. Se nada for selecionado, verá todos os dados disponíveis desde que começou a usar o Coldtivate.',
+      text: 'O objetivo da aba Análises é oferecer-lhe uma visão completa do impacto da refrigeração nas suas culturas. Os dados apresentados em "Caixas" são calculados com base nas informações de check-in e check-out registadas no coldboxstore. Assim, pode ver quanto armazenou de cada cultura e o tempo médio de armazenamento. Os dados da secção "Impacto" baseiam-se em inquéritos que lhe são pedidos no momento do registo (antes de começar a usar refrigeração) e regularmente ao fazer check-out de produtos armazenados. Estes dados são cruciais para estimar a evolução das perdas pós-colheita e da sua receita ao longo do tempo. Um lembrete para preencher os inquéritos é exibido no topo da página e incentivamos que os preencha sempre que possível. Em ambas as secções, pode usar o botão "Configurar" no canto superior direito para selecionar câmaras ou períodos de tempo específicos. Se nada for selecionado, verá todos os dados disponíveis desde que começou a usar o coldboxstore.',
     },
     {
       id: 94,
@@ -1838,19 +1838,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 95,
       title: 'Qual é o papel de uma empresa de refrigeração no marketplace?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Uma empresa de refrigeração e os seus colaboradores podem decidir o nível de envolvimento no marketplace. Como a funcionalidade depende do registo de caixas com check-in na aplicação Coldtivate, o marketplace só funciona se o operador registar regularmente os check-ins e check-outs na aplicação. Para os produtos comprados através do marketplace, a empresa de refrigeração recebe a taxa de refrigeração como parte da transação digital. Por isso, é fundamental que um Funcionário Registado defina os dados bancários da empresa: para isso, aceda a "Menu" -> "Gestão" -> "Definições de vendedor (Empresa)" -> "Opções de pagamento". Além disso, as empresas de refrigeração podem optar por comprar produtos aos agricultores (atuando como compradores) e revendê-los no marketplace (atuando como vendedores). Ambas as transações podem ser feitas na plataforma Coldtivate. Note que tanto os Operadores como os Funcionários Registados têm a opção de comprar para si (como indivíduos) ou em nome da empresa que representam.',
+      text: 'Uma empresa de refrigeração e os seus colaboradores podem decidir o nível de envolvimento no marketplace. Como a funcionalidade depende do registo de caixas com check-in na aplicação coldboxstore, o marketplace só funciona se o operador registar regularmente os check-ins e check-outs na aplicação. Para os produtos comprados através do marketplace, a empresa de refrigeração recebe a taxa de refrigeração como parte da transação digital. Por isso, é fundamental que um Funcionário Registado defina os dados bancários da empresa: para isso, aceda a "Menu" -> "Gestão" -> "Definições de vendedor (Empresa)" -> "Opções de pagamento". Além disso, as empresas de refrigeração podem optar por comprar produtos aos agricultores (atuando como compradores) e revendê-los no marketplace (atuando como vendedores). Ambas as transações podem ser feitas na plataforma coldboxstore. Note que tanto os Operadores como os Funcionários Registados têm a opção de comprar para si (como indivíduos) ou em nome da empresa que representam.',
     },
     {
       id: 96,
       title: 'Qual é o papel de um operador de câmara fria no marketplace?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Os operadores de câmaras frias no marketplace têm três papéis principais. 1) Ajudam utilizadores de refrigeração sem smartphone a configurar a conta bancária (para que possam receber pagamentos digitais), listar as suas caixas como "à venda" e definir o preço. 2) São responsáveis por manter os produtos na câmara organizados, seguindo o princípio de que todo o conteúdo de uma caixa pertence a um único utilizador: quando parte do conteúdo de uma caixa é comprado (e passa a pertencer a outro dono), o operador recebe uma notificação para mover o produto comprado para uma nova caixa. Se a caixa inteira for comprada, nenhuma ação é necessária. 3) Os operadores de câmara fria são responsáveis por todas as operações de check-out, incluindo as resultantes de vendas no marketplace: quando um comprador (ou representante de entrega) chega à câmara para levantar a compra, o operador deve realizar o check-out da caixa correspondente no Coldtivate.',
+      text: 'Os operadores de câmaras frias no marketplace têm três papéis principais. 1) Ajudam utilizadores de refrigeração sem smartphone a configurar a conta bancária (para que possam receber pagamentos digitais), listar as suas caixas como "à venda" e definir o preço. 2) São responsáveis por manter os produtos na câmara organizados, seguindo o princípio de que todo o conteúdo de uma caixa pertence a um único utilizador: quando parte do conteúdo de uma caixa é comprado (e passa a pertencer a outro dono), o operador recebe uma notificação para mover o produto comprado para uma nova caixa. Se a caixa inteira for comprada, nenhuma ação é necessária. 3) Os operadores de câmara fria são responsáveis por todas as operações de check-out, incluindo as resultantes de vendas no marketplace: quando um comprador (ou representante de entrega) chega à câmara para levantar a compra, o operador deve realizar o check-out da caixa correspondente no coldboxstore.',
     },
     {
       id: 97,
       title: 'Como são cobradas as taxas de refrigeração no marketplace?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Quando uma caixa é comprada no marketplace, a taxa de refrigeração até esse dia é deduzida do valor pago pelo comprador e transferida para a empresa de refrigeração. Assim, o vendedor não precisa de pagar a taxa diretamente, pois esta já foi tratada na transação digital. Por isso, é essencial que tanto o vendedor como a empresa de refrigeração tenham uma conta bancária configurada no Coldtivate. Por exemplo, se uma caixa for vendida por 20 USD e o vendedor tiver uma dívida de 3 USD em taxas de refrigeração, dos 20 USD pagos, 17 USD são transferidos para a conta do vendedor e 3 USD para a da empresa. Se o comprador levantar o produto no mesmo dia, não há nova taxa de refrigeração (porque o dia já está pago pelo vendedor). No entanto, se decidir manter o produto armazenado, a taxa normal aplica-se e será calculada consoante o número de dias adicionais até ao levantamento. O operador da câmara é responsável por cobrar essas taxas no momento do check-out. No caso de entrega, aplica-se a mesma lógica.',
+      text: 'Quando uma caixa é comprada no marketplace, a taxa de refrigeração até esse dia é deduzida do valor pago pelo comprador e transferida para a empresa de refrigeração. Assim, o vendedor não precisa de pagar a taxa diretamente, pois esta já foi tratada na transação digital. Por isso, é essencial que tanto o vendedor como a empresa de refrigeração tenham uma conta bancária configurada no coldboxstore. Por exemplo, se uma caixa for vendida por 20 USD e o vendedor tiver uma dívida de 3 USD em taxas de refrigeração, dos 20 USD pagos, 17 USD são transferidos para a conta do vendedor e 3 USD para a da empresa. Se o comprador levantar o produto no mesmo dia, não há nova taxa de refrigeração (porque o dia já está pago pelo vendedor). No entanto, se decidir manter o produto armazenado, a taxa normal aplica-se e será calculada consoante o número de dias adicionais até ao levantamento. O operador da câmara é responsável por cobrar essas taxas no momento do check-out. No caso de entrega, aplica-se a mesma lógica.',
     },
     {
       id: 98,
@@ -1893,7 +1893,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 104,
       title: 'Quais são as taxas que aparecem no marketplace?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'O preço de venda de cada item exibido no marketplace é definido diretamente pelo vendedor e depende de quantos kg são comprados. Para além desse valor, o marketplace aplica duas taxas: a Taxa de Marketplace, que é uma taxa de 3.5% cobrada pela equipa do Coldtivate para manter a aplicação funcional, e a Taxa de Pagamento, que corresponde à taxa aplicada pelo sistema de pagamento digital (PayStack na Nigéria) para processar a transação.',
+      text: 'O preço de venda de cada item exibido no marketplace é definido diretamente pelo vendedor e depende de quantos kg são comprados. Para além desse valor, o marketplace aplica duas taxas: a Taxa de Marketplace, que é uma taxa de 3.5% cobrada pela equipa do coldboxstore para manter a aplicação funcional, e a Taxa de Pagamento, que corresponde à taxa aplicada pelo sistema de pagamento digital (PayStack na Nigéria) para processar a transação.',
     },
     {
       id: 105,
@@ -1913,7 +1913,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         'Recebi uma notificação na aplicação a dizer que "O produto precisa de ser redistribuído". O que significa?',
       role: [ERoles.OPERATOR],
-      text: 'Devido ao procedimento de check-in na câmara fria, o conteúdo de uma caixa pertence a um único agricultor ou comerciante. No entanto, no marketplace, um comprador pode adquirir apenas alguns kg de uma caixa pertencente a um vendedor, e essa quantidade comprada deve ser movida para uma caixa separada. Esta notificação informa que uma compra foi concluída, e ao clicar nela pode visualizar de que caixa o produto deve ser retirado. Manter as caixas organizadas é essencial para garantir que os produtos não são retirados por engano e que as taxas de refrigeração são corretamente cobradas. Recomendamos utilizar a funcionalidade "ID da caixa" no check-in para identificar as caixas físicas na aplicação Coldtivate e acompanhar mais facilmente quais necessitam da sua atenção com base na notificação.',
+      text: 'Devido ao procedimento de check-in na câmara fria, o conteúdo de uma caixa pertence a um único agricultor ou comerciante. No entanto, no marketplace, um comprador pode adquirir apenas alguns kg de uma caixa pertencente a um vendedor, e essa quantidade comprada deve ser movida para uma caixa separada. Esta notificação informa que uma compra foi concluída, e ao clicar nela pode visualizar de que caixa o produto deve ser retirado. Manter as caixas organizadas é essencial para garantir que os produtos não são retirados por engano e que as taxas de refrigeração são corretamente cobradas. Recomendamos utilizar a funcionalidade "ID da caixa" no check-in para identificar as caixas físicas na aplicação coldboxstore e acompanhar mais facilmente quais necessitam da sua atenção com base na notificação.',
     },
     {
       id: 108,
@@ -2115,14 +2115,14 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 29,
       title: 'Comment puis-je enregistrer de nouveaux utilisateurs de refroidissement ?',
       role: [ERoles.OPERATOR],
-      text: 'Pour enregistrer un nouvel utilisateur de climatisation, accédez au menu « Gestion » > « Utilisateurs de climatisation ». Cliquez sur le « + » en haut à droite et choisissez d"ajouter un utilisateur déjà enregistré avec un code ou d"ajouter ses informations. Un utilisateur de climatisation possédant un smartphone et déjà inscrit à Coldtivate dispose d"un code unique, accessible sous « Menu » -> « Détails du compte » -> « Informations personnelles » -> « Code d"importation d"utilisateur de climatisation ». Si l"utilisateur n"a pas de smartphone ou n"est pas encore inscrit, vous pouvez l"ajouter en indiquant son nom, son sexe et son numéro de téléphone. Si l"utilisateur n"a pas de numéro personnel, vous pouvez utiliser le numéro d"une autre personne (amis, famille, etc.). Veuillez noter qu"un numéro de téléphone ne peut être utilisé qu"une seule fois. Cliquez sur « Enregistrer les modifications » pour confirmer. Pour finaliser l"inscription, vous devez répondre à un court questionnaire en posant quelques questions à l"utilisateur de climatisation. L"enquête peut également être complétée ultérieurement en accédant à « Gestion » -> « Utilisateurs de refroidissement » -> « Enquête auprès des utilisateurs de refroidissement ».',
+      text: 'Pour enregistrer un nouvel utilisateur de climatisation, accédez au menu « Gestion » > « Utilisateurs de climatisation ». Cliquez sur le « + » en haut à droite et choisissez d"ajouter un utilisateur déjà enregistré avec un code ou d"ajouter ses informations. Un utilisateur de climatisation possédant un smartphone et déjà inscrit à coldboxstore dispose d"un code unique, accessible sous « Menu » -> « Détails du compte » -> « Informations personnelles » -> « Code d"importation d"utilisateur de climatisation ». Si l"utilisateur n"a pas de smartphone ou n"est pas encore inscrit, vous pouvez l"ajouter en indiquant son nom, son sexe et son numéro de téléphone. Si l"utilisateur n"a pas de numéro personnel, vous pouvez utiliser le numéro d"une autre personne (amis, famille, etc.). Veuillez noter qu"un numéro de téléphone ne peut être utilisé qu"une seule fois. Cliquez sur « Enregistrer les modifications » pour confirmer. Pour finaliser l"inscription, vous devez répondre à un court questionnaire en posant quelques questions à l"utilisateur de climatisation. L"enquête peut également être complétée ultérieurement en accédant à « Gestion » -> « Utilisateurs de refroidissement » -> « Enquête auprès des utilisateurs de refroidissement ».',
     },
     {
       id: 30,
       title:
         "L'utilisateur du système de refroidissement n'a pas le temps de répondre aux questions du sondage lors de son inscription. Que dois-je faire ?",
       role: [ERoles.OPERATOR],
-      text: 'Vous pouvez passer les questions de l’enquête en cliquant sur "Compléter plus tard". Dans ce cas, vous serez invité à compléter l’enquête lors de la première création d’un enregistrement pour cet utilisateur de refroidissement. Il est recommandé de prendre le temps de répondre aux questions de l’enquête de manière approfondie : de cette façon, l’utilisateur peut bénéficier d’une expérience plus personnalisée avec l’application Coldtivate !',
+      text: 'Vous pouvez passer les questions de l’enquête en cliquant sur "Compléter plus tard". Dans ce cas, vous serez invité à compléter l’enquête lors de la première création d’un enregistrement pour cet utilisateur de refroidissement. Il est recommandé de prendre le temps de répondre aux questions de l’enquête de manière approfondie : de cette façon, l’utilisateur peut bénéficier d’une expérience plus personnalisée avec l’application coldboxstore !',
     },
     {
       id: 31,
@@ -2159,7 +2159,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 36,
       title:
-        " J'ai des capteurs de température dans la chambre froide. Peuvent-ils être connectés à Coldtivate ?",
+        " J'ai des capteurs de température dans la chambre froide. Peuvent-ils être connectés à coldboxstore ?",
       role: [ERoles.AUTH],
       text: 'Le Hub de Connaissance est une page accessible en cliquant sur le Menu en haut à gauche. Il contient des informations utiles sur les meilleures pratiques de stockage pour différents produits, y compris la température optimale et le temps de stockage approximatif à cette température.',
     },
@@ -2167,7 +2167,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 37,
       title: "Comment connecter les capteurs de la pièce avec l'application ?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Si des capteurs de température dans la pièce peuvent être connectés à l"application Coldtivate, veuillez contacter votre responsable. Seuls les utilisateurs disposant du rôle d"employé enregistré peuvent associer des capteurs aux unités de refroidissement créées dans Coldtivate.',
+      text: 'Si des capteurs de température dans la pièce peuvent être connectés à l"application coldboxstore, veuillez contacter votre responsable. Seuls les utilisateurs disposant du rôle d"employé enregistré peuvent associer des capteurs aux unités de refroidissement créées dans coldboxstore.',
     },
     {
       id: 38,
@@ -2186,7 +2186,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 40,
       title: "Qu'est-ce que l'étude de marché après stockage et pourquoi dois-je la remplir ?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'L"étude de marché est accessible en cliquant sur les trois points à côté de chaque passage en caisse dans l"onglet « Plus » -> « Historique », puis en sélectionnant « Remplir l"étude de marché ». Très courte, cette enquête demande des informations sur le prix de vente des produits que vous avez précédemment stockés dans la chambre froide, ainsi que sur leur avarie. Ces informations seront traitées de manière confidentielle et seront utilisées exclusivement par l"équipe Coldtivate pour évaluer l"impact de l"utilisation du stockage à froid. Un point rouge identifiera les passages en caisse pour lesquels l"étude de marché n"a pas encore été réalisée. Un rappel vous sera envoyé dans le panneau de notification pour les passages nécessitant votre attention. Cliquez sur la notification pour ouvrir l"enquête. Vous pouvez également accéder aux enquêtes à remplir dans l"onglet « Analyses », puis cliquer sur « Impact ».',
+      text: 'L"étude de marché est accessible en cliquant sur les trois points à côté de chaque passage en caisse dans l"onglet « Plus » -> « Historique », puis en sélectionnant « Remplir l"étude de marché ». Très courte, cette enquête demande des informations sur le prix de vente des produits que vous avez précédemment stockés dans la chambre froide, ainsi que sur leur avarie. Ces informations seront traitées de manière confidentielle et seront utilisées exclusivement par l"équipe coldboxstore pour évaluer l"impact de l"utilisation du stockage à froid. Un point rouge identifiera les passages en caisse pour lesquels l"étude de marché n"a pas encore été réalisée. Un rappel vous sera envoyé dans le panneau de notification pour les passages nécessitant votre attention. Cliquez sur la notification pour ouvrir l"enquête. Vous pouvez également accéder aux enquêtes à remplir dans l"onglet « Analyses », puis cliquer sur « Impact ».',
     },
     {
       id: 41,
@@ -2332,7 +2332,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 66,
       title: "Je ne comprends pas certaines parties de l'application. Qui dois-je contacter ?",
       role: [ERoles.COOLING_USER],
-      text: 'Vous pouvez passer les questions de l’enquête en cliquant sur "Compléter plus tard". Vous trouverez l’enquête dans les Détails de votre compte et pouvez la compléter à tout moment. Cependant, il est recommandé de prendre le temps de répondre aux questions de l’enquête de manière approfondie lorsque vous commencez à utiliser la pièce : ainsi, vous bénéficierez d’une expérience plus personnalisée avec l’application Coldtivate !',
+      text: 'Vous pouvez passer les questions de l’enquête en cliquant sur "Compléter plus tard". Vous trouverez l’enquête dans les Détails de votre compte et pouvez la compléter à tout moment. Cependant, il est recommandé de prendre le temps de répondre aux questions de l’enquête de manière approfondie lorsque vous commencez à utiliser la pièce : ainsi, vous bénéficierez d’une expérience plus personnalisée avec l’application coldboxstore !',
     },
     {
       id: 67,
@@ -2345,7 +2345,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         "Quelque chose ne fonctionne pas correctement dans l'application. Qui dois-je contacter ?",
       role: [ERoles.OPERATOR],
-      text: 'S’il y a des capteurs de température dans la pièce qui peuvent être connectés à l’application Coldtivate, veuillez communiquer avec votre responsable. Seul un utilisateur avec un rôle d’employé enregistré peut lier les capteurs aux unités de refroidissement créées dans Coldtivate.',
+      text: 'S’il y a des capteurs de température dans la pièce qui peuvent être connectés à l’application coldboxstore, veuillez communiquer avec votre responsable. Seul un utilisateur avec un rôle d’employé enregistré peut lier les capteurs aux unités de refroidissement créées dans coldboxstore.',
     },
     {
       id: 69,
@@ -2417,7 +2417,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 80,
       title: 'Je souhaite supprimer mon compte. Que dois-je faire ?',
       role: [ERoles.OPERATOR],
-      text: 'Pour supprimer un utilisateur de refroidissement de la liste, accédez à "Gestion" -> "Utilisateurs de Refroidissement", cliquez sur le nom de l"utilisateur de refroidissement puis sur le bouton "Supprimer". Veuillez noter que seuls les utilisateurs sans enregistrements en attente peuvent être supprimés ! S"il y a des enregistrements en attente, veuillez contacter l"utilisateur pour qu"il récupère la production. Notez que cette action ne peut pas être annulée ! Si l"utilisateur a un smartphone, cette opération le retirera de votre liste, mais l"utilisateur pourra toujours utiliser Coldtivate. Si l"utilisateur n"a pas de smartphone, cette opération supprimera son compte et libérera le numéro de téléphone associé.',
+      text: 'Pour supprimer un utilisateur de refroidissement de la liste, accédez à "Gestion" -> "Utilisateurs de Refroidissement", cliquez sur le nom de l"utilisateur de refroidissement puis sur le bouton "Supprimer". Veuillez noter que seuls les utilisateurs sans enregistrements en attente peuvent être supprimés ! S"il y a des enregistrements en attente, veuillez contacter l"utilisateur pour qu"il récupère la production. Notez que cette action ne peut pas être annulée ! Si l"utilisateur a un smartphone, cette opération le retirera de votre liste, mais l"utilisateur pourra toujours utiliser coldboxstore. Si l"utilisateur n"a pas de smartphone, cette opération supprimera son compte et libérera le numéro de téléphone associé.',
     },
     {
       id: 81,
@@ -2468,7 +2468,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 88,
       title: 'Que montre la carte des unités de refroidissement ?',
       role: [ERoles.COOLING_USER],
-      text: 'Sur la carte, vous pouvez visualiser votre position (l"autorisation d"accès à Coldtivate vous sera demandée), l"emplacement des unités de refroidissement autour de vous et certaines informations les concernant (produit unique ou multiple, entreprise, prix). En vous rendant dans la chambre froide, vous pourrez obtenir des informations complémentaires auprès de l"exploitant sur le fonctionnement de l"unité et les possibilités de stockage.',
+      text: 'Sur la carte, vous pouvez visualiser votre position (l"autorisation d"accès à coldboxstore vous sera demandée), l"emplacement des unités de refroidissement autour de vous et certaines informations les concernant (produit unique ou multiple, entreprise, prix). En vous rendant dans la chambre froide, vous pourrez obtenir des informations complémentaires auprès de l"exploitant sur le fonctionnement de l"unité et les possibilités de stockage.',
     },
     {
       id: 89,
@@ -2479,7 +2479,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 90,
       title:
-        'Mon type de capteur de température est compatible avec Coldtivate (Ecozen, UbiBot, Figorr, Victron Energy). Comment configurer les capteurs ?',
+        'Mon type de capteur de température est compatible avec coldboxstore (Ecozen, UbiBot, Figorr, Victron Energy). Comment configurer les capteurs ?',
       role: [ERoles.EMPLOYEE],
       text: 'Pour connecter un capteur à un climatiseur, accédez à « Menu » -> « Gestion » -> « Unités de refroidissement », sélectionnez l"unité pour laquelle le capteur doit être configuré, puis activez « Capteur disponible ». Suivez les instructions pour chaque type de capteur pris en charge et authentifiez-vous. N"oubliez pas de cliquer sur « Enregistrer » en bas de la page pour que les modifications soient prises en compte. Vous devriez voir les relevés de température de vos capteurs dans les 6 heures suivantes sous « Plus » -> « Unités de refroidissement » -> « Conditions ambiantes ».',
     },
@@ -2488,19 +2488,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         " Quelle est la différence entre les vues « Entreprise », « Agrégée » et « Comparaison » dans l'onglet Analyses ?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'L"onglet « Analyses » de la barre de navigation fournit des statistiques récapitulatives pour toutes les chambres froides de l"entreprise. La vue « Entreprise » affiche les données relatives aux utilisateurs, à l"utilisation et à l"impact de toutes les unités de refroidissement depuis votre première utilisation de Coldtivate. En cliquant sur « Agrégé », vous êtes invité à configurer les unités de refroidissement et la période qui vous intéressent. Les données affichées concernant les utilisateurs, l"utilisation et l"impact sont agrégées pour les unités de refroidissement sélectionnées sur la période choisie. Pour comparer les unités, utilisez l"onglet « Comparaison ». Les données sont alors présentées sous forme de tableaux, où sont présentées les données de chaque unité de refroidissement sur la période choisie. Vous pouvez trier les données et modifier les unités de refroidissement et la période à tout moment.',
+      text: 'L"onglet « Analyses » de la barre de navigation fournit des statistiques récapitulatives pour toutes les chambres froides de l"entreprise. La vue « Entreprise » affiche les données relatives aux utilisateurs, à l"utilisation et à l"impact de toutes les unités de refroidissement depuis votre première utilisation de coldboxstore. En cliquant sur « Agrégé », vous êtes invité à configurer les unités de refroidissement et la période qui vous intéressent. Les données affichées concernant les utilisateurs, l"utilisation et l"impact sont agrégées pour les unités de refroidissement sélectionnées sur la période choisie. Pour comparer les unités, utilisez l"onglet « Comparaison ». Les données sont alors présentées sous forme de tableaux, où sont présentées les données de chaque unité de refroidissement sur la période choisie. Vous pouvez trier les données et modifier les unités de refroidissement et la période à tout moment.',
     },
     {
       id: 92,
       title: 'Comment les données affichées dans l’onglet Analytics sont-elles calculées ?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'L"onglet « Analyses » a pour objectif d"offrir une vue d"ensemble de l"activité des chambres froides. Les données d"utilisation et d"utilisation sont calculées à partir des entrées et sorties enregistrées dans Coldtivate. Vous pouvez ainsi comprendre le nombre d"utilisateurs et d"opérations effectuées, ainsi que le chiffre d"affaires ou le taux d"occupation moyen de chaque chambre froide. Les données de la section « Impact », quant à elles, sont basées sur des enquêtes que les utilisateurs de la chambre froide sont invités à remplir lors de leur inscription (c"est-à-dire avant de commencer à utiliser la chambre froide) et régulièrement lors de la sortie des produits de la chambre froide. Ces données sont essentielles pour estimer l"évolution des pertes post-récolte et des revenus des utilisateurs liés à l"utilisation de la chambre froide. Enfin, l"estimation du CO₂ compare les émissions liées au refroidissement des récoltes stockées en chambre froide aux émissions prévues que la même récolte aurait générées si elle avait été stockée sans réfrigération.',
+      text: 'L"onglet « Analyses » a pour objectif d"offrir une vue d"ensemble de l"activité des chambres froides. Les données d"utilisation et d"utilisation sont calculées à partir des entrées et sorties enregistrées dans coldboxstore. Vous pouvez ainsi comprendre le nombre d"utilisateurs et d"opérations effectuées, ainsi que le chiffre d"affaires ou le taux d"occupation moyen de chaque chambre froide. Les données de la section « Impact », quant à elles, sont basées sur des enquêtes que les utilisateurs de la chambre froide sont invités à remplir lors de leur inscription (c"est-à-dire avant de commencer à utiliser la chambre froide) et régulièrement lors de la sortie des produits de la chambre froide. Ces données sont essentielles pour estimer l"évolution des pertes post-récolte et des revenus des utilisateurs liés à l"utilisation de la chambre froide. Enfin, l"estimation du CO₂ compare les émissions liées au refroidissement des récoltes stockées en chambre froide aux émissions prévues que la même récolte aurait générées si elle avait été stockée sans réfrigération.',
     },
     {
       id: 93,
       title: 'Comment les données affichées dans l’onglet Analytics sont-elles calculées ?',
       role: [ERoles.COOLING_USER],
-      text: 'L"onglet « Analyses » a pour objectif de vous offrir une vue d"ensemble de l"impact du refroidissement sur vos cultures. Les données affichées sous « Caisses » sont calculées à partir des informations d"entrée et de sortie enregistrées dans Coldtivate. Vous pouvez ainsi connaître la quantité stockée, la récolte et la durée moyenne de stockage. Les données de la section « Impact » sont basées sur des questionnaires que vous devez remplir lors de votre inscription (c"est-à-dire avant de commencer à utiliser la chambre froide) et régulièrement lors de la sortie des produits de la chambre froide. Ces données sont essentielles pour estimer l"évolution des pertes et des revenus post-récolte liés à l"utilisation du refroidissement. Un rappel vous invitant à remplir ces questionnaires est affiché en haut de la page, et nous vous encourageons à les remplir dès que possible. Dans les deux sections, vous pouvez utiliser le bouton « Configurer » en haut à droite pour sélectionner des chambres froides spécifiques ou une période. Si rien n"est sélectionné, vous verrez toutes les données disponibles depuis que vous avez commencé à utiliser Coldtivate.',
+      text: 'L"onglet « Analyses » a pour objectif de vous offrir une vue d"ensemble de l"impact du refroidissement sur vos cultures. Les données affichées sous « Caisses » sont calculées à partir des informations d"entrée et de sortie enregistrées dans coldboxstore. Vous pouvez ainsi connaître la quantité stockée, la récolte et la durée moyenne de stockage. Les données de la section « Impact » sont basées sur des questionnaires que vous devez remplir lors de votre inscription (c"est-à-dire avant de commencer à utiliser la chambre froide) et régulièrement lors de la sortie des produits de la chambre froide. Ces données sont essentielles pour estimer l"évolution des pertes et des revenus post-récolte liés à l"utilisation du refroidissement. Un rappel vous invitant à remplir ces questionnaires est affiché en haut de la page, et nous vous encourageons à les remplir dès que possible. Dans les deux sections, vous pouvez utiliser le bouton « Configurer » en haut à droite pour sélectionner des chambres froides spécifiques ou une période. Si rien n"est sélectionné, vous verrez toutes les données disponibles depuis que vous avez commencé à utiliser coldboxstore.',
     },
     {
       id: 94,
@@ -2512,19 +2512,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 95,
       title: ' Quel est le rôle d’une entreprise de refroidissement sur le marché ?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Une entreprise de réfrigération et ses employés peuvent décider de leur niveau d"implication sur la place de marché. Comme cette fonctionnalité repose sur l"enregistrement des caisses dans l"application Coldtivate, une place de marché ne peut fonctionner que si l"exploitant de la chambre froide enregistre régulièrement les entrées et les sorties dans l"application. Pour les produits achetés via la place de marché, l"entreprise de réfrigération perçoit les frais de réfrigération dans le cadre de la transaction numérique. Il est donc crucial qu"un employé inscrit définisse les coordonnées bancaires de l"entreprise : pour ce faire, accédez à « Menu » -> « Gestion » -> « Paramètres du vendeur (entreprise) » -> « Options de paiement ». De plus, les entreprises de réfrigération peuvent décider d"acheter des produits aux agriculteurs (en tant qu"acheteur) et de les revendre sur la place de marché (en tant que vendeur). Les deux transactions peuvent être effectuées via la place de marché Coldtivate. Notez que les opérateurs et les employés inscrits ont le choix d"acheter pour eux-mêmes (à titre individuel) ou pour le compte de l"entreprise qu"ils représentent.',
+      text: 'Une entreprise de réfrigération et ses employés peuvent décider de leur niveau d"implication sur la place de marché. Comme cette fonctionnalité repose sur l"enregistrement des caisses dans l"application coldboxstore, une place de marché ne peut fonctionner que si l"exploitant de la chambre froide enregistre régulièrement les entrées et les sorties dans l"application. Pour les produits achetés via la place de marché, l"entreprise de réfrigération perçoit les frais de réfrigération dans le cadre de la transaction numérique. Il est donc crucial qu"un employé inscrit définisse les coordonnées bancaires de l"entreprise : pour ce faire, accédez à « Menu » -> « Gestion » -> « Paramètres du vendeur (entreprise) » -> « Options de paiement ». De plus, les entreprises de réfrigération peuvent décider d"acheter des produits aux agriculteurs (en tant qu"acheteur) et de les revendre sur la place de marché (en tant que vendeur). Les deux transactions peuvent être effectuées via la place de marché coldboxstore. Notez que les opérateurs et les employés inscrits ont le choix d"acheter pour eux-mêmes (à titre individuel) ou pour le compte de l"entreprise qu"ils représentent.',
     },
     {
       id: 96,
       title: 'Quel est le rôle d’un opérateur de chambre froide sur le marché ?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: ' Les opérateurs de chambres froides sur la place de marché ont trois rôles principaux. 1) Ils aident les utilisateurs de chambres froides sans smartphone à créer leur compte bancaire (afin de pouvoir recevoir des paiements numériques), à lister leurs caisses « à vendre » et à leur prix. 2) Ils sont responsables de l"organisation des produits dans la chambre froide, selon le principe selon lequel tous les produits contenus dans une caisse appartiennent à un seul utilisateur : lorsqu"une partie des produits d"une caisse est achetée (et appartient donc à un autre propriétaire), l"opérateur reçoit une notification lui demandant de déplacer les produits achetés dans une caisse séparée. Si une caisse entière est achetée, aucune action n"est requise. 3) Les opérateurs de chambres froides sont responsables de toutes les opérations de paiement, y compris celles résultant de la place de marché : lorsqu"un acheteur (ou un livreur) arrive à la chambre froide pour récupérer les produits achetés, l"opérateur doit encaisser cette caisse auprès de Coldtivate.',
+      text: ' Les opérateurs de chambres froides sur la place de marché ont trois rôles principaux. 1) Ils aident les utilisateurs de chambres froides sans smartphone à créer leur compte bancaire (afin de pouvoir recevoir des paiements numériques), à lister leurs caisses « à vendre » et à leur prix. 2) Ils sont responsables de l"organisation des produits dans la chambre froide, selon le principe selon lequel tous les produits contenus dans une caisse appartiennent à un seul utilisateur : lorsqu"une partie des produits d"une caisse est achetée (et appartient donc à un autre propriétaire), l"opérateur reçoit une notification lui demandant de déplacer les produits achetés dans une caisse séparée. Si une caisse entière est achetée, aucune action n"est requise. 3) Les opérateurs de chambres froides sont responsables de toutes les opérations de paiement, y compris celles résultant de la place de marché : lorsqu"un acheteur (ou un livreur) arrive à la chambre froide pour récupérer les produits achetés, l"opérateur doit encaisser cette caisse auprès de coldboxstore.',
     },
     {
       id: 97,
       title: 'Comment les frais de refroidissement sont-ils collectés sur le marché ?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Lors de l"achat de caisses sur la place de marché, les frais de refroidissement en vigueur jusqu"à ce jour sont déduits du prix payé par l"acheteur et transférés à l"entreprise de réfrigération. Ainsi, le vendeur n"a pas à régler ces frais, car ils sont déjà réglés lors de la transaction numérique. Il est donc essentiel que le vendeur et l"entreprise de réfrigération disposent d"un compte bancaire sur Coldtivate. Par exemple, si une caisse est achetée 20 USD et que le vendeur doit 3 USD de frais de refroidissement, sur les 20 USD payés par l"acheteur, 17 USD seront virés sur son compte bancaire et 3 USD sur celui de l"entreprise de réfrigération. Si l"acheteur vient récupérer les produits le jour même de l"achat, aucun autre frais de refroidissement n"est dû (car les frais journaliers sont déjà réglés par le vendeur). En revanche, si l"acheteur décide de conserver les produits en chambre froide, les frais de refroidissement standard s"appliquent et le prix sera calculé en fonction du nombre de jours de conservation des produits en chambre froide jusqu"à leur retrait par l"acheteur. L"exploitant de la chambre froide est responsable de la perception de ces frais de refroidissement lors du passage en caisse. Notez que la même logique s"applique en cas de livraison.',
+      text: 'Lors de l"achat de caisses sur la place de marché, les frais de refroidissement en vigueur jusqu"à ce jour sont déduits du prix payé par l"acheteur et transférés à l"entreprise de réfrigération. Ainsi, le vendeur n"a pas à régler ces frais, car ils sont déjà réglés lors de la transaction numérique. Il est donc essentiel que le vendeur et l"entreprise de réfrigération disposent d"un compte bancaire sur coldboxstore. Par exemple, si une caisse est achetée 20 USD et que le vendeur doit 3 USD de frais de refroidissement, sur les 20 USD payés par l"acheteur, 17 USD seront virés sur son compte bancaire et 3 USD sur celui de l"entreprise de réfrigération. Si l"acheteur vient récupérer les produits le jour même de l"achat, aucun autre frais de refroidissement n"est dû (car les frais journaliers sont déjà réglés par le vendeur). En revanche, si l"acheteur décide de conserver les produits en chambre froide, les frais de refroidissement standard s"appliquent et le prix sera calculé en fonction du nombre de jours de conservation des produits en chambre froide jusqu"à leur retrait par l"acheteur. L"exploitant de la chambre froide est responsable de la perception de ces frais de refroidissement lors du passage en caisse. Notez que la même logique s"applique en cas de livraison.',
     },
     {
       id: 98,
@@ -2568,7 +2568,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 104,
       title: 'Quels sont les frais affichés sur la place de marché ?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: ' Le prix de vente de chaque article affiché sur la place de marché est fixé directement par le vendeur et dépend du nombre de kilos achetés. À ce montant s"ajoutent deux frais : les frais de place de marché, qui correspondent à une commission de transaction de 3,5 %, prélevée par l"équipe Coldtivate pour l"hébergement et le maintien de l"application. Les frais de paiement, quant à eux, sont facturés par le système de paiement numérique (PayStack au Nigeria) pour traiter la transaction.',
+      text: ' Le prix de vente de chaque article affiché sur la place de marché est fixé directement par le vendeur et dépend du nombre de kilos achetés. À ce montant s"ajoutent deux frais : les frais de place de marché, qui correspondent à une commission de transaction de 3,5 %, prélevée par l"équipe coldboxstore pour l"hébergement et le maintien de l"application. Les frais de paiement, quant à eux, sont facturés par le système de paiement numérique (PayStack au Nigeria) pour traiter la transaction.',
     },
     {
       id: 105,
@@ -2588,7 +2588,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         " J'ai reçu une notification dans l'application indiquant que « Les produits doivent être redistribués ». Qu'est-ce que c'est ?",
       role: [ERoles.OPERATOR],
-      text: 'En raison de la procédure d"enregistrement en chambre froide, le contenu d"une caisse appartient à un seul agriculteur ou commerçant. Comme sur la place de marché, un acheteur peut acheter quelques kilos d"une caisse appartenant à un vendeur, la quantité achetée doit être transférée dans une caisse séparée. Cette notification vous informe qu"un achat a été finalisé et, en cliquant dessus, vous pouvez visualiser dans quelle caisse les produits doivent être prélevés. L"organisation des caisses est essentielle pour éviter les erreurs d"enregistrement et pour que les frais de refroidissement soient correctement perçus. Nous vous recommandons d"utiliser la fonctionnalité « ID de caisse » lors de l"enregistrement pour étiqueter les caisses dans Coldtivate avec des caisses physiques et ainsi identifier plus facilement les caisses nécessitant votre attention grâce à la notification.',
+      text: 'En raison de la procédure d"enregistrement en chambre froide, le contenu d"une caisse appartient à un seul agriculteur ou commerçant. Comme sur la place de marché, un acheteur peut acheter quelques kilos d"une caisse appartenant à un vendeur, la quantité achetée doit être transférée dans une caisse séparée. Cette notification vous informe qu"un achat a été finalisé et, en cliquant dessus, vous pouvez visualiser dans quelle caisse les produits doivent être prélevés. L"organisation des caisses est essentielle pour éviter les erreurs d"enregistrement et pour que les frais de refroidissement soient correctement perçus. Nous vous recommandons d"utiliser la fonctionnalité « ID de caisse » lors de l"enregistrement pour étiqueter les caisses dans coldboxstore avec des caisses physiques et ainsi identifier plus facilement les caisses nécessitant votre attention grâce à la notification.',
     },
     {
       id: 108,
@@ -2793,7 +2793,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         'કુલિંગ યુઝર પાસે નોંધણી સમયે સર્વેના પ્રશ્નોના જવાબ આપવા માટે સમય નથી. મારે શું કરવું જોઈએ?',
       role: [ERoles.OPERATOR],
-      text: 'તમે "બાદમાં પૂર્ણ કરો" ક્લિક કરીને સર્વેના પ્રશ્નોને છોડી શકો છો. આ ઘટનામાં, જ્યારે તમે આ કૂલિંગ યુઝર માટે પહેલું ચેક-ઇન બનાવતા સમયે સર્વે પૂર્ણ કરવાનો નિર્દેશ આપવામાં આવશે. સર્વેના પ્રશ્નોને પદ્ધતિપૂર્વક જવાબ આપવાની સલાહ આપવામાં આવે છે: આ રીતે, યુઝરને Coldtivate એપ્લિકેશન સાથે વધુ વ્યક્તિગત અનુભવ મળી શકે છે!',
+      text: 'તમે "બાદમાં પૂર્ણ કરો" ક્લિક કરીને સર્વેના પ્રશ્નોને છોડી શકો છો. આ ઘટનામાં, જ્યારે તમે આ કૂલિંગ યુઝર માટે પહેલું ચેક-ઇન બનાવતા સમયે સર્વે પૂર્ણ કરવાનો નિર્દેશ આપવામાં આવશે. સર્વેના પ્રશ્નોને પદ્ધતિપૂર્વક જવાબ આપવાની સલાહ આપવામાં આવે છે: આ રીતે, યુઝરને coldboxstore એપ્લિકેશન સાથે વધુ વ્યક્તિગત અનુભવ મળી શકે છે!',
     },
     {
       id: 31,
@@ -2995,7 +2995,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 66,
       title: 'મને એપના કેટલાક ભાગો સમજાતા નથી. મારે કોનો સંપર્ક કરવો જોઈએ?',
       role: [ERoles.COOLING_USER],
-      text: 'તમે "બાદમાં પૂર્ણ કરો" ક્લિક કરીને સર્વેના પ્રશ્નોને છોડી શકો છો. સર્વે તમારા ખાતાની વિગતોનો ભાગ છે અને તમે તે કોઈપણ સમયે પૂર્ણ કરી શકો છો. જો કે, જ્યારે તમે રૂમનો ઉપયોગ શરૂ કરો ત્યારે સર્વેના પ્રશ્નોના જવાબને સંપૂર્ણ રીતે આપવા માટે સમય લેવાની સલાહ આપવામાં આવે છે: આ રીતે તમે Coldtivate એપ્લિકેશન સાથે વધુ વ્યક્તિગત અનુભવ મેળવી શકો છો!',
+      text: 'તમે "બાદમાં પૂર્ણ કરો" ક્લિક કરીને સર્વેના પ્રશ્નોને છોડી શકો છો. સર્વે તમારા ખાતાની વિગતોનો ભાગ છે અને તમે તે કોઈપણ સમયે પૂર્ણ કરી શકો છો. જો કે, જ્યારે તમે રૂમનો ઉપયોગ શરૂ કરો ત્યારે સર્વેના પ્રશ્નોના જવાબને સંપૂર્ણ રીતે આપવા માટે સમય લેવાની સલાહ આપવામાં આવે છે: આ રીતે તમે coldboxstore એપ્લિકેશન સાથે વધુ વ્યક્તિગત અનુભવ મેળવી શકો છો!',
     },
     {
       id: 67,
@@ -3007,7 +3007,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 68,
       title: 'એપ્લિકેશનમાં કંઈક યોગ્ય રીતે કામ કરી રહ્યું નથી. મારે કોનો સંપર્ક કરવો જોઈએ?',
       role: [ERoles.OPERATOR],
-      text: 'જો રૂમમાં તાપમાન સેન્સર્સ છે જે Coldtivate એપ સાથે જોડાઈ શકે છે, તો કૃપા કરીને તમારી જવાબદાર વ્યક્તિ સાથે વાત કરો. Coldtivate માં બનાવેલા કૂલિંગ યુનિટ્સ સાથે સેન્સર્સને લિંક કરવા માટે ફક્ત રજિસ્ટર થયેલ કર્મચારી ભૂમિકા ધરાવતી વ્યક્તિ જ સક્ષમ છે.',
+      text: 'જો રૂમમાં તાપમાન સેન્સર્સ છે જે coldboxstore એપ સાથે જોડાઈ શકે છે, તો કૃપા કરીને તમારી જવાબદાર વ્યક્તિ સાથે વાત કરો. coldboxstore માં બનાવેલા કૂલિંગ યુનિટ્સ સાથે સેન્સર્સને લિંક કરવા માટે ફક્ત રજિસ્ટર થયેલ કર્મચારી ભૂમિકા ધરાવતી વ્યક્તિ જ સક્ષમ છે.',
     },
     {
       id: 69,
@@ -3077,7 +3077,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 80,
       title: 'હું મારું એકાઉન્ટ ડિલીટ કરવા માંગુ છું. મારે શું કરવું જોઈએ?',
       role: [ERoles.OPERATOR],
-      text: 'કૂલિંગ યુઝરને યાદીમાંથી દૂર કરવા માટે, "મેનેજમેન્ટ" -> "કૂલિંગ યુઝર્સ" પર જાઓ, કૂલિંગ યુઝરના નામ પર ક્લિક કરો અને પછી "ડિલીટ" બટન પર ક્લિક કરો. કૃપા કરીને નોંધો કે ફક્ત તે યુઝર્સને દૂર કરી શકાય છે જે પાસે પેન્ડિંગ ચેક-ઇન્સ નથી! જો પેન્ડિંગ ચેક-ઇન્સ હોય, તો કૃપા કરીને યુઝરને ઉત્પાદન લેવા માટે સંપર્ક કરો. નોંધો કે આ ક્રિયા રદ કરી શકાતી નથી! જો યુઝર પાસે સ્માર્ટફોન છે, તો આ ઑપરેશન તેને તમારી યાદીમાંથી દૂર કરશે, પરંતુ યુઝર હજુ પણ Coldtivate નો ઉપયોગ કરી શકે છે. જો યુઝર પાસે સ્માર્ટફોન નથી, તો આ ઑપરેશન તેનો ખاتا દૂર કરશે અને સંબંધિત ફોન નંબરને મુક્ત કરશે.',
+      text: 'કૂલિંગ યુઝરને યાદીમાંથી દૂર કરવા માટે, "મેનેજમેન્ટ" -> "કૂલિંગ યુઝર્સ" પર જાઓ, કૂલિંગ યુઝરના નામ પર ક્લિક કરો અને પછી "ડિલીટ" બટન પર ક્લિક કરો. કૃપા કરીને નોંધો કે ફક્ત તે યુઝર્સને દૂર કરી શકાય છે જે પાસે પેન્ડિંગ ચેક-ઇન્સ નથી! જો પેન્ડિંગ ચેક-ઇન્સ હોય, તો કૃપા કરીને યુઝરને ઉત્પાદન લેવા માટે સંપર્ક કરો. નોંધો કે આ ક્રિયા રદ કરી શકાતી નથી! જો યુઝર પાસે સ્માર્ટફોન છે, તો આ ઑપરેશન તેને તમારી યાદીમાંથી દૂર કરશે, પરંતુ યુઝર હજુ પણ coldboxstore નો ઉપયોગ કરી શકે છે. જો યુઝર પાસે સ્માર્ટફોન નથી, તો આ ઑપરેશન તેનો ખاتا દૂર કરશે અને સંબંધિત ફોન નંબરને મુક્ત કરશે.',
     },
     {
       id: 81,
@@ -3701,7 +3701,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         'कृपया सुनिश्चित करें कि आपके पास ऐप का नवीनतम संस्करण इंस्टॉल है। यदि समस्या बनी रहती है, तो कृपया app@yourvcca.org पर ईमेल भेजकर या फ़ीडबैक फ़ॉर्म भरकर ऐप सहायता टीम को सूचित करें: https://forms.gle/ceohKHT2QCcE3rFs5.ऐप में कुछ ठीक से काम नहीं कर रहा है। मुझे किससे संपर्क करना चाहिए?',
       role: [ERoles.OPERATOR],
-      text: 'यदि कमरे में तापमान संवेदक हैं जो Coldtivate ऐप से जुड़े हो सकते हैं, तो कृपया अपने जिम्मेदार से संपर्क करें। केवल एक पंजीकृत कर्मचारी भूमिका वाला उपयोगकर्ता सेंसर को कोल्डिवेट में बनाई गई कूलिंग इकाइयों से जोड़ सकता है।',
+      text: 'यदि कमरे में तापमान संवेदक हैं जो coldboxstore ऐप से जुड़े हो सकते हैं, तो कृपया अपने जिम्मेदार से संपर्क करें। केवल एक पंजीकृत कर्मचारी भूमिका वाला उपयोगकर्ता सेंसर को कोल्डिवेट में बनाई गई कूलिंग इकाइयों से जोड़ सकता है।',
     },
     {
       id: 69,
@@ -4147,14 +4147,14 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 29,
       title: 'ମୁଁ ନୂତନ କୁଲିଂ ବ୍ୟବହାରକାରୀଙ୍କୁ କିପରି ପଞ୍ଜୀକରଣ କରିପାରିବି?',
       role: [ERoles.OPERATOR],
-      text: 'ନୂତନ କୁଲିଂ ବ୍ୟବହାରକାରୀଙ୍କୁ ପଞ୍ଜିକରଣ କରିବା ପାଇଁ, ମେନୁରେ "ପରିଚାଳନା" > "କୁଲିଂ ବ୍ୟବହାରକାରୀ" କୁ ଯାଆନ୍ତୁ। ଉପର ଡାହାଣ କୋଣରେ ଥିବା "+" ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ ଏବଂ ପୂର୍ବରୁ ପଞ୍ଜିକୃତ ବ୍ୟବହାରକାରୀଙ୍କୁ ଏକ କୋଡ୍ ସହିତ ଯୋଡିବେ କି ବ୍ୟବହାରକାରୀଙ୍କ ବିବରଣୀ ଯୋଡିବେ କି ନାହିଁ ତାହା ବାଛନ୍ତୁ। ଜଣେ କୁଲିଂ ବ୍ୟବହାରକାରୀ ଯାହାଙ୍କର ଏକ ସ୍ମାର୍ଟଫୋନ୍ ଅଛି ଏବଂ ସେ ପୂର୍ବରୁ Coldtivate ରେ ପଞ୍ଜିକୃତ ହୋଇସାରିଛନ୍ତି ତାଙ୍କର ଏକ ଅନନ୍ୟ କୋଡ୍ ଅଛି, ଯାହାକୁ ସେ "ମେନୁ" -> "ଆକାଉଣ୍ଟ ବିବରଣୀ" -> "ବ୍ୟକ୍ତିଗତ ବିବରଣୀ" -> କୁଲିଂ ବ୍ୟବହାରକାରୀ ଆମଦାନୀ କୋଡ୍ ଅନ୍ତର୍ଗତ ପାଇପାରିବେ। ଯଦି ଉପଭୋକ୍ତାଙ୍କର କୌଣସି ସ୍ମାର୍ଟଫୋନ୍ ନାହିଁ, କିମ୍ବା ଏପର୍ଯ୍ୟନ୍ତ ପଞ୍ଜିକୃତ ହୋଇନାହିଁ, ତେବେ ଆପଣ ନାମ, ଲିଙ୍ଗ ଏବଂ ଟେଲିଫୋନ୍ ନମ୍ବର ଯୋଡି ଉପଭୋକ୍ତାଙ୍କୁ ଯୋଡିପାରିବେ। ଯଦି ଉପଭୋକ୍ତାଙ୍କର ନିଜସ୍ୱ ନମ୍ବର ନାହିଁ, ତେବେ ଅନ୍ୟ ଜଣେ ବ୍ୟକ୍ତିଙ୍କ (ଯଥା ବନ୍ଧୁ, ସମ୍ପର୍କୀୟ) ନମ୍ବର ବ୍ୟବହାର କରାଯାଇପାରିବ, କିନ୍ତୁ ଦୟାକରି ମନେରଖନ୍ତୁ ଯେ ଗୋଟିଏ ଫୋନ୍ ନମ୍ବର କେବଳ ଥରେ ବ୍ୟବହାର କରାଯାଇପାରିବ। ନିଶ୍ଚିତ କରିବା ପାଇଁ "ପରିବର୍ତ୍ତନଗୁଡ଼ିକୁ ସଂରକ୍ଷଣ କରନ୍ତୁ" ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ। ପଞ୍ଜିକରଣ ସମାପ୍ତ କରିବା ପାଇଁ, ଆପଣଙ୍କୁ କୁଲିଂ ବ୍ୟବହାରକାରୀଙ୍କୁ କିଛି ପ୍ରଶ୍ନ ପଚାରି ଏକ ଛୋଟ ସର୍ଭେ ପୂରଣ କରିବାକୁ ପଡିବ। "ପରିଚାଳନା" -> "କୁଲିଂ ବ୍ୟବହାରକାରୀ" -> "କୁଲିଂ ବ୍ୟବହାରକାରୀ ସର୍ଭେ" କୁ ନାଭିଗେଟ୍ କରି ପରବର୍ତ୍ତୀ ସମୟରେ ସର୍ଭେ ମଧ୍ୟ ସମାପ୍ତ କରାଯାଇପାରିବ।',
+      text: 'ନୂତନ କୁଲିଂ ବ୍ୟବହାରକାରୀଙ୍କୁ ପଞ୍ଜିକରଣ କରିବା ପାଇଁ, ମେନୁରେ "ପରିଚାଳନା" > "କୁଲିଂ ବ୍ୟବହାରକାରୀ" କୁ ଯାଆନ୍ତୁ। ଉପର ଡାହାଣ କୋଣରେ ଥିବା "+" ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ ଏବଂ ପୂର୍ବରୁ ପଞ୍ଜିକୃତ ବ୍ୟବହାରକାରୀଙ୍କୁ ଏକ କୋଡ୍ ସହିତ ଯୋଡିବେ କି ବ୍ୟବହାରକାରୀଙ୍କ ବିବରଣୀ ଯୋଡିବେ କି ନାହିଁ ତାହା ବାଛନ୍ତୁ। ଜଣେ କୁଲିଂ ବ୍ୟବହାରକାରୀ ଯାହାଙ୍କର ଏକ ସ୍ମାର୍ଟଫୋନ୍ ଅଛି ଏବଂ ସେ ପୂର୍ବରୁ coldboxstore ରେ ପଞ୍ଜିକୃତ ହୋଇସାରିଛନ୍ତି ତାଙ୍କର ଏକ ଅନନ୍ୟ କୋଡ୍ ଅଛି, ଯାହାକୁ ସେ "ମେନୁ" -> "ଆକାଉଣ୍ଟ ବିବରଣୀ" -> "ବ୍ୟକ୍ତିଗତ ବିବରଣୀ" -> କୁଲିଂ ବ୍ୟବହାରକାରୀ ଆମଦାନୀ କୋଡ୍ ଅନ୍ତର୍ଗତ ପାଇପାରିବେ। ଯଦି ଉପଭୋକ୍ତାଙ୍କର କୌଣସି ସ୍ମାର୍ଟଫୋନ୍ ନାହିଁ, କିମ୍ବା ଏପର୍ଯ୍ୟନ୍ତ ପଞ୍ଜିକୃତ ହୋଇନାହିଁ, ତେବେ ଆପଣ ନାମ, ଲିଙ୍ଗ ଏବଂ ଟେଲିଫୋନ୍ ନମ୍ବର ଯୋଡି ଉପଭୋକ୍ତାଙ୍କୁ ଯୋଡିପାରିବେ। ଯଦି ଉପଭୋକ୍ତାଙ୍କର ନିଜସ୍ୱ ନମ୍ବର ନାହିଁ, ତେବେ ଅନ୍ୟ ଜଣେ ବ୍ୟକ୍ତିଙ୍କ (ଯଥା ବନ୍ଧୁ, ସମ୍ପର୍କୀୟ) ନମ୍ବର ବ୍ୟବହାର କରାଯାଇପାରିବ, କିନ୍ତୁ ଦୟାକରି ମନେରଖନ୍ତୁ ଯେ ଗୋଟିଏ ଫୋନ୍ ନମ୍ବର କେବଳ ଥରେ ବ୍ୟବହାର କରାଯାଇପାରିବ। ନିଶ୍ଚିତ କରିବା ପାଇଁ "ପରିବର୍ତ୍ତନଗୁଡ଼ିକୁ ସଂରକ୍ଷଣ କରନ୍ତୁ" ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ। ପଞ୍ଜିକରଣ ସମାପ୍ତ କରିବା ପାଇଁ, ଆପଣଙ୍କୁ କୁଲିଂ ବ୍ୟବହାରକାରୀଙ୍କୁ କିଛି ପ୍ରଶ୍ନ ପଚାରି ଏକ ଛୋଟ ସର୍ଭେ ପୂରଣ କରିବାକୁ ପଡିବ। "ପରିଚାଳନା" -> "କୁଲିଂ ବ୍ୟବହାରକାରୀ" -> "କୁଲିଂ ବ୍ୟବହାରକାରୀ ସର୍ଭେ" କୁ ନାଭିଗେଟ୍ କରି ପରବର୍ତ୍ତୀ ସମୟରେ ସର୍ଭେ ମଧ୍ୟ ସମାପ୍ତ କରାଯାଇପାରିବ।',
     },
     {
       id: 30,
       title:
         "ପଞ୍ଜୀକରଣ ସମୟରେ ସର୍ଭେ ପ୍ରଶ୍ନର ଉତ୍ତର ଦେବା ପାଇଁ କୁଲିଂ ବ୍ୟବହାରକାରୀଙ୍କ ପାଖରେ ସମୟ ନାହିଁ। ମୁଁ କ'ଣ କରିବା ଉଚିତ?",
       role: [ERoles.OPERATOR],
-      text: 'ଅନୁସନ୍ଧାନ ପ୍ରଶ୍ନଗୁଡିକୁ "Complete later" କ୍ଲିକ୍ କରି ସ୍କିପ୍ କରିପାରିବେ। ଏହି ସମୟରେ, କୁଲିଂ ୟୁଜର୍ ପାଇଁ ପ୍ରଥମେ ଏକ ଚେକ୍-ଇନ୍ ସୃଷ୍ଟି କଲେ ଅନୁସନ୍ଧାନ ପୂରଣ କରିବା ପାଇଁ ପ୍ରେରିତ ହେବେ। ସୁପାରିଶ କରାଯାଉଛି ଯେ ଅନୁସନ୍ଧାନ ପ୍ରଶ୍ନଗୁଡିକୁ ଏକାଧିକ ସମୟ ନେଇ ସତର୍କ ଭାବରେ ଉତ୍ତର ଦିଅନ୍ତୁ: ଏହି ପରି ସେ ବେଶି ଲାଗି ହୋଇଥିବା Coldtivate ଆପ୍‌ର ସେବା ପାଇପାରିବେ!',
+      text: 'ଅନୁସନ୍ଧାନ ପ୍ରଶ୍ନଗୁଡିକୁ "Complete later" କ୍ଲିକ୍ କରି ସ୍କିପ୍ କରିପାରିବେ। ଏହି ସମୟରେ, କୁଲିଂ ୟୁଜର୍ ପାଇଁ ପ୍ରଥମେ ଏକ ଚେକ୍-ଇନ୍ ସୃଷ୍ଟି କଲେ ଅନୁସନ୍ଧାନ ପୂରଣ କରିବା ପାଇଁ ପ୍ରେରିତ ହେବେ। ସୁପାରିଶ କରାଯାଉଛି ଯେ ଅନୁସନ୍ଧାନ ପ୍ରଶ୍ନଗୁଡିକୁ ଏକାଧିକ ସମୟ ନେଇ ସତର୍କ ଭାବରେ ଉତ୍ତର ଦିଅନ୍ତୁ: ଏହି ପରି ସେ ବେଶି ଲାଗି ହୋଇଥିବା coldboxstore ଆପ୍‌ର ସେବା ପାଇପାରିବେ!',
     },
     {
       id: 31,
@@ -4356,7 +4356,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 66,
       title: 'ମୁଁ ଆପର କିଛି ଅଂଶ ବୁଝିପାରୁନାହିଁ। ମୁଁ କାହା ସହିତ ଯୋଗାଯୋଗ କରିବା ଉଚିତ?',
       role: [ERoles.COOLING_USER],
-      text: 'ଆପଣ "Complete later" କ୍ଲିକ୍ କରି ଅନୁସନ୍ଧାନ ପ୍ରଶ୍ନଗୁଡିକୁ ସ୍କିପ୍ କରିପାରିବେ। ଆପଣ ଏହି ସର୍ଭେ କୁ "ଖାତା ବିବରଣୀ" ରେ ଭାଗ ଭାଗ ମଧ୍ୟରେ ସମୟରେ ପୂରଣ କରିପାରିବେ। ତେବେ, ଆପଣ ବାସ୍ତବରେ ଅନୁସନ୍ଧାନ ପ୍ରଶ୍ନଗୁଡିକୁ ସାଇନ୍ ଅପ୍ ସମୟରେ ସବୁଦିନ ସମୟ ନେଇ ଉତ୍ତର ଦେବାକୁ ସୁପାରିଶ କରାଯାଉଛି: ଏହା ଆପଣକୁ Coldtivate ଆପ୍ ସହିତ ଏକ ଅଧିକ ସାରଗର୍ଭୀୟ ଅନୁଭବ ମିଳିବ!',
+      text: 'ଆପଣ "Complete later" କ୍ଲିକ୍ କରି ଅନୁସନ୍ଧାନ ପ୍ରଶ୍ନଗୁଡିକୁ ସ୍କିପ୍ କରିପାରିବେ। ଆପଣ ଏହି ସର୍ଭେ କୁ "ଖାତା ବିବରଣୀ" ରେ ଭାଗ ଭାଗ ମଧ୍ୟରେ ସମୟରେ ପୂରଣ କରିପାରିବେ। ତେବେ, ଆପଣ ବାସ୍ତବରେ ଅନୁସନ୍ଧାନ ପ୍ରଶ୍ନଗୁଡିକୁ ସାଇନ୍ ଅପ୍ ସମୟରେ ସବୁଦିନ ସମୟ ନେଇ ଉତ୍ତର ଦେବାକୁ ସୁପାରିଶ କରାଯାଉଛି: ଏହା ଆପଣକୁ coldboxstore ଆପ୍ ସହିତ ଏକ ଅଧିକ ସାରଗର୍ଭୀୟ ଅନୁଭବ ମିଳିବ!',
     },
     {
       id: 67,
@@ -4368,7 +4368,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 68,
       title: 'ଆପରେ କିଛି ଠିକ୍ ଭାବରେ କାମ କରୁନାହିଁ। ମୁଁ କାହା ସହିତ ଯୋଗାଯୋଗ କରିବା ଉଚିତ?',
       role: [ERoles.OPERATOR],
-      text: 'ଯଦି କୋଠାରେ ତାପମାତ୍ରା ସେନସର୍‌ଗୁଡିକୁ Coldtivate ଆପ୍‌ସହିତ ସଂଯୋଜନ କରାଯାଇପାରିବ, ଦୟାକରି ଆପଣଙ୍କର ଦାୟିତ୍ୱ ଓଠାରେ ସଂଯୋଗ କରନ୍ତୁ। Coldtivateରେ ସୃଷ୍ଟି ହୋଇଥିବା କୁଲିଂ ଇନ୍ଇଟ୍‌ସହିତ ସେନସର୍‌ଗୁଡିକୁ ଲିଙ୍କ୍ କରିବା ପାଇଁ କେବଳ ରେଜିଷ୍ଟର୍ ହୋଇଥିବା କର୍ମଚାରୀ ଭୂମିକା ଥିବା ବ୍ୟକ୍ତିଙ୍କୁ ସୁମିତ କରାଯିବ।',
+      text: 'ଯଦି କୋଠାରେ ତାପମାତ୍ରା ସେନସର୍‌ଗୁଡିକୁ coldboxstore ଆପ୍‌ସହିତ ସଂଯୋଜନ କରାଯାଇପାରିବ, ଦୟାକରି ଆପଣଙ୍କର ଦାୟିତ୍ୱ ଓଠାରେ ସଂଯୋଗ କରନ୍ତୁ। coldboxstoreରେ ସୃଷ୍ଟି ହୋଇଥିବା କୁଲିଂ ଇନ୍ଇଟ୍‌ସହିତ ସେନସର୍‌ଗୁଡିକୁ ଲିଙ୍କ୍ କରିବା ପାଇଁ କେବଳ ରେଜିଷ୍ଟର୍ ହୋଇଥିବା କର୍ମଚାରୀ ଭୂମିକା ଥିବା ବ୍ୟକ୍ତିଙ୍କୁ ସୁମିତ କରାଯିବ।',
     },
     {
       id: 69,
@@ -4489,7 +4489,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 88,
       title: 'କୁଲିଂ ୟୁନିଟର ମାନଚିତ୍ରରେ କ’ଣ ପ୍ରଦର୍ଶିତ ହୋଇଛି?',
       role: [ERoles.COOLING_USER],
-      text: 'ମାନଚିତ୍ରରେ ଆପଣ ଆପଣଙ୍କର ସ୍ଥାନ (ଆପଣଙ୍କ ସ୍ଥାନକୁ ପ୍ରବେଶ କରିବା ପାଇଁ Coldtivate ପାଇଁ ଅନୁମତି ମଗାଯିବ), ଆପଣଙ୍କ ଚାରିପାଖରେ ଥିବା କୁଲିଂ ୟୁନିଟ୍‌ଗୁଡ଼ିକର ସ୍ଥାନ ଏବଂ ୟୁନିଟ୍‌ଗୁଡ଼ିକ ବିଷୟରେ କିଛି ସୂଚନା (ଏକକ କିମ୍ବା ମଲ୍ଟିକମୋଡିଟି, କମ୍ପାନୀ, ମୂଲ୍ୟ) ଭିଜୁଆଲାଇଜ୍ କରିପାରିବେ। କୋଲ୍ଡ ରୁମ୍‌କୁ ଯାଇ, ଆପଣ ୟୁନିଟ୍‌ର କାର୍ଯ୍ୟକ୍ଷମତା ଏବଂ ସଂରକ୍ଷଣ ପାଇଁ ସୁଯୋଗ ବିଷୟରେ କୋଲ୍ଡ ରୁମ୍ ଅପରେଟରଙ୍କଠାରୁ ଅଧିକ ସୂଚନା ପାଇପାରିବେ।',
+      text: 'ମାନଚିତ୍ରରେ ଆପଣ ଆପଣଙ୍କର ସ୍ଥାନ (ଆପଣଙ୍କ ସ୍ଥାନକୁ ପ୍ରବେଶ କରିବା ପାଇଁ coldboxstore ପାଇଁ ଅନୁମତି ମଗାଯିବ), ଆପଣଙ୍କ ଚାରିପାଖରେ ଥିବା କୁଲିଂ ୟୁନିଟ୍‌ଗୁଡ଼ିକର ସ୍ଥାନ ଏବଂ ୟୁନିଟ୍‌ଗୁଡ଼ିକ ବିଷୟରେ କିଛି ସୂଚନା (ଏକକ କିମ୍ବା ମଲ୍ଟିକମୋଡିଟି, କମ୍ପାନୀ, ମୂଲ୍ୟ) ଭିଜୁଆଲାଇଜ୍ କରିପାରିବେ। କୋଲ୍ଡ ରୁମ୍‌କୁ ଯାଇ, ଆପଣ ୟୁନିଟ୍‌ର କାର୍ଯ୍ୟକ୍ଷମତା ଏବଂ ସଂରକ୍ଷଣ ପାଇଁ ସୁଯୋଗ ବିଷୟରେ କୋଲ୍ଡ ରୁମ୍ ଅପରେଟରଙ୍କଠାରୁ ଅଧିକ ସୂଚନା ପାଇପାରିବେ।',
     },
     {
       id: 89,
@@ -4500,7 +4500,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 90,
       title:
-        'ମୋର ତାପମାତ୍ରା ସେନ୍ସର ପ୍ରକାର Coldtivate (Ecozen, UbiBot, Figorr, Victron Energy) ଦ୍ୱାରା ସମର୍ଥିତ। ମୁଁ ସେନ୍ସରଗୁଡ଼ିକୁ କିପରି ସେଟ୍ ଅପ୍ କରିପାରିବି?',
+        'ମୋର ତାପମାତ୍ରା ସେନ୍ସର ପ୍ରକାର coldboxstore (Ecozen, UbiBot, Figorr, Victron Energy) ଦ୍ୱାରା ସମର୍ଥିତ। ମୁଁ ସେନ୍ସରଗୁଡ଼ିକୁ କିପରି ସେଟ୍ ଅପ୍ କରିପାରିବି?',
       role: [ERoles.EMPLOYEE],
       text: 'ଏକ ସେନ୍ସରକୁ ଏକ କୁଲିଂ ୟୁନିଟ୍ ସହିତ ସଂଯୋଗ କରିବା ପାଇଁ, ଆପଣ "ମେନୁ" -> "ପରିଚାଳନା" -> "କୁଲିଂ ୟୁନିଟ୍" କୁ ନେଭିଗେଟ୍ କରିପାରିବେ, ସେନ୍ସର ସେଟ୍ ଅପ୍ କରାଯିବାକୁ ଥିବା ୟୁନିଟ୍ ଚୟନ କରିପାରିବେ, ଏବଂ ତାପରେ "ସେନ୍ସର ଉପଲବ୍ଧ" ଟୋଗଲ୍ କରିପାରିବେ। ଆପଣ ପ୍ରତ୍ୟେକ ସମର୍ଥିତ ସେନ୍ସର ପ୍ରକାର ପାଇଁ ନିର୍ଦ୍ଦେଶାବଳୀ ଅନୁସରଣ କରିପାରିବେ ଏବଂ ପ୍ରମାଣୀକରଣ କରିପାରିବେ। ପରିବର୍ତ୍ତନଗୁଡ଼ିକୁ ସେଭ୍ କରିବା ପାଇଁ ପୃଷ୍ଠାର ତଳ ଭାଗରେ ଥିବା "ସେଭ୍" ଘଣ୍ଟାକୁ ମନେରଖନ୍ତୁ। ଆପଣ "ଅଧିକ" -> "କୁଲିଂ ୟୁନିଟ୍" -> "ରୁମ୍ ଅବସ୍ଥା" ଅନ୍ତର୍ଗତ ଆପଣଙ୍କ ସେନ୍ସରରୁ ତାପମାତ୍ରା ପାଠ୍ୟଗୁଡ଼ିକ ପରବର୍ତ୍ତୀ 6 ଘଣ୍ଟା ମଧ୍ୟରେ ଦେଖିପାରିବେ।',
     },
@@ -4805,14 +4805,14 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 29,
       title: 'Ta yaya zan iya yin rajistar sabbin masu amfani da sanyaya?',
       role: [ERoles.OPERATOR],
-      text: 'Don yin rijistar sabon mai amfani da sanyaya, a cikin Menu kewaya zuwa "Management"> "Masu amfani da sanyaya". Danna "+" a saman kusurwar dama kuma zaɓi ko za a ƙara mai amfani da riga mai rijista tare da lamba, ko ƙara bayanan mai amfani. Mai sanyaya mai amfani wanda ke da wayowin komai da ruwan kuma ya riga ya yi rajista a cikin Coldtivate yana da lamba ta musamman, wacce zai iya samu a ƙarƙashin "Menu" -> "Bayanan Asusu" -> "Bayani na Sirri" -> Lambobin shigo da mai mai sanyaya. Idan mai amfani ba shi da wayar hannu, ko kuma ba a yi rajista ba tukuna, zaku iya ƙara mai amfani ta ƙara suna, jinsi da lambar tarho. Idan mai amfani ba shi da lambar kansa, za a iya amfani da lambar wani (misali abokai, dangi), amma da fatan za a iya amfani da lambar waya ɗaya sau ɗaya kawai. Danna "Ajiye canje-canje" don tabbatarwa. Don kammala rajistar, kuna buƙatar cika ɗan gajeren bincike ta yin ƴan tambayoyi ga mai amfani da sanyaya. Hakanan za"a iya kammala binciken a wani wuri na gaba ta hanyar kewayawa zuwa "Gudanarwa" -> "Masu Amfani" -> "Binciken Mai Amfani" Cooling".',
+      text: 'Don yin rijistar sabon mai amfani da sanyaya, a cikin Menu kewaya zuwa "Management"> "Masu amfani da sanyaya". Danna "+" a saman kusurwar dama kuma zaɓi ko za a ƙara mai amfani da riga mai rijista tare da lamba, ko ƙara bayanan mai amfani. Mai sanyaya mai amfani wanda ke da wayowin komai da ruwan kuma ya riga ya yi rajista a cikin coldboxstore yana da lamba ta musamman, wacce zai iya samu a ƙarƙashin "Menu" -> "Bayanan Asusu" -> "Bayani na Sirri" -> Lambobin shigo da mai mai sanyaya. Idan mai amfani ba shi da wayar hannu, ko kuma ba a yi rajista ba tukuna, zaku iya ƙara mai amfani ta ƙara suna, jinsi da lambar tarho. Idan mai amfani ba shi da lambar kansa, za a iya amfani da lambar wani (misali abokai, dangi), amma da fatan za a iya amfani da lambar waya ɗaya sau ɗaya kawai. Danna "Ajiye canje-canje" don tabbatarwa. Don kammala rajistar, kuna buƙatar cika ɗan gajeren bincike ta yin ƴan tambayoyi ga mai amfani da sanyaya. Hakanan za"a iya kammala binciken a wani wuri na gaba ta hanyar kewayawa zuwa "Gudanarwa" -> "Masu Amfani" -> "Binciken Mai Amfani" Cooling".',
     },
     {
       id: 30,
       title:
         'Mai amfani da sanyaya ba shi da lokaci don amsa tambayoyin binciken a rajista. Me zan yi?',
       role: [ERoles.OPERATOR],
-      text: 'Kuna iya tsallake tambayoyin binciken ta danna "Kammala daga baya". A wannan yanayin, za a sa ka kammala binciken a karon farko da kake ƙirƙirar rajistan shiga don mai sanyaya. Ana ba da shawarar ɗaukar lokaci da amsa tambayoyin binciken da kyau: ta wannan hanyar mai amfani zai iya samun ƙarin ƙwarewa tare da Coldtivate app!',
+      text: 'Kuna iya tsallake tambayoyin binciken ta danna "Kammala daga baya". A wannan yanayin, za a sa ka kammala binciken a karon farko da kake ƙirƙirar rajistan shiga don mai sanyaya. Ana ba da shawarar ɗaukar lokaci da amsa tambayoyin binciken da kyau: ta wannan hanyar mai amfani zai iya samun ƙarin ƙwarewa tare da coldboxstore app!',
     },
     {
       id: 31,
@@ -4848,7 +4848,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 36,
       title:
-        "Ina da na'urori masu auna zafin jiki a cikin dakin sanyi. Za a iya haɗa su zuwa Coldtivate?",
+        "Ina da na'urori masu auna zafin jiki a cikin dakin sanyi. Za a iya haɗa su zuwa coldboxstore?",
       role: [ERoles.AUTH],
       text: 'Cibiyar Ilimi shafi ne da za a iya samunsa ta hanyar danna Menu na hagu na sama. Ya ƙunshi bayanai masu amfani game da mafi kyawun ayyukan ajiya don kayayyaki daban-daban, gami da mafi kyawun zafin jiki da kimanin lokacin ajiya a ƙarƙashin wannan zafin.',
     },
@@ -4856,7 +4856,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 37,
       title: "Ta yaya zan haɗa na'urori masu auna firikwensin a cikin daki tare da app?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Idan akwai na"urori masu auna zafin jiki a cikin ɗakin waɗanda za a iya haɗa su zuwa aikace-aikacen Coldtivate, da fatan za a yi magana da alhakin ku. Mai amfani kawai tare da aikin ma"aikaci mai rijista zai iya haɗa na"urori masu auna firikwensin zuwa raka"a masu sanyaya waɗanda aka ƙirƙira a cikin Coldtivate.',
+      text: 'Idan akwai na"urori masu auna zafin jiki a cikin ɗakin waɗanda za a iya haɗa su zuwa aikace-aikacen coldboxstore, da fatan za a yi magana da alhakin ku. Mai amfani kawai tare da aikin ma"aikaci mai rijista zai iya haɗa na"urori masu auna firikwensin zuwa raka"a masu sanyaya waɗanda aka ƙirƙira a cikin coldboxstore.',
     },
     {
       id: 38,
@@ -4874,7 +4874,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 40,
       title: 'Menene binciken kasuwar bayan-ajiya kuma me yasa zan cika shi?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Ana iya samun damar binciken kasuwar ta danna ɗigogi uku kusa da kowane dubawa a cikin "Ƙari" -> "Tarihi" shafin kuma zaɓi "Cika da binciken kasuwa". Binciken gajere ne kuma yana neman bayani game da farashin siyar da kayayyakin da kuka adana a daki a baya, da kuma nawa ne ya lalace. Za a kula da wannan bayanin azaman sirri kuma ƙungiyar Coldtivate za ta yi amfani da ita kawai don kimanta tasirin amfani da ajiyar sanyi. Jajayen ɗigo za su gano wuraren da ba a kammala binciken kasuwa ba tukuna. Za a tunatar da ku game da abubuwan dubawa waɗanda ke buƙatar kulawar ku a cikin kwamitin sanarwa kuma kuna iya danna sanarwar don buɗe binciken. Hakanan zaka iya shiga cikin binciken da kake buƙatar cikawa a cikin shafin "Analytics", sannan danna "Impact".',
+      text: 'Ana iya samun damar binciken kasuwar ta danna ɗigogi uku kusa da kowane dubawa a cikin "Ƙari" -> "Tarihi" shafin kuma zaɓi "Cika da binciken kasuwa". Binciken gajere ne kuma yana neman bayani game da farashin siyar da kayayyakin da kuka adana a daki a baya, da kuma nawa ne ya lalace. Za a kula da wannan bayanin azaman sirri kuma ƙungiyar coldboxstore za ta yi amfani da ita kawai don kimanta tasirin amfani da ajiyar sanyi. Jajayen ɗigo za su gano wuraren da ba a kammala binciken kasuwa ba tukuna. Za a tunatar da ku game da abubuwan dubawa waɗanda ke buƙatar kulawar ku a cikin kwamitin sanarwa kuma kuna iya danna sanarwar don buɗe binciken. Hakanan zaka iya shiga cikin binciken da kake buƙatar cikawa a cikin shafin "Analytics", sannan danna "Impact".',
     },
     {
       id: 41,
@@ -5013,7 +5013,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 66,
       title: 'Ban fahimci sassan app ɗin ba. Wa zan tuntubi?',
       role: [ERoles.COOLING_USER],
-      text: 'Kuna iya tsallake tambayoyin binciken ta danna "Kammala daga baya". Za ku sami binciken a matsayin ɓangare na Cikakkun Asusunku kuma kuna iya kammala shi kowane lokaci. Koyaya, ana ba da shawarar ɗaukar lokaci don amsa tambayoyin binciken sosai lokacin da kuka fara amfani da ɗakin: ta wannan hanyar za ku iya samun ƙarin ƙwarewa tare da Coldtivate app!',
+      text: 'Kuna iya tsallake tambayoyin binciken ta danna "Kammala daga baya". Za ku sami binciken a matsayin ɓangare na Cikakkun Asusunku kuma kuna iya kammala shi kowane lokaci. Koyaya, ana ba da shawarar ɗaukar lokaci don amsa tambayoyin binciken sosai lokacin da kuka fara amfani da ɗakin: ta wannan hanyar za ku iya samun ƙarin ƙwarewa tare da coldboxstore app!',
     },
     {
       id: 67,
@@ -5025,7 +5025,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 68,
       title: 'Wani abu baya aiki da kyau a cikin app. Wa zan tuntubi?',
       role: [ERoles.OPERATOR],
-      text: 'Idan akwai na"urori masu auna zafin jiki a cikin ɗakin waɗanda za a iya haɗa su zuwa aikace-aikacen Coldtivate, da fatan za a yi magana da alhakin ku. Mai amfani kawai tare da aikin ma"aikaci mai rijista zai iya haɗa na"urori masu auna firikwensin zuwa raka"a masu sanyaya waɗanda aka ƙirƙira a cikin Coldtivate.',
+      text: 'Idan akwai na"urori masu auna zafin jiki a cikin ɗakin waɗanda za a iya haɗa su zuwa aikace-aikacen coldboxstore, da fatan za a yi magana da alhakin ku. Mai amfani kawai tare da aikin ma"aikaci mai rijista zai iya haɗa na"urori masu auna firikwensin zuwa raka"a masu sanyaya waɗanda aka ƙirƙira a cikin coldboxstore.',
     },
     {
       id: 69,
@@ -5091,7 +5091,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 80,
       title: 'Ina so in goge asusuna. Me zan yi?',
       role: [ERoles.OPERATOR],
-      text: 'Don share mai amfani da sanyaya daga lissafin, kewaya zuwa "Management" -> "Cooling users", danna sunan mai sanyaya sannan kuma maɓallin "Share". Lura cewa masu amfani kawai waɗanda ba su da rajistan shiga za a iya share su! Idan akwai rajista masu jiran aiki, tuntuɓi mai amfani don ɗaukar samfurin. Lura cewa wannan aikin ba za a iya juyawa ba! Idan mai amfani yana da wayar hannu, wannan aikin zai cire shi/ta daga jerin ku, amma har yanzu mai amfani zai iya amfani da Coldtivate. Idan mai amfani ba shi da wayowin komai da ruwan, wannan aikin yana share asusunsa kuma ya saki lambar wayar da ke da alaƙa.',
+      text: 'Don share mai amfani da sanyaya daga lissafin, kewaya zuwa "Management" -> "Cooling users", danna sunan mai sanyaya sannan kuma maɓallin "Share". Lura cewa masu amfani kawai waɗanda ba su da rajistan shiga za a iya share su! Idan akwai rajista masu jiran aiki, tuntuɓi mai amfani don ɗaukar samfurin. Lura cewa wannan aikin ba za a iya juyawa ba! Idan mai amfani yana da wayar hannu, wannan aikin zai cire shi/ta daga jerin ku, amma har yanzu mai amfani zai iya amfani da coldboxstore. Idan mai amfani ba shi da wayowin komai da ruwan, wannan aikin yana share asusunsa kuma ya saki lambar wayar da ke da alaƙa.',
     },
     {
       id: 81,
@@ -5141,7 +5141,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 88,
       title: 'Menene aka nuna akan taswirar sassan sanyaya?',
       role: [ERoles.COOLING_USER],
-      text: 'kan taswirar za ku iya hango wurin da kuke (za a nemi izinin Coldtivate don samun damar wurin ku), wurin da wuraren sanyaya ke kewaye da ku, da wasu bayanai game da raka"o"in (kasuwanci ɗaya ko multicommodity, kamfani, farashi). Ta hanyar zuwa ɗakin sanyi, za ku iya samun ƙarin bayani daga ma"aikacin ɗakin sanyi akan aiki na naúrar da damar ajiya.',
+      text: 'kan taswirar za ku iya hango wurin da kuke (za a nemi izinin coldboxstore don samun damar wurin ku), wurin da wuraren sanyaya ke kewaye da ku, da wasu bayanai game da raka"o"in (kasuwanci ɗaya ko multicommodity, kamfani, farashi). Ta hanyar zuwa ɗakin sanyi, za ku iya samun ƙarin bayani daga ma"aikacin ɗakin sanyi akan aiki na naúrar da damar ajiya.',
     },
     {
       id: 89,
@@ -5152,7 +5152,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 90,
       title:
-        "Nau'in firikwensin zafin jiki na yana goyan bayan Coldtivate (Ecozen, UbiBot, Figorr, Victron Energy). Ta yaya zan iya saita firikwensin?",
+        "Nau'in firikwensin zafin jiki na yana goyan bayan coldboxstore (Ecozen, UbiBot, Figorr, Victron Energy). Ta yaya zan iya saita firikwensin?",
       role: [ERoles.EMPLOYEE],
       text: 'Domin haɗa firikwensin zuwa naúrar sanyaya, zaku iya kewaya zuwa "Menu" -> "Management" -> "Cooling Units", zaɓi naúrar da yakamata a saita firikwensin, sannan kunna "Sensor available". Kuna iya bin umarnin kowane nau"in firikwensin da aka goyan baya kuma ku tabbatar. Tuna da agogon "Ajiye" a kasan shafin don adana canje-canje. Ya kamata ku ga karatun zafin jiki daga na"urori masu auna firikwensin ku a cikin sa"o"i 6 masu zuwa a ƙarƙashin "Ƙari" -> "Yanayin sanyaya" -> "Yanayin ɗaki".',
     },
@@ -5161,19 +5161,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         "Menene bambanci tsakanin 'Kamfanin', 'Haɗaɗɗen', da 'Kwantatawa' ra'ayi a cikin shafin Bincike?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Shafin Analytics a cikin mashaya kewayawa yana ba da taƙaitaccen ƙididdiga ga duk ɗakunan sanyi na kamfanin. A cikin kallon "Kamfani", kuna ganin bayanai kan masu amfani, amfani, da tasiri ga duk raka"o"in sanyaya tun lokacin da kuka fara amfani da Coldtivate. Ta danna "Aggregated", ana sa ka saita raka"o"in sanyaya da lokacin lokacin da kake sha"awar. Ana tattara bayanan da aka nuna don masu amfani, amfani, da tasiri a cikin zaɓaɓɓun raka"o"in sanyaya a cikin lokacin da aka zaɓa. Idan kuna son kwatanta raka"a, zaku iya amfani da shafin "Comparison". Anan, ana nuna bayanan a cikin allunan, inda bayanai daga kowace naúrar sanyaya a cikin lokacin da aka zaɓa. Kuna iya tsara bayanan kuma canza raka"a sanyaya da lokacin lokaci kowane lokaci.',
+      text: 'Shafin Analytics a cikin mashaya kewayawa yana ba da taƙaitaccen ƙididdiga ga duk ɗakunan sanyi na kamfanin. A cikin kallon "Kamfani", kuna ganin bayanai kan masu amfani, amfani, da tasiri ga duk raka"o"in sanyaya tun lokacin da kuka fara amfani da coldboxstore. Ta danna "Aggregated", ana sa ka saita raka"o"in sanyaya da lokacin lokacin da kake sha"awar. Ana tattara bayanan da aka nuna don masu amfani, amfani, da tasiri a cikin zaɓaɓɓun raka"o"in sanyaya a cikin lokacin da aka zaɓa. Idan kuna son kwatanta raka"a, zaku iya amfani da shafin "Comparison". Anan, ana nuna bayanan a cikin allunan, inda bayanai daga kowace naúrar sanyaya a cikin lokacin da aka zaɓa. Kuna iya tsara bayanan kuma canza raka"a sanyaya da lokacin lokaci kowane lokaci.',
     },
     {
       id: 92,
       title: 'Ta yaya ake ƙididdige bayanan da aka nuna a cikin shafin Bincike?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Manufar shafin Analytics shine bayar da cikakkiyar ra"ayi na abin da ke faruwa a ɗakunan sanyi. Ana ƙididdige bayanan mai amfani da amfani daga wurin shiga da bayanan da aka yi rikodin a Coldtivate. Don haka za ku iya fahimtar yawan masu amfani da ayyukan da aka yi, da menene kudaden shiga ko matsakaicin zama na kowane ɗakin sanyi. Bayanan sashin tasirin, a gefe guda, ya dogara ne akan binciken da ake buƙatar masu amfani da sanyaya su cika lokacin da aka yi rajista (watau kafin su fara amfani da ajiyar sanyi) da kuma a kai a kai yayin da suke duba kayan da aka samar daga ɗakin sanyi. . Wannan bayanan yana da mahimmanci don ƙididdige juyin halitta na asarar bayan girbi da kuma kudaden shiga na masu amfani yayin da suke amfani da sanyaya. A ƙarshe, ƙididdigar CO2 ta kwatanta fitar da hayaƙin da ke da alaƙa da sanyaya kayan amfanin gona da aka adana a cikin ɗakin sanyi tare da fitar da hayaƙi iri ɗaya da amfanin gona zai haifar lokacin da ba a adana shi ba.',
+      text: 'Manufar shafin Analytics shine bayar da cikakkiyar ra"ayi na abin da ke faruwa a ɗakunan sanyi. Ana ƙididdige bayanan mai amfani da amfani daga wurin shiga da bayanan da aka yi rikodin a coldboxstore. Don haka za ku iya fahimtar yawan masu amfani da ayyukan da aka yi, da menene kudaden shiga ko matsakaicin zama na kowane ɗakin sanyi. Bayanan sashin tasirin, a gefe guda, ya dogara ne akan binciken da ake buƙatar masu amfani da sanyaya su cika lokacin da aka yi rajista (watau kafin su fara amfani da ajiyar sanyi) da kuma a kai a kai yayin da suke duba kayan da aka samar daga ɗakin sanyi. . Wannan bayanan yana da mahimmanci don ƙididdige juyin halitta na asarar bayan girbi da kuma kudaden shiga na masu amfani yayin da suke amfani da sanyaya. A ƙarshe, ƙididdigar CO2 ta kwatanta fitar da hayaƙin da ke da alaƙa da sanyaya kayan amfanin gona da aka adana a cikin ɗakin sanyi tare da fitar da hayaƙi iri ɗaya da amfanin gona zai haifar lokacin da ba a adana shi ba.',
     },
     {
       id: 93,
       title: 'Ta yaya ake ƙididdige bayanan da aka nuna a cikin shafin Bincike?',
       role: [ERoles.COOLING_USER],
-      text: 'Manufar shafin Analytics shine don ba ku cikakkiyar ra"ayi game da tasirin sanyaya akan amfanin gonakin ku. Bayanan da aka nuna a ƙarƙashin "Crates" ana ƙididdige su daga wurin shiga da bayanan da aka yi rikodin a Coldtivate. Kuna iya haka nawa kuka adana amfanin amfanin gona da matsakaicin lokacin ajiya. Bayanan sashin "Impact" ya dogara ne akan binciken da aka umarce ka da ka cika lokacin da kake yin rajista (watau kafin ka fara amfani da ajiyar sanyi) da kuma akai-akai yayin da kake duba kayan da aka samo daga ɗakin sanyi. Wannan bayanan yana da mahimmanci don ƙididdige juyin halittar asarar amfanin gona da kudaden shiga yayin da kuke amfani da sanyaya. Ana nuna tunatarwa don cika binciken a saman shafin, kuma muna ƙarfafa ku ku cika su a duk lokacin da zai yiwu. A cikin sassan biyu, zaku iya amfani da maɓallin "Configure" a saman dama don zaɓar takamaiman ɗakunan sanyi ko lokacin lokaci. Idan ba a zaɓi komai ba, za ku ga duk bayanan akwai tun lokacin da kuka fara amfani da Coldtivate.',
+      text: 'Manufar shafin Analytics shine don ba ku cikakkiyar ra"ayi game da tasirin sanyaya akan amfanin gonakin ku. Bayanan da aka nuna a ƙarƙashin "Crates" ana ƙididdige su daga wurin shiga da bayanan da aka yi rikodin a coldboxstore. Kuna iya haka nawa kuka adana amfanin amfanin gona da matsakaicin lokacin ajiya. Bayanan sashin "Impact" ya dogara ne akan binciken da aka umarce ka da ka cika lokacin da kake yin rajista (watau kafin ka fara amfani da ajiyar sanyi) da kuma akai-akai yayin da kake duba kayan da aka samo daga ɗakin sanyi. Wannan bayanan yana da mahimmanci don ƙididdige juyin halittar asarar amfanin gona da kudaden shiga yayin da kuke amfani da sanyaya. Ana nuna tunatarwa don cika binciken a saman shafin, kuma muna ƙarfafa ku ku cika su a duk lokacin da zai yiwu. A cikin sassan biyu, zaku iya amfani da maɓallin "Configure" a saman dama don zaɓar takamaiman ɗakunan sanyi ko lokacin lokaci. Idan ba a zaɓi komai ba, za ku ga duk bayanan akwai tun lokacin da kuka fara amfani da coldboxstore.',
     },
     {
       id: 94,
@@ -5185,19 +5185,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 95,
       title: 'Menene aikin kamfanin sanyaya a kasuwa?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Kamfanin sanyaya da ma"aikatansa na iya yanke shawarar matakin sa hannu a kasuwa. Kamar yadda aikin ya dogara da akwatunan da ake dubawa a cikin aikace-aikacen Coldtivate, kasuwa na iya aiki kawai idan ma"aikacin dakin sanyi yana yin rajista akai-akai da ayyukan shiga da dubawa a cikin app. Don samfurin da aka saya ta kasuwa, kamfanin sanyaya yana karɓar kuɗin sanyaya a matsayin wani ɓangare na ma"amala na dijital. Don haka yana da mahimmanci cewa ma"aikaci mai rijista ya tsara bayanan asusun banki na kamfanin: don yin haka, ya kamata ku kewaya zuwa "Menu" -> "Gudanarwa" -> "Saitunan Masu siyarwa (Kamfanin)" -> "Zaɓuɓɓukan biyan kuɗi". Bugu da ƙari, kamfanonin sanyaya za su iya yanke shawarar siyan amfanin gona daga manoma (waɗanda suke taka rawar mai saye) sannan su sake sayar da amfanin gonakin a kasuwa (wasan kwaikwayo na mai siyarwa). Ana iya yin ma"amaloli biyu ta hanyar kasuwar Coldtivate. Lura cewa duka Ma"aikata da Ma"aikatan Rijista suna da zaɓi don siyan da kansu (a matsayin daidaikun mutane) ko a madadin kamfanin da suke wakilta.',
+      text: 'Kamfanin sanyaya da ma"aikatansa na iya yanke shawarar matakin sa hannu a kasuwa. Kamar yadda aikin ya dogara da akwatunan da ake dubawa a cikin aikace-aikacen coldboxstore, kasuwa na iya aiki kawai idan ma"aikacin dakin sanyi yana yin rajista akai-akai da ayyukan shiga da dubawa a cikin app. Don samfurin da aka saya ta kasuwa, kamfanin sanyaya yana karɓar kuɗin sanyaya a matsayin wani ɓangare na ma"amala na dijital. Don haka yana da mahimmanci cewa ma"aikaci mai rijista ya tsara bayanan asusun banki na kamfanin: don yin haka, ya kamata ku kewaya zuwa "Menu" -> "Gudanarwa" -> "Saitunan Masu siyarwa (Kamfanin)" -> "Zaɓuɓɓukan biyan kuɗi". Bugu da ƙari, kamfanonin sanyaya za su iya yanke shawarar siyan amfanin gona daga manoma (waɗanda suke taka rawar mai saye) sannan su sake sayar da amfanin gonakin a kasuwa (wasan kwaikwayo na mai siyarwa). Ana iya yin ma"amaloli biyu ta hanyar kasuwar coldboxstore. Lura cewa duka Ma"aikata da Ma"aikatan Rijista suna da zaɓi don siyan da kansu (a matsayin daidaikun mutane) ko a madadin kamfanin da suke wakilta.',
     },
     {
       id: 96,
       title: "Menene aikin ma'aikacin dakin sanyi a kasuwa?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Masu aikin dakin sanyi a kasuwa suna da manyan ayyuka guda uku. 1) Suna taimaka wa masu amfani da sanyaya ba tare da wayar salula ba don saita asusun ajiyar banki (domin su sami biyan kuɗi na dijital), jera akwatunan "na siyarwa" da farashin su. 2) Suna da alhakin adana kayan amfanin gona a cikin dakin sanyi da aka tsara bisa ka"idar cewa duk abin da ke cikin akwati na mai amfani ne guda ɗaya: lokacin da aka sayi wasu kayan da ke cikin akwati (kuma don haka na wani mai shi ne daban), ma"aikacin. yana karɓar sanarwa don matsar da abin da aka saya zuwa wani akwati daban. Idan an sayi gabaɗayan akwati, ba a buƙatar wani mataki. 3) Masu aiki da ɗakin sanyi suna da alhakin duk ayyukan dubawa, gami da waɗanda ke fitowa daga kasuwa: lokacin da mai siye (ko wakilin bayarwa) ya isa ɗakin sanyi don ɗaukar kayan amfanin da aka saya, ma"aikacin ya kamata ya bincika akwatin. daga Coldtivate.',
+      text: 'Masu aikin dakin sanyi a kasuwa suna da manyan ayyuka guda uku. 1) Suna taimaka wa masu amfani da sanyaya ba tare da wayar salula ba don saita asusun ajiyar banki (domin su sami biyan kuɗi na dijital), jera akwatunan "na siyarwa" da farashin su. 2) Suna da alhakin adana kayan amfanin gona a cikin dakin sanyi da aka tsara bisa ka"idar cewa duk abin da ke cikin akwati na mai amfani ne guda ɗaya: lokacin da aka sayi wasu kayan da ke cikin akwati (kuma don haka na wani mai shi ne daban), ma"aikacin. yana karɓar sanarwa don matsar da abin da aka saya zuwa wani akwati daban. Idan an sayi gabaɗayan akwati, ba a buƙatar wani mataki. 3) Masu aiki da ɗakin sanyi suna da alhakin duk ayyukan dubawa, gami da waɗanda ke fitowa daga kasuwa: lokacin da mai siye (ko wakilin bayarwa) ya isa ɗakin sanyi don ɗaukar kayan amfanin da aka saya, ma"aikacin ya kamata ya bincika akwatin. daga coldboxstore.',
     },
     {
       id: 97,
       title: 'Yaya ake karɓar kuɗin sanyaya a kasuwa?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Lokacin da aka sayi akwatuna a kasuwa, ana cire kuɗin sanyaya har zuwa wannan rana daga farashin da mai saye yake biya kuma a tura shi zuwa kamfanin sanyaya. Ta wannan hanyar, mai siyarwa ba dole ba ne ya daidaita kuɗin sanyaya, kamar yadda aka riga aka yi a cikin ma"amala na dijital. Saboda wannan dalili, yana da mahimmanci cewa duka masu siyarwa da kamfanonin sanyaya suna da asusun banki da aka kafa a Coldtivate. Misali, idan an sayi akwati akan dalar Amurka 20, kuma mai siyarwa yana bin dalar Amurka 3 na kudin sanyaya, daga cikin dalar Amurka 20 da mai saye ya biya, za a tura dala 17 zuwa asusun banki na mai siyar, kuma 3 USD za a samu. canja wurin zuwa asusun banki na kamfanin sanyaya. Idan mai saye ya zo karban amfanin gona a rana guda da siyan, babu wani kudin sanyaya da ya kamata (saboda kudin yau da kullun ya riga ya biya ta mai siyarwa). Duk da haka, idan mai siye ya yanke shawarar ajiye kayan amfanin gona a ajiya, daidaitaccen kuɗin sanyaya ya shafi, kuma za a ƙididdige farashin ya danganta da adadin kwanakin da aka ajiye kayan amfanin a cikin ɗakin sanyi har sai mai siye ya karɓa. Ma"aikacin dakin sanyi ne ke da alhakin tattara waɗannan kuɗaɗen sanyaya lokacin dubawa. Lura cewa idan ana bayarwa, dabaru iri ɗaya ne.',
+      text: 'Lokacin da aka sayi akwatuna a kasuwa, ana cire kuɗin sanyaya har zuwa wannan rana daga farashin da mai saye yake biya kuma a tura shi zuwa kamfanin sanyaya. Ta wannan hanyar, mai siyarwa ba dole ba ne ya daidaita kuɗin sanyaya, kamar yadda aka riga aka yi a cikin ma"amala na dijital. Saboda wannan dalili, yana da mahimmanci cewa duka masu siyarwa da kamfanonin sanyaya suna da asusun banki da aka kafa a coldboxstore. Misali, idan an sayi akwati akan dalar Amurka 20, kuma mai siyarwa yana bin dalar Amurka 3 na kudin sanyaya, daga cikin dalar Amurka 20 da mai saye ya biya, za a tura dala 17 zuwa asusun banki na mai siyar, kuma 3 USD za a samu. canja wurin zuwa asusun banki na kamfanin sanyaya. Idan mai saye ya zo karban amfanin gona a rana guda da siyan, babu wani kudin sanyaya da ya kamata (saboda kudin yau da kullun ya riga ya biya ta mai siyarwa). Duk da haka, idan mai siye ya yanke shawarar ajiye kayan amfanin gona a ajiya, daidaitaccen kuɗin sanyaya ya shafi, kuma za a ƙididdige farashin ya danganta da adadin kwanakin da aka ajiye kayan amfanin a cikin ɗakin sanyi har sai mai siye ya karɓa. Ma"aikacin dakin sanyi ne ke da alhakin tattara waɗannan kuɗaɗen sanyaya lokacin dubawa. Lura cewa idan ana bayarwa, dabaru iri ɗaya ne.',
     },
     {
       id: 98,
@@ -5239,7 +5239,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 104,
       title: 'Menene kudaden da aka nuna a kasuwa?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Farashin siyar da kowane abu da aka nuna a kasuwa an saita shi kai tsaye ta mai siyarwa kuma ya dogara da kilogiram nawa aka saya. A saman wannan adadin, kasuwa ta ƙunshi kudade biyu: Kuɗin Kasuwa kuɗin ma"amala ne na 3.5% wanda ƙungiyar Coldtivate ta tattara don ɗaukar nauyin aikace-aikacen da kuma kula da aikin. Kudin Biyan kuɗi shine kuɗin da tsarin biyan kuɗi na dijital (PayStack a Najeriya) ke ɗauka don aiwatar da ciniki.',
+      text: 'Farashin siyar da kowane abu da aka nuna a kasuwa an saita shi kai tsaye ta mai siyarwa kuma ya dogara da kilogiram nawa aka saya. A saman wannan adadin, kasuwa ta ƙunshi kudade biyu: Kuɗin Kasuwa kuɗin ma"amala ne na 3.5% wanda ƙungiyar coldboxstore ta tattara don ɗaukar nauyin aikace-aikacen da kuma kula da aikin. Kudin Biyan kuɗi shine kuɗin da tsarin biyan kuɗi na dijital (PayStack a Najeriya) ke ɗauka don aiwatar da ciniki.',
     },
     {
       id: 105,
@@ -5259,7 +5259,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         "Na sami sanarwa a cikin app ɗin yana cewa 'Produce yana buƙatar sake rarrabawa'. Menene wancan?",
       role: [ERoles.OPERATOR],
-      text: 'Saboda tsarin shiga a dakin sanyi, abun cikin akwati daya na manomi ko dan kasuwa daya ne. Kamar yadda, a cikin kasuwa, mai siye zai iya siyan kilogiram daga cikin akwati na mai siyarwa, adadin da aka saya ya kamata a motsa shi zuwa wani akwati daban. Wannan sanarwar tana sanar da ku cewa an gama siyayya, kuma ta danna kan ta zaku iya hango ko wane kwalin ya kamata a ɗauko samfurin. Tsara manyan akwatuna yana da mahimmanci don tabbatar da cewa ba a bincika amfanin gona bisa kuskure ba, kuma ana karɓar kuɗin sanyaya daidai. Muna ba da shawarar yin amfani da aikin "Crate ID" a wurin shiga don yiwa akwatuna alama a cikin Coldtivate tare da akwatunan jiki da sauƙin waƙa waɗanda akwatunan ke buƙatar hankalin ku dangane da sanarwar.',
+      text: 'Saboda tsarin shiga a dakin sanyi, abun cikin akwati daya na manomi ko dan kasuwa daya ne. Kamar yadda, a cikin kasuwa, mai siye zai iya siyan kilogiram daga cikin akwati na mai siyarwa, adadin da aka saya ya kamata a motsa shi zuwa wani akwati daban. Wannan sanarwar tana sanar da ku cewa an gama siyayya, kuma ta danna kan ta zaku iya hango ko wane kwalin ya kamata a ɗauko samfurin. Tsara manyan akwatuna yana da mahimmanci don tabbatar da cewa ba a bincika amfanin gona bisa kuskure ba, kuma ana karɓar kuɗin sanyaya daidai. Muna ba da shawarar yin amfani da aikin "Crate ID" a wurin shiga don yiwa akwatuna alama a cikin coldboxstore tare da akwatunan jiki da sauƙin waƙa waɗanda akwatunan ke buƙatar hankalin ku dangane da sanarwar.',
     },
     {
       id: 108,
@@ -5456,14 +5456,14 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 29,
       title: 'Bawo ni MO ṣe le forukọsilẹ awọn olumulo itutu agbaiye tuntun?',
       role: [ERoles.OPERATOR],
-      text: 'Lati forukọsilẹ olumulo itutu agbaiye tuntun, ninu Akojọ aṣyn lilö kiri si "Iṣakoso"> "Awọn olumulo Itutu". Tẹ "+" ni igun apa ọtun oke ati yan boya lati ṣafikun olumulo ti o forukọsilẹ tẹlẹ pẹlu koodu kan, tabi ṣafikun awọn alaye olumulo. Olumulo itutu agbaiye ti o ni foonuiyara kan ati pe o ti forukọsilẹ tẹlẹ ni Coldtivate ni koodu alailẹgbẹ kan, eyiti oun / o le rii labẹ "Akojọ aṣyn" -> "Awọn alaye akọọlẹ" -> "Awọn alaye ti ara ẹni" -> koodu Itutu agbaiye Olumulo. Ti olumulo ko ba ni foonuiyara, tabi ko forukọsilẹ sibẹsibẹ, o le ṣafikun olumulo nipa fifi orukọ kun, akọ ati abo ati nọmba tẹlifoonu. Ti olumulo ko ba ni nọmba tirẹ, nọmba eniyan miiran (fun apẹẹrẹ awọn ọrẹ, ibatan) le ṣee lo, ṣugbọn jọwọ ranti pe nọmba foonu kan le ṣee lo ni ẹẹkan. Tẹ "Fipamọ awọn ayipada" lati jẹrisi. Lati pari iforukọsilẹ, o nilo lati kun iwadi kukuru kan nipa bibeere awọn ibeere diẹ si olumulo itutu agbaiye. Iwadi na tun le pari ni aaye nigbamii nipa lilọ kiri si "Iṣakoso" -> "Awọn olumulo Itutu" -> "Iwadii Olumulo Itutu".',
+      text: 'Lati forukọsilẹ olumulo itutu agbaiye tuntun, ninu Akojọ aṣyn lilö kiri si "Iṣakoso"> "Awọn olumulo Itutu". Tẹ "+" ni igun apa ọtun oke ati yan boya lati ṣafikun olumulo ti o forukọsilẹ tẹlẹ pẹlu koodu kan, tabi ṣafikun awọn alaye olumulo. Olumulo itutu agbaiye ti o ni foonuiyara kan ati pe o ti forukọsilẹ tẹlẹ ni coldboxstore ni koodu alailẹgbẹ kan, eyiti oun / o le rii labẹ "Akojọ aṣyn" -> "Awọn alaye akọọlẹ" -> "Awọn alaye ti ara ẹni" -> koodu Itutu agbaiye Olumulo. Ti olumulo ko ba ni foonuiyara, tabi ko forukọsilẹ sibẹsibẹ, o le ṣafikun olumulo nipa fifi orukọ kun, akọ ati abo ati nọmba tẹlifoonu. Ti olumulo ko ba ni nọmba tirẹ, nọmba eniyan miiran (fun apẹẹrẹ awọn ọrẹ, ibatan) le ṣee lo, ṣugbọn jọwọ ranti pe nọmba foonu kan le ṣee lo ni ẹẹkan. Tẹ "Fipamọ awọn ayipada" lati jẹrisi. Lati pari iforukọsilẹ, o nilo lati kun iwadi kukuru kan nipa bibeere awọn ibeere diẹ si olumulo itutu agbaiye. Iwadi na tun le pari ni aaye nigbamii nipa lilọ kiri si "Iṣakoso" -> "Awọn olumulo Itutu" -> "Iwadii Olumulo Itutu".',
     },
     {
       id: 30,
       title:
         'Olumulo itutu agbaiye ko ni akoko lati dahun awọn ibeere iwadi ni iforukọsilẹ. Kini o yẹ ki n ṣe?',
       role: [ERoles.OPERATOR],
-      text: 'O le fo awọn ibeere iwadi nipa titẹ "Pari nigbamii". Ni idi eyi, iwọ yoo ti ọ lati pari iwadi naa ni igba akọkọ ti o ṣẹda ayẹwo kan fun olumulo itutu agbaiye naa. A ṣe iṣeduro lati gba akoko ati dahun awọn ibeere iwadi daradara: ni ọna yii olumulo le ni iriri ti o ni ibamu pẹlu ohun elo Coldtivate!',
+      text: 'O le fo awọn ibeere iwadi nipa titẹ "Pari nigbamii". Ni idi eyi, iwọ yoo ti ọ lati pari iwadi naa ni igba akọkọ ti o ṣẹda ayẹwo kan fun olumulo itutu agbaiye naa. A ṣe iṣeduro lati gba akoko ati dahun awọn ibeere iwadi daradara: ni ọna yii olumulo le ni iriri ti o ni ibamu pẹlu ohun elo coldboxstore!',
     },
     {
       id: 31,
@@ -5498,7 +5498,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     },
     {
       id: 36,
-      title: 'Mo ni awọn sensọ iwọn otutu ninu yara tutu. Njẹ wọn le sopọ si Coldtivate?',
+      title: 'Mo ni awọn sensọ iwọn otutu ninu yara tutu. Njẹ wọn le sopọ si coldboxstore?',
       role: [ERoles.AUTH],
       text: 'Ibudo Imọ jẹ oju-iwe ti o le de ọdọ nipasẹ titẹ si Akojọ aṣyn ni apa osi. O ni alaye to wulo nipa awọn iṣe ipamọ to dara julọ fun awọn ọja oriṣiriṣi, pẹlu iwọn otutu to dara julọ ati akoko ibi ipamọ isunmọ labẹ iwọn otutu yii.',
     },
@@ -5506,7 +5506,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 37,
       title: 'Bawo ni MO ṣe so awọn sensọ ninu yara pẹlu ohun elo naa?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Ti awọn sensọ iwọn otutu ba wa ninu yara ti o le sopọ si ohun elo Coldtivate, jọwọ ṣe ibasọrọ pẹlu oniduro rẹ. Olumulo nikan ti o ni ipa oṣiṣẹ ti o forukọsilẹ le so awọn sensosi pọ si awọn ẹya itutu agbaiye ti a ṣẹda ni Coldtivate.',
+      text: 'Ti awọn sensọ iwọn otutu ba wa ninu yara ti o le sopọ si ohun elo coldboxstore, jọwọ ṣe ibasọrọ pẹlu oniduro rẹ. Olumulo nikan ti o ni ipa oṣiṣẹ ti o forukọsilẹ le so awọn sensosi pọ si awọn ẹya itutu agbaiye ti a ṣẹda ni coldboxstore.',
     },
     {
       id: 38,
@@ -5524,7 +5524,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 40,
       title: 'Kini iwadii ọja lẹhin-ipamọ ati kilode ti MO yẹ ki o kun?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Iwadi ọja naa le wọle si nipa tite lori awọn aami mẹta ti o wa lẹgbẹẹ ayẹwo kọọkan ninu taabu "Die" -> "Itan" ati yiyan "Fikun iwadi ọja". Iwadi naa kuru pupọ o beere fun alaye nipa idiyele tita ọja ti o ti fipamọ sinu yara tẹlẹ, ati nipa iye ti o bajẹ. Alaye yii yoo ṣe itọju bi aṣiri ati lilo nikan nipasẹ ẹgbẹ Coldtivate lati ṣe iṣiro ipa ti lilo ibi ipamọ tutu. Aami pupa kan yoo ṣe idanimọ awọn ayẹwo jade fun eyiti iwadi ọja ko ti pari sibẹsibẹ. O yoo wa ni leti nipa awọn ayẹwo jade ti o nilo akiyesi rẹ ninu awọn iwifunni nronu ati ki o le tẹ lori iwifunni lati ṣii iwadi. O tun le wọle si awọn iwadi ti o nilo lati kun ni "Analytics" taabu, ati ki o si tite lori "Ipa".',
+      text: 'Iwadi ọja naa le wọle si nipa tite lori awọn aami mẹta ti o wa lẹgbẹẹ ayẹwo kọọkan ninu taabu "Die" -> "Itan" ati yiyan "Fikun iwadi ọja". Iwadi naa kuru pupọ o beere fun alaye nipa idiyele tita ọja ti o ti fipamọ sinu yara tẹlẹ, ati nipa iye ti o bajẹ. Alaye yii yoo ṣe itọju bi aṣiri ati lilo nikan nipasẹ ẹgbẹ coldboxstore lati ṣe iṣiro ipa ti lilo ibi ipamọ tutu. Aami pupa kan yoo ṣe idanimọ awọn ayẹwo jade fun eyiti iwadi ọja ko ti pari sibẹsibẹ. O yoo wa ni leti nipa awọn ayẹwo jade ti o nilo akiyesi rẹ ninu awọn iwifunni nronu ati ki o le tẹ lori iwifunni lati ṣii iwadi. O tun le wọle si awọn iwadi ti o nilo lati kun ni "Analytics" taabu, ati ki o si tite lori "Ipa".',
     },
     {
       id: 41,
@@ -5661,7 +5661,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 66,
       title: 'Emi ko loye awọn apakan ti app naa. Tani o yẹ ki n kan si?',
       role: [ERoles.COOLING_USER],
-      text: 'le fo awọn ibeere iwadi nipa titẹ "Pari nigbamii". Iwọ yoo wa iwadi naa gẹgẹbi apakan ti Awọn alaye Account rẹ ati pe o le pari nigbakugba. Sibẹsibẹ, A ṣe iṣeduro lati gba akoko lati dahun awọn ibeere iwadi daradara nigbati o bẹrẹ lilo yara naa: ni ọna yii o le ni iriri ti o ni ibamu pẹlu ohun elo Coldtivate!',
+      text: 'le fo awọn ibeere iwadi nipa titẹ "Pari nigbamii". Iwọ yoo wa iwadi naa gẹgẹbi apakan ti Awọn alaye Account rẹ ati pe o le pari nigbakugba. Sibẹsibẹ, A ṣe iṣeduro lati gba akoko lati dahun awọn ibeere iwadi daradara nigbati o bẹrẹ lilo yara naa: ni ọna yii o le ni iriri ti o ni ibamu pẹlu ohun elo coldboxstore!',
     },
     {
       id: 67,
@@ -5673,7 +5673,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 68,
       title: 'Nkankan ko ṣiṣẹ daradara ni app naa. Tani o yẹ ki n kan si?',
       role: [ERoles.OPERATOR],
-      text: 'Ti awọn sensọ iwọn otutu ba wa ninu yara ti o le sopọ si ohun elo Coldtivate, jọwọ ṣe ibasọrọ pẹlu oniduro rẹ. Olumulo nikan ti o ni ipa oṣiṣẹ ti o forukọsilẹ le so awọn sensosi pọ si awọn ẹya itutu agbaiye ti a ṣẹda ni Coldtivate.',
+      text: 'Ti awọn sensọ iwọn otutu ba wa ninu yara ti o le sopọ si ohun elo coldboxstore, jọwọ ṣe ibasọrọ pẹlu oniduro rẹ. Olumulo nikan ti o ni ipa oṣiṣẹ ti o forukọsilẹ le so awọn sensosi pọ si awọn ẹya itutu agbaiye ti a ṣẹda ni coldboxstore.',
     },
     {
       id: 69,
@@ -5739,7 +5739,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 80,
       title: 'Emi yoo fẹ lati pa akọọlẹ mi rẹ. Kini o yẹ ki n ṣe?',
       role: [ERoles.OPERATOR],
-      text: 'Lati pa olumulo itutu rẹ kuro ninu atokọ naa, lilö kiri si "Iṣakoso" -> "Awọn olumulo itutu", tẹ orukọ olumulo itutu agbaiye ati lẹhinna bọtini "Paarẹ". Jọwọ ṣakiyesi pe awọn olumulo nikan ti ko si awọn iṣayẹwo isunmọ le jẹ paarẹ! Ti o ba wa ni isunmọtosi awọn ayẹwo, jọwọ kan si olumulo lati gbe awọn ọja. Ṣe akiyesi pe igbese yii ko le yipada! Ti olumulo ba ni foonuiyara kan, iṣẹ ṣiṣe yii yoo yọ ọ / rẹ kuro ninu atokọ rẹ, ṣugbọn olumulo yoo tun ni anfani lati lo Coldtivate. Ti olumulo ko ba ni foonuiyara, isẹ yii npa akọọlẹ / akọọlẹ rẹ kuro ki o si sọ nọmba foonu ti o somọ ọfẹ.',
+      text: 'Lati pa olumulo itutu rẹ kuro ninu atokọ naa, lilö kiri si "Iṣakoso" -> "Awọn olumulo itutu", tẹ orukọ olumulo itutu agbaiye ati lẹhinna bọtini "Paarẹ". Jọwọ ṣakiyesi pe awọn olumulo nikan ti ko si awọn iṣayẹwo isunmọ le jẹ paarẹ! Ti o ba wa ni isunmọtosi awọn ayẹwo, jọwọ kan si olumulo lati gbe awọn ọja. Ṣe akiyesi pe igbese yii ko le yipada! Ti olumulo ba ni foonuiyara kan, iṣẹ ṣiṣe yii yoo yọ ọ / rẹ kuro ninu atokọ rẹ, ṣugbọn olumulo yoo tun ni anfani lati lo coldboxstore. Ti olumulo ko ba ni foonuiyara, isẹ yii npa akọọlẹ / akọọlẹ rẹ kuro ki o si sọ nọmba foonu ti o somọ ọfẹ.',
     },
     {
       id: 81,
@@ -5789,7 +5789,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 88,
       title: 'Kini o han lori maapu ti awọn ẹya itutu agbaiye?',
       role: [ERoles.COOLING_USER],
-      text: 'Lori maapu naa o le wo ipo rẹ (o yoo beere fun igbanilaaye fun Coldtivate lati wọle si ipo rẹ), ipo ti awọn ẹya itutu agbaiye ni ayika rẹ, ati alaye diẹ nipa awọn ẹya (ẹyọkan tabi multicommodity, ile-iṣẹ, idiyele). Nipa lilọ si yara tutu, o le gba alaye diẹ sii lati ọdọ oniṣẹ yara tutu lori iṣẹ ti ẹyọkan ati aye fun ibi ipamọ.',
+      text: 'Lori maapu naa o le wo ipo rẹ (o yoo beere fun igbanilaaye fun coldboxstore lati wọle si ipo rẹ), ipo ti awọn ẹya itutu agbaiye ni ayika rẹ, ati alaye diẹ nipa awọn ẹya (ẹyọkan tabi multicommodity, ile-iṣẹ, idiyele). Nipa lilọ si yara tutu, o le gba alaye diẹ sii lati ọdọ oniṣẹ yara tutu lori iṣẹ ti ẹyọkan ati aye fun ibi ipamọ.',
     },
     {
       id: 89,
@@ -5800,7 +5800,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 90,
       title:
-        'Iru sensọ otutu mi ni atilẹyin nipasẹ Coldtivate (Ecozen, UbiBot, Figorr, Victron Energy). Bawo ni MO ṣe le ṣeto awọn sensọ?',
+        'Iru sensọ otutu mi ni atilẹyin nipasẹ coldboxstore (Ecozen, UbiBot, Figorr, Victron Energy). Bawo ni MO ṣe le ṣeto awọn sensọ?',
       role: [ERoles.EMPLOYEE],
       text: 'Lati le so sensọ kan pọ si ẹyọ itutu agbaiye, o le lọ kiri si "Akojọ aṣyn" -> "Iṣakoso" -> "Awọn ẹya Itutu", yan ẹyọ ti o yẹ ki sensọ ṣeto, lẹhinna yi "Sensor wa". O le tẹle itọnisọna fun iru sensọ atilẹyin kọọkan ati jẹrisi. Ranti lati aago "Fipamọ" ni isalẹ ti oju-iwe fun awọn ayipada lati wa ni fipamọ. O yẹ ki o wo awọn kika iwọn otutu lati awọn sensọ rẹ ni awọn wakati 6 to nbọ labẹ "Die sii" -> "Awọn ẹya itutu agbaiye" -> "Awọn ipo yara".',
     },
@@ -5808,19 +5808,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 91,
       title: "Kini iyatọ laarin 'Ile-iṣẹ', 'Akopọ', ati wiwo 'Ifiwera' ni taabu Awọn atupale?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Awọn atupale taabu ninu ọpa lilọ pese awọn iṣiro akojọpọ fun gbogbo awọn yara tutu ti ile-iṣẹ. Ni wiwo "Ile-iṣẹ", o rii data kan lori awọn olumulo, lilo, ati ipa fun gbogbo awọn ẹya itutu agbaiye lati igba ti o bẹrẹ lilo Coldtivate. Nipa tite lori "Akopọ", o ti ṣetan lati tunto iru awọn ẹya itutu agbaiye ati akoko akoko ti o nifẹ si. Awọn data ti o han fun awọn olumulo, lilo, ati ipa ti ṣajọpọ kọja awọn ẹya itutu agbaiye ti o yan ni akoko akoko ti o yan. Ti o ba fẹ lati ṣe afiwe kọja awọn ẹya, o le lo taabu "Comparison". Nibi, data ti han ni awọn tabili, nibiti data lati inu ẹyọkan itutu agbaiye kọọkan ni akoko akoko ti o yan ti pin. O le to awọn data ki o si yi awọn itutu sipo ati akoko akoko nigbakugba.',
+      text: 'Awọn atupale taabu ninu ọpa lilọ pese awọn iṣiro akojọpọ fun gbogbo awọn yara tutu ti ile-iṣẹ. Ni wiwo "Ile-iṣẹ", o rii data kan lori awọn olumulo, lilo, ati ipa fun gbogbo awọn ẹya itutu agbaiye lati igba ti o bẹrẹ lilo coldboxstore. Nipa tite lori "Akopọ", o ti ṣetan lati tunto iru awọn ẹya itutu agbaiye ati akoko akoko ti o nifẹ si. Awọn data ti o han fun awọn olumulo, lilo, ati ipa ti ṣajọpọ kọja awọn ẹya itutu agbaiye ti o yan ni akoko akoko ti o yan. Ti o ba fẹ lati ṣe afiwe kọja awọn ẹya, o le lo taabu "Comparison". Nibi, data ti han ni awọn tabili, nibiti data lati inu ẹyọkan itutu agbaiye kọọkan ni akoko akoko ti o yan ti pin. O le to awọn data ki o si yi awọn itutu sipo ati akoko akoko nigbakugba.',
     },
     {
       id: 92,
       title: 'Bawo ni data ti o han ninu taabu Awọn atupale ṣe iṣiro?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Ibi-afẹde ti taabu Awọn atupale ni lati funni ni wiwo okeerẹ ti ohun ti n ṣẹlẹ ni awọn yara tutu. Olumulo ati data iṣamulo jẹ iṣiro lati inu ayẹwo ati ṣayẹwo-jade alaye ti o gbasilẹ ni Coldtivate. O le ni oye iye awọn olumulo ati awọn iṣẹ ṣiṣe, ati kini owo-wiwọle tabi ibugbe apapọ ti yara tutu kọọkan. Awọn data ti apakan ikolu, ni apa keji, da lori awọn iwadi ti awọn olumulo itutu agbaiye ni a beere lati kun nigbati wọn ba forukọsilẹ (ie ṣaaju ki wọn to bẹrẹ lilo ibi ipamọ tutu) ati nigbagbogbo bi wọn ṣe ṣayẹwo jade lati inu yara tutu. Data yii ṣe pataki lati ṣe iṣiro itankalẹ ti ipadanu ikore ati owo-wiwọle awọn olumulo bi wọn ṣe nlo itutu agbaiye. Nikẹhin, idiyele CO2 ṣe afiwe itujade ti o ni nkan ṣe pẹlu itutu awọn irugbin ti a fipamọ sinu yara tutu pẹlu awọn itujade ti a sọ asọtẹlẹ irugbin kanna yoo ti fa nigba ti o fipamọ laisi firiji.',
+      text: 'Ibi-afẹde ti taabu Awọn atupale ni lati funni ni wiwo okeerẹ ti ohun ti n ṣẹlẹ ni awọn yara tutu. Olumulo ati data iṣamulo jẹ iṣiro lati inu ayẹwo ati ṣayẹwo-jade alaye ti o gbasilẹ ni coldboxstore. O le ni oye iye awọn olumulo ati awọn iṣẹ ṣiṣe, ati kini owo-wiwọle tabi ibugbe apapọ ti yara tutu kọọkan. Awọn data ti apakan ikolu, ni apa keji, da lori awọn iwadi ti awọn olumulo itutu agbaiye ni a beere lati kun nigbati wọn ba forukọsilẹ (ie ṣaaju ki wọn to bẹrẹ lilo ibi ipamọ tutu) ati nigbagbogbo bi wọn ṣe ṣayẹwo jade lati inu yara tutu. Data yii ṣe pataki lati ṣe iṣiro itankalẹ ti ipadanu ikore ati owo-wiwọle awọn olumulo bi wọn ṣe nlo itutu agbaiye. Nikẹhin, idiyele CO2 ṣe afiwe itujade ti o ni nkan ṣe pẹlu itutu awọn irugbin ti a fipamọ sinu yara tutu pẹlu awọn itujade ti a sọ asọtẹlẹ irugbin kanna yoo ti fa nigba ti o fipamọ laisi firiji.',
     },
     {
       id: 93,
       title: 'Bawo ni data ti o han ninu taabu Awọn atupale ṣe iṣiro?',
       role: [ERoles.COOLING_USER],
-      text: 'Ibi-afẹde ti taabu Awọn atupale ni lati fun ọ ni wiwo okeerẹ ti ipa ti itutu agbaiye lori awọn irugbin rẹ. Awọn data ti o han labẹ "Crates" jẹ iṣiro lati inu ayẹwo ati ṣayẹwo-jade alaye ti o gbasilẹ ni Coldtivate. O le nitorinaa iye ti o fipamọ iru irugbin na ati akoko ipamọ apapọ. Awọn data ti apakan "Ipact" da lori awọn iwadi ti o beere lọwọ rẹ lati kun nigbati wọn ba forukọsilẹ (ie ṣaaju ki o to bẹrẹ lilo ibi ipamọ tutu) ati nigbagbogbo bi o ṣe ṣayẹwo-jade lati inu yara tutu. Data yii ṣe pataki lati ṣe iṣiro itankalẹ ti ipadanu lẹhin ikore ati owo ti n wọle bi o ṣe nlo itutu agbaiye. Olurannileti lati kun awọn iwadi ni o han lori oke oju-iwe naa, ati pe a gba ọ niyanju lati kun wọn nigbakugba ti o ba ṣeeṣe. Ni apakan mejeeji, o le lo bọtini "Ṣiṣe atunto" ni apa ọtun oke lati yan awọn yara tutu kan pato tabi akoko akoko kan. Ti ko ba yan ohunkohun, o rii gbogbo data ti o wa lati igba ti o bẹrẹ lilo Coldtivate.',
+      text: 'Ibi-afẹde ti taabu Awọn atupale ni lati fun ọ ni wiwo okeerẹ ti ipa ti itutu agbaiye lori awọn irugbin rẹ. Awọn data ti o han labẹ "Crates" jẹ iṣiro lati inu ayẹwo ati ṣayẹwo-jade alaye ti o gbasilẹ ni coldboxstore. O le nitorinaa iye ti o fipamọ iru irugbin na ati akoko ipamọ apapọ. Awọn data ti apakan "Ipact" da lori awọn iwadi ti o beere lọwọ rẹ lati kun nigbati wọn ba forukọsilẹ (ie ṣaaju ki o to bẹrẹ lilo ibi ipamọ tutu) ati nigbagbogbo bi o ṣe ṣayẹwo-jade lati inu yara tutu. Data yii ṣe pataki lati ṣe iṣiro itankalẹ ti ipadanu lẹhin ikore ati owo ti n wọle bi o ṣe nlo itutu agbaiye. Olurannileti lati kun awọn iwadi ni o han lori oke oju-iwe naa, ati pe a gba ọ niyanju lati kun wọn nigbakugba ti o ba ṣeeṣe. Ni apakan mejeeji, o le lo bọtini "Ṣiṣe atunto" ni apa ọtun oke lati yan awọn yara tutu kan pato tabi akoko akoko kan. Ti ko ba yan ohunkohun, o rii gbogbo data ti o wa lati igba ti o bẹrẹ lilo coldboxstore.',
     },
     {
       id: 94,
@@ -5832,19 +5832,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 95,
       title: 'Kini ipa ti ile-iṣẹ itutu agbaiye ni ọjà?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Ile-iṣẹ itutu agbaiye ati awọn oṣiṣẹ rẹ le pinnu ipele ilowosi wọn ni aaye ọjà. Bi iṣẹ ṣiṣe ṣe gbarale awọn apoti ti a ṣayẹwo ni ohun elo Coldtivate, ibi ọja le ṣiṣẹ nikan ti oniṣẹ yara tutu ba forukọsilẹ nigbagbogbo ati ṣayẹwo awọn iṣẹ ṣiṣe ninu ohun elo naa. Fun ọja ti o ra nipasẹ ibi ọja, ile-iṣẹ itutu agbaiye n gba owo itutu agbaiye gẹgẹbi apakan ti iṣowo oni-nọmba. Nitorinaa o ṣe pataki pe Oṣiṣẹ Iforukọsilẹ ṣeto awọn alaye akọọlẹ banki ile-iṣẹ naa: lati ṣe bẹ, o yẹ ki o lọ kiri si "Akojọ aṣyn" -> "Iṣakoso" -> "Eto Olutaja (Ile-iṣẹ)" -> "Awọn aṣayan isanwo". Ni afikun, awọn ile-iṣẹ itutu agbaiye le pinnu lati ra ọja lati ọdọ awọn agbe (ti nṣe ipa ti olura) ati lẹhinna tun ta awọn irugbin wọnyẹn ni ọjà (ti nṣe ipa ti olutaja). Mejeeji lẹkọ le ṣee ṣe nipasẹ Coldtivate ọjà. Ṣe akiyesi pe awọn oniṣẹ mejeeji ati Awọn oṣiṣẹ ti o forukọsilẹ ni aṣayan lati boya ra fun ara wọn (gẹgẹbi awọn ẹni kọọkan) tabi ni aṣoju ile-iṣẹ ti wọn ṣe aṣoju.',
+      text: 'Ile-iṣẹ itutu agbaiye ati awọn oṣiṣẹ rẹ le pinnu ipele ilowosi wọn ni aaye ọjà. Bi iṣẹ ṣiṣe ṣe gbarale awọn apoti ti a ṣayẹwo ni ohun elo coldboxstore, ibi ọja le ṣiṣẹ nikan ti oniṣẹ yara tutu ba forukọsilẹ nigbagbogbo ati ṣayẹwo awọn iṣẹ ṣiṣe ninu ohun elo naa. Fun ọja ti o ra nipasẹ ibi ọja, ile-iṣẹ itutu agbaiye n gba owo itutu agbaiye gẹgẹbi apakan ti iṣowo oni-nọmba. Nitorinaa o ṣe pataki pe Oṣiṣẹ Iforukọsilẹ ṣeto awọn alaye akọọlẹ banki ile-iṣẹ naa: lati ṣe bẹ, o yẹ ki o lọ kiri si "Akojọ aṣyn" -> "Iṣakoso" -> "Eto Olutaja (Ile-iṣẹ)" -> "Awọn aṣayan isanwo". Ni afikun, awọn ile-iṣẹ itutu agbaiye le pinnu lati ra ọja lati ọdọ awọn agbe (ti nṣe ipa ti olura) ati lẹhinna tun ta awọn irugbin wọnyẹn ni ọjà (ti nṣe ipa ti olutaja). Mejeeji lẹkọ le ṣee ṣe nipasẹ coldboxstore ọjà. Ṣe akiyesi pe awọn oniṣẹ mejeeji ati Awọn oṣiṣẹ ti o forukọsilẹ ni aṣayan lati boya ra fun ara wọn (gẹgẹbi awọn ẹni kọọkan) tabi ni aṣoju ile-iṣẹ ti wọn ṣe aṣoju.',
     },
     {
       id: 96,
       title: 'Kini ipa ti oniṣẹ ẹrọ yara tutu ni ọjà?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Awọn oniṣẹ yara tutu ni ọjà ni awọn ipa akọkọ mẹta. 1) Wọn ṣe iranlọwọ fun awọn olumulo tutu laisi foonuiyara lati ṣeto akọọlẹ banki wọn (ki wọn le gba awọn sisanwo oni-nọmba), ṣe atokọ awọn apoti wọn "fun tita" ati idiyele wọn. 2) Wọn ṣe iduro fun titọju awọn ọja ni yara tutu ti a ṣeto ni atẹle ilana pe gbogbo awọn eso ti o wa ninu apoti jẹ ti olumulo kan: nigbati a ra awọn eso kan ninu apoti kan (ati nitorinaa jẹ ti oniwun miiran), oniṣẹ gba iwifunni lati gbe ọja ti o ra si apoti lọtọ. Ti o ba ti ra gbogbo apoti, ko si igbese ti a beere. 3) Awọn oniṣẹ yara tutu jẹ iduro fun gbogbo awọn iṣẹ ṣiṣe ayẹwo, pẹlu awọn abajade lati ibi ọja: nigbati olura kan (tabi aṣoju ifijiṣẹ) ba de yara tutu lati gbe ọja ti o ra, oniṣẹ yẹ ki o ṣayẹwo-jade apoti naa lati Coldtivate.',
+      text: 'Awọn oniṣẹ yara tutu ni ọjà ni awọn ipa akọkọ mẹta. 1) Wọn ṣe iranlọwọ fun awọn olumulo tutu laisi foonuiyara lati ṣeto akọọlẹ banki wọn (ki wọn le gba awọn sisanwo oni-nọmba), ṣe atokọ awọn apoti wọn "fun tita" ati idiyele wọn. 2) Wọn ṣe iduro fun titọju awọn ọja ni yara tutu ti a ṣeto ni atẹle ilana pe gbogbo awọn eso ti o wa ninu apoti jẹ ti olumulo kan: nigbati a ra awọn eso kan ninu apoti kan (ati nitorinaa jẹ ti oniwun miiran), oniṣẹ gba iwifunni lati gbe ọja ti o ra si apoti lọtọ. Ti o ba ti ra gbogbo apoti, ko si igbese ti a beere. 3) Awọn oniṣẹ yara tutu jẹ iduro fun gbogbo awọn iṣẹ ṣiṣe ayẹwo, pẹlu awọn abajade lati ibi ọja: nigbati olura kan (tabi aṣoju ifijiṣẹ) ba de yara tutu lati gbe ọja ti o ra, oniṣẹ yẹ ki o ṣayẹwo-jade apoti naa lati coldboxstore.',
     },
     {
       id: 97,
       title: 'Bawo ni a ṣe gba awọn idiyele itutu agbaiye ni ibi ọja?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Nigbati a ba ra awọn apoti ni ibi ọja, owo itutu agbaiye titi di ọjọ yẹn ni a yọkuro lati idiyele ti olura ti n san ati gbe lọ si ile-iṣẹ itutu agbaiye. Ni ọna yii, ẹniti o ta ọja naa ko ni lati yanju owo itutu agbaiye, bi eyi ti ṣe tẹlẹ ninu iṣowo oni-nọmba. Fun idi eyi, o ṣe pataki pe awọn olutaja ati awọn ile-iṣẹ itutu agbaiye ni akọọlẹ banki kan ti a ṣeto ni Coldtivate. Fun apẹẹrẹ, ti a ba ra apoti kan fun 20 USD, ati pe eniti o ta ọja naa jẹ 3 USD ti awọn idiyele itutu agbaiye, ninu 20 USD ti o san nipasẹ ẹniti o ra, 17 USD yoo gbe lọ si akọọlẹ banki ti eniti o ta, ati pe 3 USD yoo gbe lọ si akọọlẹ banki ti ile-iṣẹ itutu agbaiye. Ti eniti o ra ọja ba wa lati gbe ọja ni ọjọ kanna bi rira, ko si owo itutu agbaiye miiran ti o yẹ (nitori owo ojoojumọ ti san tẹlẹ nipasẹ ẹniti o ta ọja naa). Bibẹẹkọ, ti olura naa ba pinnu lati tọju ọja naa ni ibi ipamọ, idiyele itutu agbaiye boṣewa kan, ati pe idiyele naa yoo ṣe iṣiro da lori nọmba awọn ọjọ ti a fi eso naa sinu yara tutu titi ti olura yoo fi gbe e. Onišẹ yara tutu jẹ iduro fun gbigba awọn idiyele itutu agbaiye wọnyi ni ayẹwo-jade. Ṣe akiyesi pe ni ọran ti ifijiṣẹ, ọgbọn kanna kan.',
+      text: 'Nigbati a ba ra awọn apoti ni ibi ọja, owo itutu agbaiye titi di ọjọ yẹn ni a yọkuro lati idiyele ti olura ti n san ati gbe lọ si ile-iṣẹ itutu agbaiye. Ni ọna yii, ẹniti o ta ọja naa ko ni lati yanju owo itutu agbaiye, bi eyi ti ṣe tẹlẹ ninu iṣowo oni-nọmba. Fun idi eyi, o ṣe pataki pe awọn olutaja ati awọn ile-iṣẹ itutu agbaiye ni akọọlẹ banki kan ti a ṣeto ni coldboxstore. Fun apẹẹrẹ, ti a ba ra apoti kan fun 20 USD, ati pe eniti o ta ọja naa jẹ 3 USD ti awọn idiyele itutu agbaiye, ninu 20 USD ti o san nipasẹ ẹniti o ra, 17 USD yoo gbe lọ si akọọlẹ banki ti eniti o ta, ati pe 3 USD yoo gbe lọ si akọọlẹ banki ti ile-iṣẹ itutu agbaiye. Ti eniti o ra ọja ba wa lati gbe ọja ni ọjọ kanna bi rira, ko si owo itutu agbaiye miiran ti o yẹ (nitori owo ojoojumọ ti san tẹlẹ nipasẹ ẹniti o ta ọja naa). Bibẹẹkọ, ti olura naa ba pinnu lati tọju ọja naa ni ibi ipamọ, idiyele itutu agbaiye boṣewa kan, ati pe idiyele naa yoo ṣe iṣiro da lori nọmba awọn ọjọ ti a fi eso naa sinu yara tutu titi ti olura yoo fi gbe e. Onišẹ yara tutu jẹ iduro fun gbigba awọn idiyele itutu agbaiye wọnyi ni ayẹwo-jade. Ṣe akiyesi pe ni ọran ti ifijiṣẹ, ọgbọn kanna kan.',
     },
     {
       id: 98,
@@ -5886,7 +5886,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 104,
       title: 'Kini awọn idiyele ti o han ni ọjà?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Iye owo tita ọja kọọkan ti o han ni ibi ọja jẹ ṣeto taara nipasẹ ẹniti o ta ọja ati da lori iye kg ti o ra. Lori oke ti iye yẹn, ibi ọja naa pẹlu awọn idiyele meji: ọya Ibi ọja jẹ ọya idunadura 3.5% ti a gba nipasẹ ẹgbẹ Coldtivate lati gbalejo ati ṣetọju iṣẹ ṣiṣe ohun elo. Owo sisan ni owo ti eto isanwo oni-nọmba (PayStack ni Nigeria) n gba agbara lati ṣe ilana iṣowo naa.',
+      text: 'Iye owo tita ọja kọọkan ti o han ni ibi ọja jẹ ṣeto taara nipasẹ ẹniti o ta ọja ati da lori iye kg ti o ra. Lori oke ti iye yẹn, ibi ọja naa pẹlu awọn idiyele meji: ọya Ibi ọja jẹ ọya idunadura 3.5% ti a gba nipasẹ ẹgbẹ coldboxstore lati gbalejo ati ṣetọju iṣẹ ṣiṣe ohun elo. Owo sisan ni owo ti eto isanwo oni-nọmba (PayStack ni Nigeria) n gba agbara lati ṣe ilana iṣowo naa.',
     },
     {
       id: 105,
@@ -5906,7 +5906,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         "Mo gba ifitonileti kan ninu ohun elo naa ti o sọ pe 'Ṣejade nilo lati tun pin kaakiri'. Kini ni yen?",
       role: [ERoles.OPERATOR],
-      text: 'Nitori ilana ayẹwo ni yara tutu, akoonu ti apoti kan jẹ ti agbẹ kan tabi oniṣowo. Bi, ni ọjà, olura le ra diẹ ninu awọn kg lati inu apoti ti o jẹ ti olutaja, iye ti o ra yẹ ki o gbe lọ si apoti ti o yatọ. Ifitonileti yii sọ fun ọ pe rira kan ti pari, ati nipa tite lori rẹ o le foju inu wo inu apoti wo ni o yẹ ki o mu ọja naa. Titọju awọn apoti ti a ṣeto jẹ pataki lati rii daju pe a ko ṣayẹwo awọn irugbin nipasẹ aṣiṣe, ati pe awọn idiyele itutu agbaiye ni a gba ni deede. A ṣeduro lilo iṣẹ "Crate ID" ni ibi-iṣayẹwo lati taagi si awọn apoti ni Coldtivate pẹlu awọn apoti ti ara ati ni irọrun diẹ sii ni irọrun orin eyiti awọn apoti nilo akiyesi rẹ ti o da lori ifitonileti naa.',
+      text: 'Nitori ilana ayẹwo ni yara tutu, akoonu ti apoti kan jẹ ti agbẹ kan tabi oniṣowo. Bi, ni ọjà, olura le ra diẹ ninu awọn kg lati inu apoti ti o jẹ ti olutaja, iye ti o ra yẹ ki o gbe lọ si apoti ti o yatọ. Ifitonileti yii sọ fun ọ pe rira kan ti pari, ati nipa tite lori rẹ o le foju inu wo inu apoti wo ni o yẹ ki o mu ọja naa. Titọju awọn apoti ti a ṣeto jẹ pataki lati rii daju pe a ko ṣayẹwo awọn irugbin nipasẹ aṣiṣe, ati pe awọn idiyele itutu agbaiye ni a gba ni deede. A ṣeduro lilo iṣẹ "Crate ID" ni ibi-iṣayẹwo lati taagi si awọn apoti ni coldboxstore pẹlu awọn apoti ti ara ati ni irọrun diẹ sii ni irọrun orin eyiti awọn apoti nilo akiyesi rẹ ti o da lori ifitonileti naa.',
     },
     {
       id: 108,
@@ -6102,14 +6102,14 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 29,
       title: 'Kedu otu m ga-esi debanye aha ndị ọrụ jụrụ oyi ọhụrụ?',
       role: [ERoles.OPERATOR],
-      text: 'Ka ịdebanye aha onye ọrụ jụrụ oyi ọhụrụ, na Menu gaa na "Management"> "Ndị ọrụ jụrụ oyi". Pịa na "+" dị n"akụkụ aka nri elu wee họrọ ma ị ga-agbakwunye onye ọrụ edebanyelarị ya na koodu, ma ọ bụ tinye nkọwa onye ọrụ. Onye ọrụ jụrụ oyi nke nwere smartphone ma debanyelarị aha na Coldtivate nwere koodu pụrụ iche, nke ọ nwere ike ịhụ n"okpuru "NchNhr" -> "Nkọwa akaụntụ" -> "Nkọwa nkeonwe" -> Koodu mbubata onye ọrụ jụrụ oyi. Ọ bụrụ na onye ọrụ enweghị smartphone, ma ọ bụ edebanyeghị aha ya, ịnwere ike ịgbakwunye onye ọrụ site na ịgbakwunye aha, okike na nọmba ekwentị. Ọ bụrụ na onye ọrụ enweghị nọmba nke ya, enwere ike iji nọmba onye ọzọ (dịka ndị enyi, ndị ikwu) mee ihe, mana biko cheta na enwere ike iji otu nọmba ekwentị naanị otu ugboro. Pịa "Chekwa mgbanwe" iji gosi. Iji mezue ndebanye aha, ịkwesịrị imeju nyocha dị nkenke site na ịjụ onye ọrụ jụrụ ajụjụ ole na ole. Enwere ike ịmecha nyocha ahụ n"oge ọzọ site na ịgagharị na "Management" -> "Ndị ọrụ jụrụ oyi" -> "Nyocha onye ọrụ jụrụ oyi".',
+      text: 'Ka ịdebanye aha onye ọrụ jụrụ oyi ọhụrụ, na Menu gaa na "Management"> "Ndị ọrụ jụrụ oyi". Pịa na "+" dị n"akụkụ aka nri elu wee họrọ ma ị ga-agbakwunye onye ọrụ edebanyelarị ya na koodu, ma ọ bụ tinye nkọwa onye ọrụ. Onye ọrụ jụrụ oyi nke nwere smartphone ma debanyelarị aha na coldboxstore nwere koodu pụrụ iche, nke ọ nwere ike ịhụ n"okpuru "NchNhr" -> "Nkọwa akaụntụ" -> "Nkọwa nkeonwe" -> Koodu mbubata onye ọrụ jụrụ oyi. Ọ bụrụ na onye ọrụ enweghị smartphone, ma ọ bụ edebanyeghị aha ya, ịnwere ike ịgbakwunye onye ọrụ site na ịgbakwunye aha, okike na nọmba ekwentị. Ọ bụrụ na onye ọrụ enweghị nọmba nke ya, enwere ike iji nọmba onye ọzọ (dịka ndị enyi, ndị ikwu) mee ihe, mana biko cheta na enwere ike iji otu nọmba ekwentị naanị otu ugboro. Pịa "Chekwa mgbanwe" iji gosi. Iji mezue ndebanye aha, ịkwesịrị imeju nyocha dị nkenke site na ịjụ onye ọrụ jụrụ ajụjụ ole na ole. Enwere ike ịmecha nyocha ahụ n"oge ọzọ site na ịgagharị na "Management" -> "Ndị ọrụ jụrụ oyi" -> "Nyocha onye ọrụ jụrụ oyi".',
     },
     {
       id: 30,
       title:
         'Onye ọrụ jụrụ oyi enweghị oge ịza ajụjụ nyocha na ndebanye aha. Kedu ihe m kwesịrị ịme?',
       role: [ERoles.OPERATOR],
-      text: 'Ị nwere ike ịgafe ajụjụ nyocha site na ịpị "Mezue ma emechaa". N"okwu a, a ga-akpali gị ịmecha nyocha ahụ oge mbụ ị na-emepụta nlele maka onye ọrụ ahụ jụrụ oyi. A na-atụ aro ka iwepụta oge wee zaa ajụjụ nyocha nke ọma: n"ụzọ dị otú a onye ọrụ nwere ike nweta ahụmịhe ahaziri ahazi na ngwa Coldtivate!',
+      text: 'Ị nwere ike ịgafe ajụjụ nyocha site na ịpị "Mezue ma emechaa". N"okwu a, a ga-akpali gị ịmecha nyocha ahụ oge mbụ ị na-emepụta nlele maka onye ọrụ ahụ jụrụ oyi. A na-atụ aro ka iwepụta oge wee zaa ajụjụ nyocha nke ọma: n"ụzọ dị otú a onye ọrụ nwere ike nweta ahụmịhe ahaziri ahazi na ngwa coldboxstore!',
     },
     {
       id: 31,
@@ -6144,7 +6144,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     },
     {
       id: 36,
-      title: "Enwere m ihe mmetụta okpomọkụ n'ime ụlọ oyi. Enwere ike ijikọ ha na Coldtivate?",
+      title: "Enwere m ihe mmetụta okpomọkụ n'ime ụlọ oyi. Enwere ike ijikọ ha na coldboxstore?",
       role: [ERoles.AUTH],
       text: 'Ebe Ọmụma bụ ibe enwere ike iru site na ịpị NchNhr dị n"elu aka ekpe. Ọ nwere ozi bara uru gbasara usoro nchekwa kacha mma maka ngwa ahịa dị iche iche, gụnyere oke okpomọkụ yana oge nchekwa oge n"okpuru okpomọkụ a.',
     },
@@ -6152,7 +6152,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 37,
       title: "Kedu otu m ga-esi jikọọ sensọ dị n'ime ụlọ na ngwa ahụ?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Ọ bụrụ na enwere sensọ okpomọkụ n"ime ụlọ nke enwere ike ijikọ na ngwa Coldtivate, biko kpọtụrụ ndị ọrụ gị. Naanị onye ọrụ nwere ọrụ onye ọrụ edebanyere aha nwere ike jikọta sensọ na nkeji jụrụ oyi emebere na Coldtivate.',
+      text: 'Ọ bụrụ na enwere sensọ okpomọkụ n"ime ụlọ nke enwere ike ijikọ na ngwa coldboxstore, biko kpọtụrụ ndị ọrụ gị. Naanị onye ọrụ nwere ọrụ onye ọrụ edebanyere aha nwere ike jikọta sensọ na nkeji jụrụ oyi emebere na coldboxstore.',
     },
     {
       id: 38,
@@ -6170,7 +6170,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 40,
       title: 'Kedu ihe nyocha ahịa ahịa mgbe-echekwara na gịnị kpatara m ga-eji mejupụta ya?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Enwere ike ịnweta nyocha ahịa site na ịpị akara atọ dị n"akụkụ nlele ọ bụla na taabụ "More" -> "History" na ịhọrọ "Mejupụta nyocha ahịa". Nnyocha ahụ dị mkpụmkpụ ma na-ajụ maka ozi gbasara ọnụahịa ire ere nke ngwaahịa ị chekwaaburu n"ime ụlọ, yana gbasara ole n"ime ya mebiri emebi. A ga-ewere ozi a dị ka nzuzo yana naanị ndị otu Coldtivate ga-eji nyochaa mmetụta nke iji nchekwa oyi. Akara uhie ga-achọpụta nlele nlele nke emechabeghị nyocha ahịa. A ga-echetara gị banyere nlele nlele nke chọrọ nlebara anya gị na panel ngosi ma nwee ike pịa ngosi iji mepee nyocha ahụ. Ịnwekwara ike ịnweta nyocha ndị ịchọrọ iji dejupụta na taabụ "Analytics", wee pịa "Mmetụta".',
+      text: 'Enwere ike ịnweta nyocha ahịa site na ịpị akara atọ dị n"akụkụ nlele ọ bụla na taabụ "More" -> "History" na ịhọrọ "Mejupụta nyocha ahịa". Nnyocha ahụ dị mkpụmkpụ ma na-ajụ maka ozi gbasara ọnụahịa ire ere nke ngwaahịa ị chekwaaburu n"ime ụlọ, yana gbasara ole n"ime ya mebiri emebi. A ga-ewere ozi a dị ka nzuzo yana naanị ndị otu coldboxstore ga-eji nyochaa mmetụta nke iji nchekwa oyi. Akara uhie ga-achọpụta nlele nlele nke emechabeghị nyocha ahịa. A ga-echetara gị banyere nlele nlele nke chọrọ nlebara anya gị na panel ngosi ma nwee ike pịa ngosi iji mepee nyocha ahụ. Ịnwekwara ike ịnweta nyocha ndị ịchọrọ iji dejupụta na taabụ "Analytics", wee pịa "Mmetụta".',
     },
     {
       id: 41,
@@ -6311,7 +6311,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 66,
       title: 'Aghọtaghị m akụkụ nke ngwa ahụ. Onye ka m ga-akpọtụrụ?',
       role: [ERoles.COOLING_USER],
-      text: 'Ị nwere ike ịgafe ajụjụ nyocha site na ịpị "Mezue ma emechaa". Ị ga-ahụ nyocha ahụ dị ka akụkụ nke nkọwa Akaụntụ gị ma nwee ike mezue ya oge ọ bụla. Otú ọ dị, a na-atụ aro ka iwepụta oge iji zaa ajụjụ nyocha nke ọma mgbe ịmalitere ime ụlọ: n"ụzọ dị otú a, ị nwere ike nweta ahụmịhe ahaziri ahazi na ngwa Coldtivate!',
+      text: 'Ị nwere ike ịgafe ajụjụ nyocha site na ịpị "Mezue ma emechaa". Ị ga-ahụ nyocha ahụ dị ka akụkụ nke nkọwa Akaụntụ gị ma nwee ike mezue ya oge ọ bụla. Otú ọ dị, a na-atụ aro ka iwepụta oge iji zaa ajụjụ nyocha nke ọma mgbe ịmalitere ime ụlọ: n"ụzọ dị otú a, ị nwere ike nweta ahụmịhe ahaziri ahazi na ngwa coldboxstore!',
     },
     {
       id: 67,
@@ -6323,7 +6323,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 68,
       title: 'Ihe anaghị arụ ọrụ nke ọma na ngwa. Onye ka m ga-akpọtụrụ?',
       role: [ERoles.OPERATOR],
-      text: 'Ọ bụrụ na enwere sensọ okpomọkụ n"ime ụlọ nke enwere ike ijikọ na ngwa Coldtivate, biko kpọtụrụ ndị ọrụ gị. Naanị onye ọrụ nwere ọrụ onye ọrụ edebanyere aha nwere ike jikọta sensọ na nkeji jụrụ oyi emebere na Coldtivate.',
+      text: 'Ọ bụrụ na enwere sensọ okpomọkụ n"ime ụlọ nke enwere ike ijikọ na ngwa coldboxstore, biko kpọtụrụ ndị ọrụ gị. Naanị onye ọrụ nwere ọrụ onye ọrụ edebanyere aha nwere ike jikọta sensọ na nkeji jụrụ oyi emebere na coldboxstore.',
     },
     {
       id: 69,
@@ -6389,7 +6389,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 80,
       title: 'Ọ ga-amasị m ihichapụ akaụntụ m. Kedu ihe m kwesịrị ịme?',
       role: [ERoles.OPERATOR],
-      text: 'Ka ihichapụ onye ọrụ jụrụ na listi ahụ, gaa na "Management" -> "Ndị ọrụ jụrụ oyi", pịa aha njirimara jụrụ oyi wee pịa bọtịnụ "Hichapụ". Biko mara na ọ bụ naanị ndị ọrụ na-enweghị ndenye nbanye nwere ike ihichapụ! Ọ bụrụ na enwere ndenye nbanye na-echere, biko kpọtụrụ onye ọrụ ka ọ buru ngwaahịa a. Mara na omume a enweghị ike ịgbanwe! Ọ bụrụ na onye ọrụ nwere smartphone, ọrụ a ga-ewepụ ya na listi gị, mana onye ọrụ ka ga-enwe ike iji Coldtivate. Ọ bụrụ na onye ọrụ enweghị smartphone, ọrụ a na-ehichapụ akaụntụ ya wee hapụ nọmba ekwentị metụtara ya.',
+      text: 'Ka ihichapụ onye ọrụ jụrụ na listi ahụ, gaa na "Management" -> "Ndị ọrụ jụrụ oyi", pịa aha njirimara jụrụ oyi wee pịa bọtịnụ "Hichapụ". Biko mara na ọ bụ naanị ndị ọrụ na-enweghị ndenye nbanye nwere ike ihichapụ! Ọ bụrụ na enwere ndenye nbanye na-echere, biko kpọtụrụ onye ọrụ ka ọ buru ngwaahịa a. Mara na omume a enweghị ike ịgbanwe! Ọ bụrụ na onye ọrụ nwere smartphone, ọrụ a ga-ewepụ ya na listi gị, mana onye ọrụ ka ga-enwe ike iji coldboxstore. Ọ bụrụ na onye ọrụ enweghị smartphone, ọrụ a na-ehichapụ akaụntụ ya wee hapụ nọmba ekwentị metụtara ya.',
     },
     {
       id: 81,
@@ -6440,7 +6440,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 88,
       title: 'Kedu ihe egosiri na maapụ nkeji oyi?',
       role: [ERoles.COOLING_USER],
-      text: 'Na map ị nwere ike iji anya nke uche hụ ọnọdụ gị (a ga-ajụ gị maka ikike maka Coldtivate iji nweta ọnọdụ gị), ọnọdụ nke nkeji oyi gbara gị gburugburu, na ụfọdụ ozi gbasara nkeji (otu ma ọ bụ multicommodity, ụlọ ọrụ, ọnụahịa). Site na ịga n"ime ụlọ oyi, ị nwere ike nweta ozi ndị ọzọ site n"aka onye na-ahụ maka ụlọ oyi na-arụ ọrụ nke unit na ohere maka nchekwa.',
+      text: 'Na map ị nwere ike iji anya nke uche hụ ọnọdụ gị (a ga-ajụ gị maka ikike maka coldboxstore iji nweta ọnọdụ gị), ọnọdụ nke nkeji oyi gbara gị gburugburu, na ụfọdụ ozi gbasara nkeji (otu ma ọ bụ multicommodity, ụlọ ọrụ, ọnụahịa). Site na ịga n"ime ụlọ oyi, ị nwere ike nweta ozi ndị ọzọ site n"aka onye na-ahụ maka ụlọ oyi na-arụ ọrụ nke unit na ohere maka nchekwa.',
     },
     {
       id: 89,
@@ -6451,7 +6451,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
     {
       id: 90,
       title:
-        'Ụdị ihe mmetụta okpomọkụ m bụ Coldtivate (Ecozen, UbiBot, Figorr, Victron Energy) kwadoro. Kedu ka m ga-esi melite sensọ?',
+        'Ụdị ihe mmetụta okpomọkụ m bụ coldboxstore (Ecozen, UbiBot, Figorr, Victron Energy) kwadoro. Kedu ka m ga-esi melite sensọ?',
       role: [ERoles.EMPLOYEE],
       text: 'Ka ijikọ ihe mmetụta na unit jụrụ oyi, ị nwere ike ịnyagharịa na "NchNhr" -> "Management" -> "Cooling Units", họrọ unit nke a ga-edozi sensọ maka, wee tụgharịa "Sensọ dị". Ị nwere ike soro ntuziaka maka ụdị ihe mmetụta ọ bụla akwadoro wee chọpụta. Cheta na elekere "Chekwa" na ala nke ibe maka mgbanwe ndị a ga-echekwa. Ị ga-ahụ n"ọgụgụ okpomọkụ site na sensọ gị n"ime awa 6 na-esote n"okpuru "Ọzọ" -> "Nkeji oyi" -> "Ọnọdụ ime ụlọ".',
     },
@@ -6460,19 +6460,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         "Kedu ihe dị iche n'etiti 'Company', 'Aggregated', and' Comparison' na taabụ nchịkọta akụkọ?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'The Analytics tab na igodo nsoroụzọ na-enye nchịkọta nchịkọta maka niile ụlọ oyi na-atụ ụlọ. Na nlele "Company", ị na-ahụ data na ndị ọrụ, ojiji, yana mmetụta maka nkeji niile jụrụ oyi kemgbe ịmalitere iji Coldtivate. Site na ịpị "Aggregated", a na-akpali gị ịhazi nkeji jụrụ oyi na oge oge ị nwere mmasị na ya. A na-agbakọta data egosiri maka ndị ọrụ, ojiji na mmetụta n"ofe nkeji oyi ahọpụtara na oge a họọrọ. Ọ bụrụ na-ịchọrọ ịtụnyere n"ofe nkeji, ị nwere ike iji taabụ "Comparison". N"ebe a, a na-egosipụta data ahụ na tebụl, ebe a na-ewepụ data sitere na nkeji ọ bụla jụrụ oyi na oge oge a họọrọ. Ị nwere ike hazie data ma gbanwee nkeji na oge oyi n"oge ọ bụla.',
+      text: 'The Analytics tab na igodo nsoroụzọ na-enye nchịkọta nchịkọta maka niile ụlọ oyi na-atụ ụlọ. Na nlele "Company", ị na-ahụ data na ndị ọrụ, ojiji, yana mmetụta maka nkeji niile jụrụ oyi kemgbe ịmalitere iji coldboxstore. Site na ịpị "Aggregated", a na-akpali gị ịhazi nkeji jụrụ oyi na oge oge ị nwere mmasị na ya. A na-agbakọta data egosiri maka ndị ọrụ, ojiji na mmetụta n"ofe nkeji oyi ahọpụtara na oge a họọrọ. Ọ bụrụ na-ịchọrọ ịtụnyere n"ofe nkeji, ị nwere ike iji taabụ "Comparison". N"ebe a, a na-egosipụta data ahụ na tebụl, ebe a na-ewepụ data sitere na nkeji ọ bụla jụrụ oyi na oge oge a họọrọ. Ị nwere ike hazie data ma gbanwee nkeji na oge oyi n"oge ọ bụla.',
     },
     {
       id: 92,
       title: 'Kedu otu esi agbakọọ data egosiri na taabụ nchịkọta?',
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Ebumnuche nke taabụ nchịkọta bụ ịnye echiche zuru oke nke ihe na-eme n"ime ụlọ oyi. A na-agbakọ data onye ọrụ na ojiji n"ime ozi nbanye na nbanye na Coldtivate. Ị nwere ike ịghọta otú ọtụtụ ndị ọrụ na arụmọrụ na-eme, na ihe bụ ego ha ga enweta ma ọ bụ nkezi nke ọnụ ụlọ oyi ọ bụla. N"aka nke ọzọ, data nke mpaghara mmetụta, dabere na nyocha nke ndị ọrụ jụrụ oyi na-ajụ ka ha mejupụta mgbe ha debanyere aha (ya bụ tupu ha amalite iji nchekwa oyi) na mgbe niile ka ha na-achọpụta ihe na-emepụta site na ụlọ oyi. Data a dị oke mkpa iji tụọ ngbanwe nke mfu akwụkwọ akụkọ na ego ndị ọrụ na-enweta ka ha na-eji ntụ oyi. N"ikpeazụ, ntule CO2 na-atụnyere mpụta nke jikọtara ya na ime ka ihe ọkụkụ ndị echekwara n"ime ụlọ oyi na-ekpo ọkụ na ihe ndị e buru n"amụma na otu ihe ọkụkụ ahụ gaara eme ma ọ bụrụ na echekwara ya na friji.',
+      text: 'Ebumnuche nke taabụ nchịkọta bụ ịnye echiche zuru oke nke ihe na-eme n"ime ụlọ oyi. A na-agbakọ data onye ọrụ na ojiji n"ime ozi nbanye na nbanye na coldboxstore. Ị nwere ike ịghọta otú ọtụtụ ndị ọrụ na arụmọrụ na-eme, na ihe bụ ego ha ga enweta ma ọ bụ nkezi nke ọnụ ụlọ oyi ọ bụla. N"aka nke ọzọ, data nke mpaghara mmetụta, dabere na nyocha nke ndị ọrụ jụrụ oyi na-ajụ ka ha mejupụta mgbe ha debanyere aha (ya bụ tupu ha amalite iji nchekwa oyi) na mgbe niile ka ha na-achọpụta ihe na-emepụta site na ụlọ oyi. Data a dị oke mkpa iji tụọ ngbanwe nke mfu akwụkwọ akụkọ na ego ndị ọrụ na-enweta ka ha na-eji ntụ oyi. N"ikpeazụ, ntule CO2 na-atụnyere mpụta nke jikọtara ya na ime ka ihe ọkụkụ ndị echekwara n"ime ụlọ oyi na-ekpo ọkụ na ihe ndị e buru n"amụma na otu ihe ọkụkụ ahụ gaara eme ma ọ bụrụ na echekwara ya na friji.',
     },
     {
       id: 93,
       title: 'Kedu otu esi agbakọọ data egosiri na taabụ nchịkọta?',
       role: [ERoles.COOLING_USER],
-      text: 'Ebumnuche nke taabụ Analytics bụ inye gị nlele zuru oke nke mmetụta dị jụụ na ihe ọkụkụ gị. A na-agbakọ data egosiri n"okpuru "Crates" site na nbanye na ozi nlele edere na Coldtivate. Ị nwere ike otú ahụ ole ị na-echekwara nke akuku na nkezi nchekwa oge. Data nke ngalaba "Mmetụta" dabere na nyocha nke a gwara gị ka ị mejupụta mgbe ị debanyere aha (ya bụ tupu ịmalite iji nchekwa oyi) na mgbe niile ka ị na-elele ihe na-emepụta site na ụlọ oyi. Data a dị oke mkpa iji tụọ ngbanwe nke mfu na ego ha nwetara mgbe ị na-eji oyi. E gosipụtara ihe ncheta iji dejupụta nyocha ndị a n"elu ibe ahụ, anyị na-agbakwa gị ume ka ị dejupụta ha mgbe ọ bụla enwere ike. Na ngalaba abụọ ahụ, ịnwere ike iji bọtịnụ "Configure" dị n"elu aka nri ịhọrọ ọnụ ụlọ oyi ma ọ bụ oge. Ọ bụrụ na ọ nweghị ihe ahọpụtara, ị ga-ahụ data niile dị kemgbe ịmalitere iji Coldtivate.',
+      text: 'Ebumnuche nke taabụ Analytics bụ inye gị nlele zuru oke nke mmetụta dị jụụ na ihe ọkụkụ gị. A na-agbakọ data egosiri n"okpuru "Crates" site na nbanye na ozi nlele edere na coldboxstore. Ị nwere ike otú ahụ ole ị na-echekwara nke akuku na nkezi nchekwa oge. Data nke ngalaba "Mmetụta" dabere na nyocha nke a gwara gị ka ị mejupụta mgbe ị debanyere aha (ya bụ tupu ịmalite iji nchekwa oyi) na mgbe niile ka ị na-elele ihe na-emepụta site na ụlọ oyi. Data a dị oke mkpa iji tụọ ngbanwe nke mfu na ego ha nwetara mgbe ị na-eji oyi. E gosipụtara ihe ncheta iji dejupụta nyocha ndị a n"elu ibe ahụ, anyị na-agbakwa gị ume ka ị dejupụta ha mgbe ọ bụla enwere ike. Na ngalaba abụọ ahụ, ịnwere ike iji bọtịnụ "Configure" dị n"elu aka nri ịhọrọ ọnụ ụlọ oyi ma ọ bụ oge. Ọ bụrụ na ọ nweghị ihe ahọpụtara, ị ga-ahụ data niile dị kemgbe ịmalitere iji coldboxstore.',
     },
     {
       id: 94,
@@ -6484,19 +6484,19 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 95,
       title: "Kedu ọrụ nke ụlọ ọrụ jụrụ oyi n'ahịa?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Ụlọ ọrụ jụrụ oyi na ndị ọrụ ya nwere ike ikpebi ọkwa itinye aka ha n"ahịa. Dị ka ọrụ na-adabere na crates na-enyocha na ngwa Coldtivate, ebe ahịa nwere ike ịrụ ọrụ naanị ma ọ bụrụ na onye na-ahụ maka ụlọ oyi na-edebanye aha na nbanye na nlele ọrụ na ngwa. Maka ngwaahịa a zụtara site n"ọma ahịa, ụlọ ọrụ jụrụ oyi na-anata ego jụrụ oyi dịka akụkụ nke azụmahịa dijitalụ. Ọ dị oke mkpa na onye ọrụ edebanyere aha na-edobe nkọwa akaụntụ ụlọ akụ nke ụlọ ọrụ: ime nke a, ị ga-aga na "NchNhr" -> "Management" -> "Ntọala ndị na-ere ere (Ụlọ ọrụ)" -> "Nhọrọ ịkwụ ụgwọ". Na mgbakwunye, ụlọ ọrụ jụrụ oyi nwere ike ikpebi ịzụta ihe sitere n"aka ndị ọrụ ugbo (na-arụ ọrụ nke onye zụrụ ya) wee regharịa ihe ubi ndị ahụ n"ọma ahịa (na-arụ ọrụ nke onye na-ere ahịa). Enwere ike ịme azụmahịa abụọ ahụ site na ahịa ahịa Coldtivate. Rịba ama na ma ndị ọrụ na ndị ọrụ debanyere aha nwere nhọrọ ịzụtara onwe ha (dị ka ndị mmadụ n"otu n"otu) ma ọ bụ n"aha ụlọ ọrụ ha na-anọchite anya ya.',
+      text: 'Ụlọ ọrụ jụrụ oyi na ndị ọrụ ya nwere ike ikpebi ọkwa itinye aka ha n"ahịa. Dị ka ọrụ na-adabere na crates na-enyocha na ngwa coldboxstore, ebe ahịa nwere ike ịrụ ọrụ naanị ma ọ bụrụ na onye na-ahụ maka ụlọ oyi na-edebanye aha na nbanye na nlele ọrụ na ngwa. Maka ngwaahịa a zụtara site n"ọma ahịa, ụlọ ọrụ jụrụ oyi na-anata ego jụrụ oyi dịka akụkụ nke azụmahịa dijitalụ. Ọ dị oke mkpa na onye ọrụ edebanyere aha na-edobe nkọwa akaụntụ ụlọ akụ nke ụlọ ọrụ: ime nke a, ị ga-aga na "NchNhr" -> "Management" -> "Ntọala ndị na-ere ere (Ụlọ ọrụ)" -> "Nhọrọ ịkwụ ụgwọ". Na mgbakwunye, ụlọ ọrụ jụrụ oyi nwere ike ikpebi ịzụta ihe sitere n"aka ndị ọrụ ugbo (na-arụ ọrụ nke onye zụrụ ya) wee regharịa ihe ubi ndị ahụ n"ọma ahịa (na-arụ ọrụ nke onye na-ere ahịa). Enwere ike ịme azụmahịa abụọ ahụ site na ahịa ahịa coldboxstore. Rịba ama na ma ndị ọrụ na ndị ọrụ debanyere aha nwere nhọrọ ịzụtara onwe ha (dị ka ndị mmadụ n"otu n"otu) ma ọ bụ n"aha ụlọ ọrụ ha na-anọchite anya ya.',
     },
     {
       id: 96,
       title: "Kedu ọrụ onye na-arụ ụlọ oyi n'ahịa?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR],
-      text: 'Ndị na-arụ ụlọ oyi n"ahịa nwere ọrụ atọ bụ isi. 1) Ha na-enyere ndị ọrụ jụrụ oyi na-enweghị smartphone iji guzobe akaụntụ akụ ha (ka ha wee nweta ụgwọ dijitalụ), depụta akpa ha "maka ọrịre" na ọnụahịa ha. 2) Ha na-ahụ maka idobe ihe ndị a na-emepụta n"ime ụlọ oyi na-ahazi na-agbaso ụkpụrụ na ihe niile dị na crate bụ nke otu onye ọrụ: mgbe a na-azụta ihe ụfọdụ na-emepụta na crate (ma si otú ahụ bụrụ nke onye nwe ya dị iche), onye ọrụ na-enweta ọkwa ka ọ bugharịa ihe a zụtara na crate dị iche. Ọ bụrụ na a zụtara igbe zuru ezu, ọ nweghị ihe achọrọ. 3) Ndị na-ahụ maka ime ụlọ oyi na-ahụ maka ọrụ nlele niile, gụnyere ndị sitere n"ọma ahịa: mgbe onye na-azụ ahịa (ma ọ bụ onye nnọchi anya nnyefe) rutere n"ọnụ ụlọ oyi iji buru ihe a zụtara, onye ọrụ kwesịrị ịlele crate si Coldtivate.',
+      text: 'Ndị na-arụ ụlọ oyi n"ahịa nwere ọrụ atọ bụ isi. 1) Ha na-enyere ndị ọrụ jụrụ oyi na-enweghị smartphone iji guzobe akaụntụ akụ ha (ka ha wee nweta ụgwọ dijitalụ), depụta akpa ha "maka ọrịre" na ọnụahịa ha. 2) Ha na-ahụ maka idobe ihe ndị a na-emepụta n"ime ụlọ oyi na-ahazi na-agbaso ụkpụrụ na ihe niile dị na crate bụ nke otu onye ọrụ: mgbe a na-azụta ihe ụfọdụ na-emepụta na crate (ma si otú ahụ bụrụ nke onye nwe ya dị iche), onye ọrụ na-enweta ọkwa ka ọ bugharịa ihe a zụtara na crate dị iche. Ọ bụrụ na a zụtara igbe zuru ezu, ọ nweghị ihe achọrọ. 3) Ndị na-ahụ maka ime ụlọ oyi na-ahụ maka ọrụ nlele niile, gụnyere ndị sitere n"ọma ahịa: mgbe onye na-azụ ahịa (ma ọ bụ onye nnọchi anya nnyefe) rutere n"ọnụ ụlọ oyi iji buru ihe a zụtara, onye ọrụ kwesịrị ịlele crate si coldboxstore.',
     },
     {
       id: 97,
       title: "Kedu ka esi anakọta ụgwọ jụrụ oyi n'ọma ahịa?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Mgbe a na-azụta crates n"ọma ahịa, a na-ewepụ ego jụrụ oyi ruo ụbọchị ahụ n"ọnụ ahịa onye zụrụ ya na-akwụ ma bufee ya na ụlọ ọrụ jụrụ oyi. N"ụzọ dị otú a, onye na-ere ahịa agaghị edozi ego jụrụ oyi, dịka nke a na-emebu na azụmahịa dijitalụ. N"ihi nke a, ọ dị oke mkpa na ma ụlọ ọrụ ndị na-ere ahịa na ndị na-ajụ oyi nwere akaụntụ ụlọ akụ eguzobere na Coldtivate. Dịka ọmụmaatụ, ọ bụrụ na a na-azụta crate maka 20 USD, na onye na-ere ahịa ji 3 USD nke ụgwọ jụrụ oyi, n"ime USD 20 nke onye zụrụ ya kwụrụ, a ga-ebufe 17 USD na akaụntụ ụlọ akụ nke onye na-ere ahịa, na 3 USD ga-ebufe na akaụntụ ụlọ akụ nke ụlọ ọrụ jụrụ oyi. Ọ bụrụ na onye na-azụ ihe na-abịa iburu ihe a na-emepụta n"otu ụbọchị ahụ a zụrụ ya, ọ dịghị ego ọ bụla jụrụ oyi (n"ihi na onye na-ere ya akwụlarị ụgwọ ụbọchị ọ bụla). Otú ọ dị, ọ bụrụ na onye na-azụ ihe ekpebie idobe ihe ndị a na-emepụta na nchekwa, a na-akwụ ụgwọ ego jụrụ oyi, a ga-agbakọkwa ọnụahịa ahụ dabere na ụbọchị ole a na-echekwa ihe a na-emepụta n"ime ụlọ oyi ruo mgbe onye zụrụ ya eburu ya. Onye na-ahụ maka ime ụlọ oyi na-ahụ maka ịnakọta ụgwọ ntụ oyi ndị a na nlele. Rịba ama na ọ bụrụ na nnyefe, otu ezi uche dị.',
+      text: 'Mgbe a na-azụta crates n"ọma ahịa, a na-ewepụ ego jụrụ oyi ruo ụbọchị ahụ n"ọnụ ahịa onye zụrụ ya na-akwụ ma bufee ya na ụlọ ọrụ jụrụ oyi. N"ụzọ dị otú a, onye na-ere ahịa agaghị edozi ego jụrụ oyi, dịka nke a na-emebu na azụmahịa dijitalụ. N"ihi nke a, ọ dị oke mkpa na ma ụlọ ọrụ ndị na-ere ahịa na ndị na-ajụ oyi nwere akaụntụ ụlọ akụ eguzobere na coldboxstore. Dịka ọmụmaatụ, ọ bụrụ na a na-azụta crate maka 20 USD, na onye na-ere ahịa ji 3 USD nke ụgwọ jụrụ oyi, n"ime USD 20 nke onye zụrụ ya kwụrụ, a ga-ebufe 17 USD na akaụntụ ụlọ akụ nke onye na-ere ahịa, na 3 USD ga-ebufe na akaụntụ ụlọ akụ nke ụlọ ọrụ jụrụ oyi. Ọ bụrụ na onye na-azụ ihe na-abịa iburu ihe a na-emepụta n"otu ụbọchị ahụ a zụrụ ya, ọ dịghị ego ọ bụla jụrụ oyi (n"ihi na onye na-ere ya akwụlarị ụgwọ ụbọchị ọ bụla). Otú ọ dị, ọ bụrụ na onye na-azụ ihe ekpebie idobe ihe ndị a na-emepụta na nchekwa, a na-akwụ ụgwọ ego jụrụ oyi, a ga-agbakọkwa ọnụahịa ahụ dabere na ụbọchị ole a na-echekwa ihe a na-emepụta n"ime ụlọ oyi ruo mgbe onye zụrụ ya eburu ya. Onye na-ahụ maka ime ụlọ oyi na-ahụ maka ịnakọta ụgwọ ntụ oyi ndị a na nlele. Rịba ama na ọ bụrụ na nnyefe, otu ezi uche dị.',
     },
     {
       id: 98,
@@ -6538,7 +6538,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       id: 104,
       title: "Kedu ụgwọ ọrụ egosiri n'ahịa?",
       role: [ERoles.EMPLOYEE, ERoles.OPERATOR, ERoles.COOLING_USER],
-      text: 'Ọnụ ahịa ire ere nke ihe ọ bụla gosipụtara n"ahịa bụ nke onye na-ere ere setịpụrụ ozugbo ma dabere n"ụdị kilogram azụrụ. N"elu ego ahụ, ebe a na-ere ahịa na-agụnye ụgwọ abụọ: ụgwọ ebe a na-ere ahịa bụ ụgwọ azụmahịa 3.5% nke ndị otu Coldtivate na-anakọta iji kwado ma nọgide na-arụ ọrụ ngwa. Ụgwọ ịkwụ ụgwọ bụ ụgwọ nke usoro ịkwụ ụgwọ dijitalụ (PayStack na Nigeria) na-ana iji hazie azụmahịa ahụ.',
+      text: 'Ọnụ ahịa ire ere nke ihe ọ bụla gosipụtara n"ahịa bụ nke onye na-ere ere setịpụrụ ozugbo ma dabere n"ụdị kilogram azụrụ. N"elu ego ahụ, ebe a na-ere ahịa na-agụnye ụgwọ abụọ: ụgwọ ebe a na-ere ahịa bụ ụgwọ azụmahịa 3.5% nke ndị otu coldboxstore na-anakọta iji kwado ma nọgide na-arụ ọrụ ngwa. Ụgwọ ịkwụ ụgwọ bụ ụgwọ nke usoro ịkwụ ụgwọ dijitalụ (PayStack na Nigeria) na-ana iji hazie azụmahịa ahụ.',
     },
     {
       id: 105,
@@ -6558,7 +6558,7 @@ export const FAQ_CONTENT: Record<TranslationLocales, Faq[]> = {
       title:
         "Enwetara m ọkwa n'ime ngwa ahụ na-ekwu na 'Ekwesịrị ikesagharị mmepụta'. Kedu ihe bụ ihe ahụ?",
       role: [ERoles.OPERATOR],
-      text: 'N"ihi usoro nbanye n"ime ụlọ oyi, ọdịnaya nke otu crate bụ nke otu onye ọrụ ugbo ma ọ bụ onye ahịa. Dị ka, n"ọma ahịa, onye na-azụ ihe nwere ike ịzụta ụfọdụ kg si a crate nke onye na-ere ahịa, ego zụrụ kwesịrị ibuga na iche iche crate. Ọkwa a na-agwa gị na azụrụla ihe, na site na ịpị ya, ị nwere ike were anya nke uche hụ nke a ga-esi were were were were. Idobe igbe dị n"usoro dị mkpa iji hụ na anaghị enyocha ihe ọkụkụ n"amaghị ama, yana na anakọtara ụgwọ jụrụ oyi nke ọma. Anyị na-akwado iji ọrụ "Crate ID" na ndebanye aha iji kpado crates na Coldtivate na akpa anụ ahụ yana ngwa ngwa soro nke crates chọrọ nlebara anya gị dabere na ọkwa.',
+      text: 'N"ihi usoro nbanye n"ime ụlọ oyi, ọdịnaya nke otu crate bụ nke otu onye ọrụ ugbo ma ọ bụ onye ahịa. Dị ka, n"ọma ahịa, onye na-azụ ihe nwere ike ịzụta ụfọdụ kg si a crate nke onye na-ere ahịa, ego zụrụ kwesịrị ibuga na iche iche crate. Ọkwa a na-agwa gị na azụrụla ihe, na site na ịpị ya, ị nwere ike were anya nke uche hụ nke a ga-esi were were were were. Idobe igbe dị n"usoro dị mkpa iji hụ na anaghị enyocha ihe ọkụkụ n"amaghị ama, yana na anakọtara ụgwọ jụrụ oyi nke ọma. Anyị na-akwado iji ọrụ "Crate ID" na ndebanye aha iji kpado crates na coldboxstore na akpa anụ ahụ yana ngwa ngwa soro nke crates chọrọ nlebara anya gị dabere na ọkwa.',
     },
     {
       id: 108,

@@ -3,7 +3,7 @@ import { ToastOptions } from 'react-native-toast-notifications';
 import { create } from 'zustand';
 
 import { CustomToastOptions } from '#common/InAppNotifications';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import MarketplaceService from '#services/MarketplaceService';
 import { GetCartResponse } from '#types/api.responses';
 import { CoolingUnit } from '#types/global';
@@ -91,7 +91,7 @@ const useCartStore = create<CartStoreState>((set, get) => ({
 
       const results = await Promise.all(
         unique.map((item) =>
-          ColdtivateService.getCoolingUnit({
+          coldboxstoreService.getCoolingUnit({
             coolingUnitId: item.relCoolingUnitId,
             companyId: item.relCompanyId,
           })

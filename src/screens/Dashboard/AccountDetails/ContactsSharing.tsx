@@ -12,7 +12,7 @@ import { useAuthStore } from '#stores/auth';
 import InAppNotifications from '#common/InAppNotifications';
 import { useToggle } from '#ui/hooks/useToggle';
 import { useApiCall } from '#services/hooks/useAPiCall';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { paperTheme } from '#ui/lib/theme';
 import RBAC from '#common/RBAC';
 import reportCrash from '#ui/lib/reportCrash';
@@ -30,7 +30,7 @@ function ContactsSharing() {
 
   const { data, isLoading, isValidating, refetch } = useApiCall(
     'getUser',
-    ColdtivateService.getUser,
+    coldboxstoreService.getUser,
     user!.id,
     {
       skip: !user?.id,
@@ -42,7 +42,7 @@ function ContactsSharing() {
     async (publicPhone: boolean | undefined, publicEmail: boolean | undefined) => {
       if (!user) return;
 
-      const userDatum = await ColdtivateService.updateUser({
+      const userDatum = await coldboxstoreService.updateUser({
         userId: user.id,
         firstName: user.firstName,
         lastName: user.lastName,

@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { resolveCropInfo, resolveOwnerName } from '#services/utils/resolvers';
 import { ERoles, type CoolingUnit, type User } from '#types/global';
@@ -13,7 +13,7 @@ export function useMovementsHistory(
   return useApiCall(
     'getMovementsHistory',
     async function () {
-      const movements = await ColdtivateService.getMovementsHistory({
+      const movements = await coldboxstoreService.getMovementsHistory({
         ...(user?.role === ERoles.COOLING_USER ? { farmerId: farmerId as number } : {}),
         coolingUnit: coolingUnit?.id as number,
       });

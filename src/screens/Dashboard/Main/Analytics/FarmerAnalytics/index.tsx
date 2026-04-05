@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableOpacity, View, Platform, Image } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
-//import Logo from '#assets/images/coldtivate_logo.svg';
+//import Logo from '#assets/images/coldboxstore_logo.svg';
 
 import { Button } from '#ui/components/Button';
 import { ScrollView } from '#ui/components/ScrollView';
@@ -13,7 +13,7 @@ import reportCrash from '#ui/lib/reportCrash';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { dateFmt, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import type { Farmer } from '#types/global';
@@ -66,14 +66,14 @@ export function FarmerAnalytics() {
 
   const { data: farmerResponse, isLoading: isLoadingFarmers } = useApiCall(
     'getFarmerByUserId',
-    ColdtivateService.getFarmerByUserId,
+    coldboxstoreService.getFarmerByUserId,
     user!.id,
     { skip: !user?.id, defaultData: [] }
   );
 
   const { data: cropsResult, isLoading: isLoadingCrops } = useApiCall(
     'getAllCrops',
-    ColdtivateService.getAllCrops,
+    coldboxstoreService.getAllCrops,
     undefined,
     { skip: !user?.id, defaultData: [] }
   );
@@ -82,7 +82,7 @@ export function FarmerAnalytics() {
 
   const { data: companies, isLoading: isLoadingCompanies } = useApiCall(
     'getCompanies',
-    ColdtivateService.getCompanies,
+    coldboxstoreService.getCompanies,
     undefined,
     { skip: !user?.id, defaultData: [] }
   );

@@ -13,7 +13,7 @@ import { useTranslationUtils } from '#i18n/utils';
 import { useToggle } from '#ui/hooks/useToggle';
 import { ERoles } from '#types/global';
 import { useManagementStore } from '#stores/management';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { paperTheme } from '#ui/lib/theme';
 import { resetAllStores } from '#navigation/Dashboard/components/DrawerContent/resetStoresUtil';
 import InAppNotifications from '#common/InAppNotifications';
@@ -41,9 +41,9 @@ export default function DeleteAccountAction() {
         case ERoles.EMPLOYEE: {
           const companyId = useManagementStore.getState().company?.id;
           if (!companyId) return; // safe guard
-          const companyEmployees = await ColdtivateService.getCompanyEmployees(companyId);
+          const companyEmployees = await coldboxstoreService.getCompanyEmployees(companyId);
           if (companyEmployees.length === 1) {
-            const nonEmptyCoolingUnits = await ColdtivateService.getCoolingUnitsByStatus({
+            const nonEmptyCoolingUnits = await coldboxstoreService.getCoolingUnitsByStatus({
               companyId,
               isFarmer: false,
               notEmpty: true,
@@ -60,7 +60,7 @@ export default function DeleteAccountAction() {
         }
 
         case ERoles.OPERATOR: {
-          const nonEmptyCoolingUnits = await ColdtivateService.getCoolingUnitsByStatus({
+          const nonEmptyCoolingUnits = await coldboxstoreService.getCoolingUnitsByStatus({
             userId: user.id,
             isFarmer: false,
             notEmpty: true,
@@ -74,7 +74,7 @@ export default function DeleteAccountAction() {
         }
 
         case ERoles.COOLING_USER: {
-          const nonEmptyCoolingUnits = await ColdtivateService.getCoolingUnitsByStatus({
+          const nonEmptyCoolingUnits = await coldboxstoreService.getCoolingUnitsByStatus({
             userId: user.id,
             isFarmer: true,
             notEmpty: true,
@@ -105,7 +105,7 @@ export default function DeleteAccountAction() {
       toggleProcessing();
       if (!user) throw new Error(); // safe guard
       resetPopup();
-      await ColdtivateService.deleteUser(user.id);
+      await coldboxstoreService.deleteUser(user.id);
       resetAllStores();
       mutate(() => true, undefined, false);
       useAuthStore.getState().revokeSession();

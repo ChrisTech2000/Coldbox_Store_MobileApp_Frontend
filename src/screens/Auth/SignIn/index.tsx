@@ -7,7 +7,7 @@ import { ActivityIndicator, Divider, TextInput } from 'react-native-paper';
 import Employee from '#assets/icons/employee.svg';
 import Farmer from '#assets/icons/farmer.svg';
 import Operator from '#assets/icons/operator.svg';
-//import Logo from '#assets/images/coldtivate_logo.svg';
+//import Logo from '#assets/images/coldboxstore_logo.svg';
 
 import InAppNotifications from '#common/InAppNotifications';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';

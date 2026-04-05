@@ -8,7 +8,7 @@ import { Button } from '#ui/components/Button';
 import { Image } from '#ui/components/Image';
 import { Text } from '#ui/components/Text';
 
-//import DefaultLogo from '#assets/images/coldtivate_logo.svg';
+//import DefaultLogo from '#assets/images/coldboxstore_logo.svg';
 import { useTranslationUtils } from '#i18n/utils';
 import InAppNotifications from '#common/InAppNotifications';
 

@@ -426,7 +426,7 @@ export type CartDatumGetCartResponse = {
   id: number;
   items: Array<CartItem>;
   totalAmount: number;
-  totalColdtivateAmount: number;
+  totalcoldboxstoreAmount: number;
   totalCoolingFeesAmount: number;
   totalDiscountAmount: number;
   totalPaymentFeesAmount: number;

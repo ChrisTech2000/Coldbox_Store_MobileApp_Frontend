@@ -14,7 +14,7 @@ import type { ManagementRoutePaths, ManagementRoutes } from '#navigation/Dashboa
 import { useToggle } from '#ui/hooks/useToggle';
 import { useTranslationUtils } from '#i18n/utils';
 import { APP_EVENTS, useAppEventListener } from '#ui/lib/emitter';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import InAppNotifications from '#common/InAppNotifications';
 import reportCrash from '#ui/lib/reportCrash';
 
@@ -57,7 +57,7 @@ export default function FormModal(props: Props) {
 
   async function onSubmit(values: FormValues) {
     try {
-      const farmer = await ColdtivateService.getFarmerByUserCode(values.code);
+      const farmer = await coldboxstoreService.getFarmerByUserCode(values.code);
 
       if (!farmer) {
         toast.show(t('Dashboard.Management.CoolingUsers.toasts.notFound'), { type: 'md_danger' });

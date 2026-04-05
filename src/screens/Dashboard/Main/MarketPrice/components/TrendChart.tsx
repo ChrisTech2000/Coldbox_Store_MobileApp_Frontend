@@ -19,7 +19,7 @@ import { CartesianChart, Line, Scatter, useChartPressState } from 'victory-nativ
 import colors from 'tailwindcss/colors';
 
 import { LanguageManager, dateFmt, useTranslationUtils } from '#i18n/utils';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import type {
   PredictionCrop,
@@ -58,7 +58,7 @@ export function TrendChart({ commodity, state, market }: TrendChartProps) {
 
   const { data: predictionData, isLoading: loadingPredictionData } = useApiCall(
     'getPrediction',
-    ColdtivateService.getPrediction,
+    coldboxstoreService.getPrediction,
     {
       country: countryISO as QueryCountry,
       cropId: commodity?.id as number,

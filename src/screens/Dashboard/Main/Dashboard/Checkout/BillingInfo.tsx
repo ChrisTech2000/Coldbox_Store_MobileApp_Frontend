@@ -19,7 +19,7 @@ import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { TemperatureAlertEvtDatum } from '#navigation/Dashboard/components/TemperatureAlert';
 import { MainTabStackRoutes } from '#navigation/Dashboard/Main/MainTabStack';
 import { CheckOutStackRouteProps } from '#navigation/Dashboard/Main/MainTabStack/CheckOutTabStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { useManagementStore } from '#stores/management';
@@ -109,7 +109,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
 
   const { data: locations } = useApiCall(
     'getLocations',
-    ColdtivateService.getLocations,
+    coldboxstoreService.getLocations,
     company?.id ?? 0,
     {
       skip: !coolingUnit?.id,
@@ -177,7 +177,7 @@ function BillingInfo({ route, navigation }: CheckOutStackRouteProps<'BillingInfo
       const dInt = Number(discount);
       if (!crates || isNaN(dInt) || !coolingUnit?.id || !company?.id) throw new Error();
 
-      await ColdtivateService.checkOut({
+      await coldboxstoreService.checkOut({
         crates: crates?.map((crate) => crate.id),
         discountAmount: dInt,
         currency: currency,

@@ -30,7 +30,7 @@ import { API_BASE_URL } from '#constants/environment';
 import { useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRoutes } from '#navigation/Dashboard/Main/HistoryTabStack';
 import { MarketSurveyStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack/MarketSurveyStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useDashboardStore } from '#stores/dashboard';
 import { useMarketSurveyStore } from '#stores/marketSurvey';
@@ -76,7 +76,7 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
 
   const { data: cropsResult, isLoading: isCropsLoading } = useApiCall(
     'getAllCrops',
-    ColdtivateService.getAllCrops,
+    coldboxstoreService.getAllCrops,
     undefined
   );
 
@@ -103,7 +103,7 @@ function MarketSurvey(props: MarketSurveyStackRouteProps<'MarketSurvey'>) {
   const onSubmit: SubmitHandler<MarketSurveySchemaType> = useCallback(
     async (values) => {
       try {
-        const result = await ColdtivateService.addMarketSurvey({
+        const result = await coldboxstoreService.addMarketSurvey({
           crop: crop?.id as number,
           checkout: checkoutId as number,
           sellingPlace: values.location,

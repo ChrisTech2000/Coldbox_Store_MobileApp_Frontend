@@ -14,7 +14,7 @@ import InAppNotifications from '#common/InAppNotifications';
 import { DEFAULT_CURRENCY_CODE } from '#constants/general';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import type { EditCoolingUserStackRouteProps } from '#navigation/Dashboard/Management/EditCoolingUserStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useManagementStore } from '#stores/management';
 import reportCrash from '#ui/lib/reportCrash';
@@ -49,7 +49,7 @@ export type CommoditySurveyPatcher = (
   contextualCropId: number
 ) => (
   formValues: FarmerSurveySchemaType
-) => ReturnType<typeof ColdtivateService.updateFarmerSurveys>;
+) => ReturnType<typeof coldboxstoreService.updateFarmerSurveys>;
 
 function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersSurvey'>) {
   const { params } = props.route;
@@ -88,7 +88,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
     (ctx) => {
       return (contextualCropId) => {
         return async (values) => {
-          const response = await ColdtivateService.updateFarmerSurveys({
+          const response = await coldboxstoreService.updateFarmerSurveys({
             farmer: ctx.farmerId,
             userType: ctx.occupation,
             experience: ctx.experience === EExperience.OLD ? 'yes' : 'no',
@@ -159,7 +159,7 @@ function CoolingUsersSurvey(props: EditCoolingUserStackRouteProps<'CoolingUsersS
         initialValues={baseDatums}
         onSubmit={async (values): Promise<void> => {
           try {
-            const response = await ColdtivateService.updateFarmerSurveys({
+            const response = await coldboxstoreService.updateFarmerSurveys({
               farmer: params.farmerId,
               userType: values.occupation,
               experience: values.experience === EExperience.OLD ? 'yes' : 'no',
@@ -239,8 +239,8 @@ async function _dataFetcher(opts: {
   farmerId: number;
 }) {
   const [allCropsResult, farmerSurveysResult] = await Promise.allSettled([
-    ColdtivateService.getAllCrops(),
-    ColdtivateService.getFarmerSurveys({ farmerId: opts.farmerId }),
+    coldboxstoreService.getAllCrops(),
+    coldboxstoreService.getFarmerSurveys({ farmerId: opts.farmerId }),
   ]);
 
   const allCrops = allCropsResult.status === 'fulfilled' ? allCropsResult.value : [];

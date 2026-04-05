@@ -22,7 +22,7 @@ import { cropTranslationLookup } from '#i18n/transl/misc/crops';
 import InAppNotifications from '#common/InAppNotifications';
 import { LanguageManager, useTranslationUtils } from '#i18n/utils';
 import { HistoryTabStackRouteProps } from '#navigation/Dashboard/Main/HistoryTabStack';
-import ColdtivateService from '#services/ColdtivateService';
+import coldboxstoreService from '#services/coldboxstoreService';
 import { useApiCall } from '#services/hooks/useAPiCall';
 import { useAuthStore } from '#stores/auth';
 import { useDashboardStore } from '#stores/dashboard';
@@ -50,7 +50,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
 
   const { data: farmers, isLoading: loadingFarmers } = useApiCall(
     'getOperatorFarmers',
-    ColdtivateService.getOperatorFarmers,
+    coldboxstoreService.getOperatorFarmers,
     {
       operator: user?.id as number,
     },
@@ -62,7 +62,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
 
   const { data: produces, isLoading: loadingProduces } = useApiCall(
     'getDashboardProduces',
-    ColdtivateService.getDashboardProduces,
+    coldboxstoreService.getDashboardProduces,
     {
       coolingUnit: coolingUnitId as number,
     },
@@ -72,7 +72,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     }
   );
 
-  const { data: crops } = useApiCall('getAllCrops', ColdtivateService.getAllCrops, undefined, {
+  const { data: crops } = useApiCall('getAllCrops', coldboxstoreService.getAllCrops, undefined, {
     skip: !user?.id,
     defaultData: [],
   });
@@ -150,7 +150,7 @@ function EditCheckIn(props: HistoryTabStackRouteProps<'EditCheckIn'>) {
     async (values) => {
       try {
         const promises = values.produces.map((produce) => {
-          return ColdtivateService.editCheckIn({
+          return coldboxstoreService.editCheckIn({
             id: produce.id,
             cropId: produce.cropId,
             plannedDays: Number(produce.plannedDays) as number,
