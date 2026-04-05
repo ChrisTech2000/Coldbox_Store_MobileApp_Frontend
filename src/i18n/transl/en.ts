@@ -1,6 +1,6 @@
 const en = {
   appVersion: {
-    newVersion: 'A new version of ColdBox Store is available!',
+    newVersion: 'A new version of coldboxstore is available!',
     pleaseUpdate: 'Please update app before continuing.',
   },
   languages: {
@@ -180,7 +180,7 @@ const en = {
   },
   Auth: {
     welcomePopup:
-      "Welcome to ColdBox Store! If you are a farmer, a trader, or are interested in purchasing produce stored in the cold rooms, please sign up by clicking on 'Sign up as cooling user or consumer'. If you work for a cooling company, please contact your responsible to check whether your company is registered. If it is, your responsible should send you an SMS invite for you to sign up as a registered employee or as an operator. If not, you can sign up the company, and register as a registered employee. Please check the 'App info' section for FAQs.",
+      "Welcome to coldboxstore! If you are a farmer, a trader, or are interested in purchasing produce stored in the cold rooms, please sign up by clicking on 'Sign up as cooling user or consumer'. If you work for a cooling company, please contact your responsible to check whether your company is registered. If it is, your responsible should send you an SMS invite for you to sign up as a registered employee or as an operator. If not, you can sign up the company, and register as a registered employee. Please check the 'App info' section for FAQs.",
     Root: {
       welcome: 'Digitized Cold Chain For Agriculture',
       signIn: 'Sign In',
@@ -242,7 +242,7 @@ const en = {
         cancel: 'Cancel',
         ok: 'OK',
       },
-      welcome: 'Welcome to ColdBox Store',
+      welcome: 'Welcome to coldboxstore',
       schema: {
         passwordError:
           'Your password needs to be at least 8 characters long, contain one uppercase and one lowercase letters, and a number.',
@@ -272,7 +272,7 @@ const en = {
         genderFieldName: 'gender',
         submit: 'Sign Up',
         terms: {
-          agree: 'I agree to ColdBox Store',
+          agree: 'I agree to coldboxstore',
           license: 'User License Agreement',
           privacy: 'Privacy Policy',
           and: 'and',
@@ -328,7 +328,7 @@ const en = {
       resetButton: 'Reset',
     },
     Invite: {
-      heading: 'Welcome to ColdBox Store',
+      heading: 'Welcome to coldboxstore',
       employee:
         'You have been invited as Employee. Please fill in the form to finish your registration.',
       operator:
@@ -357,7 +357,7 @@ const en = {
     noCompanyAvailable: 'No company available',
     noCoolingUnitAvailable: 'No cooling unit available',
     noLocationsAvailable:
-      'Welcome to ColdBox Store. Get started by adding locations to your app in the management panel.',
+      'Welcome to coldboxstore. Get started by adding locations to your app in the management panel.',
     coolingUserNavigateToMarketplace:
       'Interested in purchasing produce stored in cold rooms? Visit the Marketplace tab in the lower right!',
     MarketPrice: {
@@ -786,7 +786,7 @@ const en = {
       },
       AddOperator: {
         messages: {
-          operator: 'To join the ColdBox Store app as an Operator, go to: {{link}}',
+          operator: 'To join the coldboxstore app as an Operator, go to: {{link}}',
         },
         toasts: {
           success: 'Successfully invited operator',
@@ -834,7 +834,7 @@ const en = {
         deleteOther: 'If you want to delete this account, please contact {{contact}}',
       },
       AddRegisteredEmployee: {
-        message: 'To join the ColdBox Store app as a Registered Employee, go to: {{link}}',
+        message: 'To join the coldboxstore app as a Registered Employee, go to: {{link}}',
         toasts: {
           success: 'Successfully invited registered employee',
         },
@@ -1578,9 +1578,9 @@ const en = {
     },
   },
   tutorial: {
-    welcome: 'Welcome to ColdBox Store! This is a walkthrough of the functionalities.',
+    welcome: 'Welcome to coldboxstore! This is a walkthrough of the functionalities.',
     farmerWelcome:
-      'Welcome to ColdBox Store! This tutorial will help you understand how to use the app.',
+      'Welcome to coldboxstore! This tutorial will help you understand how to use the app.',
     quit: 'Quit Tutorial',
     congratulations:
       'Congratulations! You have completed the tutorial! Go back to the dashboard to start using the app.',
@@ -1673,7 +1673,7 @@ const en = {
         'Congratulations! You have completed the tutorial! If you have questions about the app, we recommend checking the FAQ, asking an operator of the cold room, or writing us at app@yourvcca.org.',
       more: 'Clicking on "More", you will be able to select the "History", "Crop Prices", "Cooling Units", and "Orders" screens.',
       marketplaceStep1:
-        'This is the ColdBox Store digital marketplace, where all users can buy and sell produce that is being stored in the cold room. Each crate for sale is listed here, and you can buy any amount (in kg) or the full crate.',
+        'This is the coldboxstore digital marketplace, where all users can buy and sell produce that is being stored in the cold room. Each crate for sale is listed here, and you can buy any amount (in kg) or the full crate.',
       marketplaceStep2:
         'After selecting items to buy, click the shopping cart icon to see the items in your cart.',
       shoppingCart:

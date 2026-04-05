@@ -2,7 +2,7 @@ import { Translations } from './en';
 
 export default {
   appVersion: {
-    newVersion: 'Ụzọ ọhụrụ nke Coldboxstore dị!',
+    newVersion: 'Ụzọ ọhụrụ nke coldboxstore dị!',
     pleaseUpdate: "Biko mezie ngwa tupu ịga n'ihu.",
   },
   languages: {
@@ -63,7 +63,7 @@ export default {
       LegacyContacts: 'Kọntakt ndị ochie',
     },
     bottomTabs: {
-      RootMainTabStack: 'Coldboxstore  {{firstName}}',
+      RootMainTabStack: 'coldboxstore  {{firstName}}',
       ProduceDetails: '{{produceCode}}',
       MarketplaceSettings: 'Ntọala ebe ahịa',
       PriceTrend: 'Usoro ọnụahịa',
@@ -176,9 +176,9 @@ export default {
   },
   Auth: {
     welcomePopup:
-      "NnỌ na Coldboxstore! Ọ bụrụ na ị bụ onye ọrụ ugbo, onye na-azụ ahịa ma ọ bụ nwee mmasị ịzụrụ ngwaahịa echekwara n'ime ụlọ oyi, biko debanye aha site na ịpị 'Debanye aha dị ka onye ọrụ jụrụ oyi ma ọ bụ onye na-azụta ihe'. Ọ bụrụ na ị na-arụ ọrụ maka ụlọ ọrụ jụrụ oyi, biko kpọtụrụ ndị ọrụ gị ka ịlele ma ụlọ ọrụ gị edebanyere aha. Ọ bụrụ na ọ bụ, ndị ọrụ gị kwesịrị iziga gị oku SMS ka ị denye aha dị ka onye ọrụ edebanyere aha ma ọ bụ onye ọrụ. Ọ bụrụ na ọ bụghị, ị nwere ike ịdebanye aha ụlọ ọrụ, ma debanye aha dị ka onye ọrụ edebanyere aha. Biko lelee ngalaba 'Agwa' maka ajụjụ ajụjụ.",
+      "NnỌ na coldboxstore! Ọ bụrụ na ị bụ onye ọrụ ugbo, onye na-azụ ahịa ma ọ bụ nwee mmasị ịzụrụ ngwaahịa echekwara n'ime ụlọ oyi, biko debanye aha site na ịpị 'Debanye aha dị ka onye ọrụ jụrụ oyi ma ọ bụ onye na-azụta ihe'. Ọ bụrụ na ị na-arụ ọrụ maka ụlọ ọrụ jụrụ oyi, biko kpọtụrụ ndị ọrụ gị ka ịlele ma ụlọ ọrụ gị edebanyere aha. Ọ bụrụ na ọ bụ, ndị ọrụ gị kwesịrị iziga gị oku SMS ka ị denye aha dị ka onye ọrụ edebanyere aha ma ọ bụ onye ọrụ. Ọ bụrụ na ọ bụghị, ị nwere ike ịdebanye aha ụlọ ọrụ, ma debanye aha dị ka onye ọrụ edebanyere aha. Biko lelee ngalaba 'Agwa' maka ajụjụ ajụjụ.",
     Root: {
-      welcome: 'Nnọọ na Coldboxstore',
+      welcome: 'Nnọọ na coldboxstore',
       signIn: 'Banye aka na',
       signUpCompany: 'Debanye aha dị ka ụlọ ọrụ',
       signUpCoolingUser: 'Debanye aha dị ka onye na-ajụ oyi ma ọ bụ onye na-azụ ahịa',
@@ -231,7 +231,7 @@ export default {
         cancel: 'Kagbuo',
         ok: 'Ọ DỊ MMA',
       },
-      welcome: 'Nnọọ na Coldboxstore',
+      welcome: 'Nnọọ na coldboxstore',
       schema: {
         passwordError:
           'Okwuntughe gị kwesịrị ịdị ogologo ma ọ dịkarịa ala mkpụrụedemede 8, nwere otu mkpụrụedemede ukwu na otu obere mkpụrụedemede, yana nọmba.',
@@ -260,7 +260,7 @@ export default {
         genderFieldName: 'Okike',
         submit: 'Debanye aha',
         terms: {
-          agree: 'Ekwenyere m na Coldboxstore',
+          agree: 'Ekwenyere m na coldboxstore',
           license: 'Nkwekọrịta ikike onye ọrụ(User License Agreement)',
           privacy: 'Nzuzo (Privacy) Iwu',
           and: 'na',
@@ -309,7 +309,7 @@ export default {
       resetButton: 'Tọgharia (Reset)',
     },
     Invite: {
-      heading: 'Nnọọ na Coldboxstore',
+      heading: 'Nnọọ na coldboxstore',
       employee: 'Akpọrọ gị òkù ka I bụrụ onye ọrụ. Biko dejupụta fọm ka ịmechaa ndebanye aha gị.',
       operator: 'Akpọrọ gị òkù ka onye ọrụ. Biko dejupụta fọm ka ịmechaa ndebanye aha gị.',
       fields: {
@@ -336,7 +336,7 @@ export default {
     noCompanyAvailable: 'Enweghị ụlọ ọrụ dị',
     noCoolingUnitAvailable: 'Enweghị otu nju oyi dị',
     noLocationsAvailable:
-      'Nnọọ na Coldboxstore. Bido site na ịgbakwunye ebe ino na app gi nke di na panel njikwa gi.',
+      'Nnọọ na coldboxstore. Bido site na ịgbakwunye ebe ino na app gi nke di na panel njikwa gi.',
     coolingUserNavigateToMarketplace:
       'Ị chọọ ịzụta ngwaahịa echekwara n’ime ụlọ oyi? Gaa na taabụ Marketplace dị na aka nri ala!',
     MarketPrice: {
@@ -741,7 +741,7 @@ export default {
       },
       AddOperator: {
         messages: {
-          operator: 'Iji sonye na ngwa Coldboxstore dị ka onye ọrụ na ulo oyi a, gaa na: {{link}}',
+          operator: 'Iji sonye na ngwa coldboxstore dị ka onye ọrụ na ulo oyi a, gaa na: {{link}}',
         },
         toasts: {
           success: 'Onye ọrụ akpọrọ a nabata nke ọma',
@@ -779,7 +779,7 @@ export default {
         deleteOther: 'Ọ bụrụ na ịchọrọ ihichapụ akaụntụ a, biko kpọtụrụ  {{contact}}',
       },
       AddRegisteredEmployee: {
-        message: 'Iji sonye na ngwa Coldboxstore dị ka onye ọrụ edebanyere aha, gaa na: {{link}}',
+        message: 'Iji sonye na ngwa coldboxstore dị ka onye ọrụ edebanyere aha, gaa na: {{link}}',
         toasts: { success: 'Onye ọrụ edebanyere aha na-akpọ nke ọma' },
       },
       CoolingUsers: {
@@ -1495,8 +1495,8 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'Nnọọ na Coldboxstore. Nke a bụ ngagharị nke ọrụ.',
-    farmerWelcome: 'Nnọọ na Coldboxstore! Nkuzi a ga-enyere gị ghọta otu esi eji ngwa ahụ.',
+    welcome: 'Nnọọ na coldboxstore. Nke a bụ ngagharị nke ọrụ.',
+    farmerWelcome: 'Nnọọ na coldboxstore! Nkuzi a ga-enyere gị ghọta otu esi eji ngwa ahụ.',
     quit: 'Kwụsị nkuzi',
     congratulations: 'Ekele! Ị gụchara nkuzi ahụ! Laghachi na dashboard ka ịmalite iji ngwa ahụ.',
     prev: 'Nzọụkwụ gara aga',
@@ -1512,7 +1512,7 @@ export default {
       operatorManagementNavigation:
         'Na Menu, ị nwere ike ịga na "Njikwa" ma pịa ebe ahụ iji tinye ma ọ bụ dezie Ndị ọrụ Oyi',
       addCoolingUser:
-        'Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi na-edebeghị aha na Coldboxstore site na itinye nkọwa ha (aha, nọmba ekwentị). Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi ndị debanyere aha na ngwa ahụ site na koodu. Ha nwere ike ịchọta koodu ha na profaịlụ ha -> "Nkọwa akaụntụ" -> "koodu na-ebubata onye ọrụ oyi".',
+        'Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi na-edebeghị aha na coldboxstore site na itinye nkọwa ha (aha, nọmba ekwentị). Enwere ike ịgbakwunye ndị ọrụ jụrụ oyi ndị debanyere aha na ngwa ahụ site na koodu. Ha nwere ike ịchọta koodu ha na profaịlụ ha -> "Nkọwa akaụntụ" -> "koodu na-ebubata onye ọrụ oyi".',
       navigateToCoolingUser: 'Gaa n’ihu ma pịa taabụ Ndị ọrụ Oyi',
       listCoolingUsers:
         "A na-amata ndị ọrụ jụrụ oyi nwere smartphone site na akara ekwentị dị n'akụkụ aka nri nke ihuenyo ahụ. Ndị ọzọ na-eji ekwentị bụ isi na-eme ka ndị ọrụ jụrụ oyi. N'okwu abụọ a, ị nwere ike pịa aha iji nweta nkọwa ha yana nyocha onye ọrụ jụrụ oyi.",
@@ -1584,7 +1584,7 @@ export default {
         'Ekele! Ị mechala nkuzi a! Ọ bụrụ na ị nwere ajụjụ gbasara ngwa a, anyị na-akwado ka i lelee FAQ, jụọ onye na-ahụ maka ime ụlọ oyi, ma ọ bụ dee anyị na app@yourvcca.org.',
       more: "Mgbe ịpị 'Ọzọ', ị ga-enwe ike ịhọrọ ihuenyo 'Akụkọ ihe mere eme', 'Ọnụahịa Ọhịa', 'Igwe Oyi', na 'Ịtụ ahịa'.",
       marketplaceStep1:
-        "Nke a bụ ahịa dijitalụ Coldboxstore, ebe ndị ọrụ niile nwere ike ịzụ na ire ngwaahịa a na-echekwa n'ime ụlọ oyi. A na-egosipụta igbe ọ bụla e tinyere n’ahịa ebe a, ma i nwere ike ịzụ ọ bụla n'ime kilogram ma ọ bụ igbe dum.",
+        "Nke a bụ ahịa dijitalụ coldboxstore, ebe ndị ọrụ niile nwere ike ịzụ na ire ngwaahịa a na-echekwa n'ime ụlọ oyi. A na-egosipụta igbe ọ bụla e tinyere n’ahịa ebe a, ma i nwere ike ịzụ ọ bụla n'ime kilogram ma ọ bụ igbe dum.",
       marketplaceStep2:
         "Mgbe i họrọla ihe ịchọrọ ịzụta, pịa akara ụgbọ ahịa iji hụ ihe dị n'ime ya.",
       shoppingCart:

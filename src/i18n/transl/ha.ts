@@ -2,7 +2,7 @@ import { Translations } from './en';
 
 export default {
   appVersion: {
-    newVersion: 'Sabon sigar Coldboxstore tana nan!',
+    newVersion: 'Sabon sigar coldboxstore tana nan!',
     pleaseUpdate: 'Don Allah a sabunta manhaja kafin ci gaba.',
   },
   languages: {
@@ -63,7 +63,7 @@ export default {
       LegacyContacts: 'Tsoffin lambobi',
     },
     bottomTabs: {
-      RootMainTabStack: "{{firstName}}'s Coldboxstore",
+      RootMainTabStack: "{{firstName}}'s coldboxstore",
       ProduceDetails: '{{produceCode}}',
       MarketplaceSettings: 'Saitunan kasuwa',
       PriceTrend: 'Yanayin farashi',
@@ -176,9 +176,9 @@ export default {
   },
   Auth: {
     welcomePopup:
-      "Barka da zuwa Coldboxstore! Idan manomi ne, ɗan kasuwa, ko kuma kuna sha'awar siyan kayan amfanin gona da aka adana a cikin dakuna masu sanyi, da fatan za a yi rajista ta danna kan 'Yi rijista azaman mai amfani ko mai siye'. Idan kuna aiki don kamfanin sanyaya, tuntuɓi alhakin ku don bincika ko kamfanin ku yana da rajista. Idan haka ne, alhakinku ya kamata ya aiko muku da gayyatar SMS don yin rajista a matsayin ma'aikaci mai rijista ko a matsayin mai aiki. Idan ba haka ba, zaku iya shiga kamfani, kuma kuyi rijista azaman ma'aikaci mai rijista. Da fatan za a duba sashin 'Bayanin App' don FAQs.",
+      "Barka da zuwa coldboxstore! Idan manomi ne, ɗan kasuwa, ko kuma kuna sha'awar siyan kayan amfanin gona da aka adana a cikin dakuna masu sanyi, da fatan za a yi rajista ta danna kan 'Yi rijista azaman mai amfani ko mai siye'. Idan kuna aiki don kamfanin sanyaya, tuntuɓi alhakin ku don bincika ko kamfanin ku yana da rajista. Idan haka ne, alhakinku ya kamata ya aiko muku da gayyatar SMS don yin rajista a matsayin ma'aikaci mai rijista ko a matsayin mai aiki. Idan ba haka ba, zaku iya shiga kamfani, kuma kuyi rijista azaman ma'aikaci mai rijista. Da fatan za a duba sashin 'Bayanin App' don FAQs.",
     Root: {
-      welcome: 'Barka da zuwa Coldboxstore',
+      welcome: 'Barka da zuwa coldboxstore',
       signIn: 'Shiga',
       signUpCompany: 'Yi rajista azaman kamfani',
       signUpCoolingUser: 'Yi rajista azaman Mai amfani mai sanyaya ko mai siye',
@@ -230,7 +230,7 @@ export default {
     },
     SignUp: {
       select: { header: 'Zaɓi {{fieldName}}', label: 'Bincika...', cancel: 'Soke', ok: 'To' },
-      welcome: 'Barka da zuwa Coldboxstore',
+      welcome: 'Barka da zuwa coldboxstore',
       schema: {
         passwordError:
           'Kalmar sirrin ku tana buƙatar zama aƙalla tsawon haruffa 8, ya ƙunshi babban baƙaƙe ɗaya da ƙananan haruffa ɗaya, da lamba.',
@@ -259,7 +259,7 @@ export default {
         genderFieldName: 'Jinsi',
         submit: 'Shiga',
         terms: {
-          agree: 'Na yarda da Coldboxstore',
+          agree: 'Na yarda da coldboxstore',
           license: 'Yarjejeniyar lasisin mai amfani',
           privacy: 'Keɓanta Siyasa',
           and: 'kuma',
@@ -309,7 +309,7 @@ export default {
       resetButton: 'Sake saiti',
     },
     Invite: {
-      heading: 'Barka da zuwa Coldboxstore',
+      heading: 'Barka da zuwa coldboxstore',
       employee:
         "An gayyace ku a matsayin Ma'aikaci. Da fatan za a cika fom don kammala rajistar ku.",
       operator:
@@ -339,7 +339,7 @@ export default {
     noCompanyAvailable: 'Babu kamfani samuwa',
     noCoolingUnitAvailable: 'Babu naúrar sanyaya da akwai',
     noLocationsAvailable:
-      'Barka da zuwa Coldboxstore. Fara ta hanyar ƙara wurare zuwa manhajar ku a cikin kwamitin gudanarwa.',
+      'Barka da zuwa coldboxstore. Fara ta hanyar ƙara wurare zuwa manhajar ku a cikin kwamitin gudanarwa.',
     coolingUserNavigateToMarketplace:
       'Kana sha’awar siyan amfanin gona da aka adana a ɗakunan sanyaya kaya? Je zuwa shafin Kasuwa a ƙasan dama!',
     MarketPrice: {
@@ -755,7 +755,7 @@ export default {
       },
       AddOperator: {
         messages: {
-          operator: "Don shiga cikin manhajar Coldboxstore a matsayin ma'aikaci, je: zuwa: {{link}}",
+          operator: "Don shiga cikin manhajar coldboxstore a matsayin ma'aikaci, je: zuwa: {{link}}",
         },
         toasts: {
           success: "An gayyace ma'aikaci cikin nasara",
@@ -790,7 +790,7 @@ export default {
       },
       AddRegisteredEmployee: {
         message:
-          "Don shiga cikin manhajar Coldboxstore a matsayin Ma'aikaci mai rijista, je zuwa: {{link}}",
+          "Don shiga cikin manhajar coldboxstore a matsayin Ma'aikaci mai rijista, je zuwa: {{link}}",
         toasts: { success: "Anyi nasarar gayyatar ma'aikaci mai rijista" },
       },
       CoolingUsers: {
@@ -1518,9 +1518,9 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'Barka da zuwa Coldboxstore. Wannan tafiya ce ta ayyukan.',
+    welcome: 'Barka da zuwa coldboxstore. Wannan tafiya ce ta ayyukan.',
     farmerWelcome:
-      'Barka da zuwa Coldboxstore! Wannan koyaswar zata taimaka muku fahimtar yadda ake amfani da app.',
+      'Barka da zuwa coldboxstore! Wannan koyaswar zata taimaka muku fahimtar yadda ake amfani da app.',
     quit: 'Bar koyarwa',
     congratulations: 'Taya murna! Kun gama koyawa! Koma kan dashboard don fara amfani da app.',
     prev: 'Mataki na baya',
@@ -1536,7 +1536,7 @@ export default {
       operatorManagementNavigation:
         'A cikin menu, zaka iya zuwa zuwa "Gudanarwa" sannan ka danna can don ƙara ko gyara Masu Amfani da Sanyaya.',
       addCoolingUser:
-        'Ana iya ƙara masu amfani da sanyaya waɗanda ba su yi rajista ba akan Coldboxstore ta saka bayanansu (suna, lambar waya). Ana iya ƙara masu amfani da sanyaya waɗanda suka riga sun yi rajista a cikin ƙa\'idar ta lamba. Za su iya nemo lambar su akan bayanan martabarsu -> "Bayanan asusu" -> "Lambar shigo da mai amfani mai sanyaya".',
+        'Ana iya ƙara masu amfani da sanyaya waɗanda ba su yi rajista ba akan coldboxstore ta saka bayanansu (suna, lambar waya). Ana iya ƙara masu amfani da sanyaya waɗanda suka riga sun yi rajista a cikin ƙa\'idar ta lamba. Za su iya nemo lambar su akan bayanan martabarsu -> "Bayanan asusu" -> "Lambar shigo da mai amfani mai sanyaya".',
       navigateToCoolingUser: 'Je ka danna shafin Masu Amfani da Sanyaya',
       listCoolingUsers:
         'Ana gano masu amfani da sanyaya tare da wayar hannu ta alamar waya a gefen dama na allo. Sauran suna sanyaya masu amfani da wayar asali. A cikin lokuta biyu, zaku iya danna sunan don samun damar bayanan su da binciken mai sanyaya mai amfani.',
@@ -1608,7 +1608,7 @@ export default {
         'Taya murna! Ka kammala koyarwar! Idan kana da tambayoyi game da manhajar, muna ba da shawarar duba FAQ, tambayar mai aiki na ɗakin sanyi, ko aiko da saƙo zuwa app@yourvcca.org.',
       more: 'Danna "More" zai baka damar zaɓar shafukan "Tarihi", "Farashin Amfanin Gona", "Na’urorin Sanyaya", da "Odoyi".',
       marketplaceStep1:
-        'Wannan shi ne kasuwar dijital ta Coldboxstore, inda duk masu amfani za su iya saye da sayar da amfanin gona da ake ajiye a dakin sanyaya. Kowanne akwatin da aka saka don sayarwa yana nan a jera, kuma zaka iya sayen kowanne adadi (a cikin kg) ko cikakken akwatin.',
+        'Wannan shi ne kasuwar dijital ta coldboxstore, inda duk masu amfani za su iya saye da sayar da amfanin gona da ake ajiye a dakin sanyaya. Kowanne akwatin da aka saka don sayarwa yana nan a jera, kuma zaka iya sayen kowanne adadi (a cikin kg) ko cikakken akwatin.',
       marketplaceStep2:
         'Bayan zaɓar kayan da kake son saya, danna gunkin keken sayayya domin ganin abubuwan da ke cikin kekenka.',
       shoppingCart:

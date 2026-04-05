@@ -77,7 +77,7 @@ try {
   var extractedLink = invitationMatch[0];
 
   if (extractedLink.indexOf('http://localhost:8100') === 0) {
-    extractedLink = extractedLink.replace('http://localhost:8100', 'https://app.coldtivate.org');
+    extractedLink = extractedLink.replace('http://localhost:8100', 'https://app.coldboxstore.com');
   }
 
   output.invitationLink = extractedLink;

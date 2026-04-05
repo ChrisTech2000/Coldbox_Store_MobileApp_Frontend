@@ -2,7 +2,7 @@ import { Translations } from './en';
 
 export default {
   appVersion: {
-    newVersion: 'Uma nova versão do Coldboxstore está disponível!',
+    newVersion: 'Uma nova versão do coldboxstore está disponível!',
     pleaseUpdate: 'Por favor, atualize a aplicação antes de continuar.',
   },
   languages: {
@@ -67,7 +67,7 @@ export default {
       LegacyContacts: 'Contactos antigos',
     },
     bottomTabs: {
-      RootMainTabStack: 'Coldboxstore de {{firstName}}',
+      RootMainTabStack: 'coldboxstore de {{firstName}}',
       ProduceDetails: '{{produceCode}}',
       MarketplaceSettings: 'Configurações do Marketplace',
       PriceTrend: 'Tendência de Preços',
@@ -182,9 +182,9 @@ export default {
   },
   Auth: {
     welcomePopup:
-      'Bem-vindo ao Coldboxstore! Se for agricultor, comerciante ou estiver interessado em adquirir produtos armazenados nas câmaras frias, inscreva-se clicando em "Inscrever-se como utilizador de refrigeração ou consumidor". Se trabalha para uma empresa de refrigeração, entre em contacto com o seu responsável para verificar se a sua empresa está registada. Se estiver, o seu responsável deverá enviar-lhe um convite por SMS para se inscrever como empregado registado ou como operador. Caso contrário, pode registar a empresa e inscrever-se como empregado registado. Consulte a secção "Informações da App" para ver as FAQs.',
+      'Bem-vindo ao coldboxstore! Se for agricultor, comerciante ou estiver interessado em adquirir produtos armazenados nas câmaras frias, inscreva-se clicando em "Inscrever-se como utilizador de refrigeração ou consumidor". Se trabalha para uma empresa de refrigeração, entre em contacto com o seu responsável para verificar se a sua empresa está registada. Se estiver, o seu responsável deverá enviar-lhe um convite por SMS para se inscrever como empregado registado ou como operador. Caso contrário, pode registar a empresa e inscrever-se como empregado registado. Consulte a secção "Informações da App" para ver as FAQs.',
     Root: {
-      welcome: 'Bem-vindo ao Coldboxstore',
+      welcome: 'Bem-vindo ao coldboxstore',
       signIn: 'Iniciar Sessão',
       signUpCompany: 'Registar como Empresa',
       signUpCoolingUser: 'Registar como Utilizador de Refrigeração ou Consumidor',
@@ -245,7 +245,7 @@ export default {
         cancel: 'Cancelar',
         ok: 'OK',
       },
-      welcome: 'Bem-vindo ao Coldboxstore',
+      welcome: 'Bem-vindo ao coldboxstore',
       schema: {
         passwordError:
           'A sua palavra-passe deve ter pelo menos 8 caracteres, conter uma letra maiúscula e uma minúscula, e um número.',
@@ -275,7 +275,7 @@ export default {
         genderFieldName: 'género',
         submit: 'Registar',
         terms: {
-          agree: 'Eu concordo com Coldboxstore',
+          agree: 'Eu concordo com coldboxstore',
           license: 'Contrato de licença de utilizador',
           privacy: 'Política da Privacidade',
           and: 'e',
@@ -331,7 +331,7 @@ export default {
       resetButton: 'Redefinir',
     },
     Invite: {
-      heading: 'Bem-vindo ao Coldboxstore',
+      heading: 'Bem-vindo ao coldboxstore',
       employee:
         'Foi convidado como Funcionário. Por favor, preencha o formulário para concluir o seu registo.',
       operator:
@@ -361,7 +361,7 @@ export default {
     noCompanyAvailable: 'Nenhuma empresa disponível',
     noCoolingUnitAvailable: 'Nenhuma unidade de refrigeração disponível',
     noLocationsAvailable:
-      'Bem-vindo ao Coldboxstore. Comece a adicionar localizações à sua aplicação no Dashboard.',
+      'Bem-vindo ao coldboxstore. Comece a adicionar localizações à sua aplicação no Dashboard.',
     coolingUserNavigateToMarketplace:
       'Interessado em comprar produtos armazenados em salas de refrigeração? Visite a aba do Marketplace, em baixo, à direita!',
     MarketPrice: {
@@ -796,7 +796,7 @@ export default {
       },
       AddOperator: {
         messages: {
-          operator: 'Para se juntar aa aplicação Coldboxstore como Operador, vá para: {{link}}',
+          operator: 'Para se juntar aa aplicação coldboxstore como Operador, vá para: {{link}}',
         },
         toasts: {
           success: 'Operador convidado com sucesso',
@@ -845,7 +845,7 @@ export default {
       },
       AddRegisteredEmployee: {
         message:
-          'Para se juntar aa aplicação Coldboxstore como um Funcionário Registado, vá para: {{link}}',
+          'Para se juntar aa aplicação coldboxstore como um Funcionário Registado, vá para: {{link}}',
         toasts: {
           success: 'Funcionário registado convidado com sucesso',
         },
@@ -1599,9 +1599,9 @@ export default {
     },
   },
   tutorial: {
-    welcome: 'Bem-vindo ao Coldboxstore! Este é um tutorial das funções.',
+    welcome: 'Bem-vindo ao coldboxstore! Este é um tutorial das funções.',
     farmerWelcome:
-      'Bem vido ao Coldboxstore! Este tutorial vai ajudar a compreender o funcionamento da aplicação.',
+      'Bem vido ao coldboxstore! Este tutorial vai ajudar a compreender o funcionamento da aplicação.',
     quit: 'Sair do tutorial',
     congratulations:
       'Parabéns! Completou o tutorial! Volte ao Dashboard para começar a usar a aplicação.',
@@ -1620,7 +1620,7 @@ export default {
       operatorManagementNavigation:
         'No Menu, pode navegar para "Gestão" e premir ali para adicionar ou editar Utilizadores de Refrigeração.',
       addCoolingUser:
-        'Utilizadores de refrigeração que não se registraram no Coldboxstore podem ser adicionados inserindo seus dados (nome, número de telefone). Utilizadores de refrigeração que já se inscreveram na aplicação podem ser adicionados pelo código. Eles podem encontrar seu código em seu perfil -> "Detalhes da conta" -> "Código de Importação do Utilizador de Refrigeração".',
+        'Utilizadores de refrigeração que não se registraram no coldboxstore podem ser adicionados inserindo seus dados (nome, número de telefone). Utilizadores de refrigeração que já se inscreveram na aplicação podem ser adicionados pelo código. Eles podem encontrar seu código em seu perfil -> "Detalhes da conta" -> "Código de Importação do Utilizador de Refrigeração".',
       navigateToCoolingUser: 'Vá em frente e clique na guia Utilizadores de Refrigeração',
       listCoolingUsers:
         'Utilizadores de refrigeração com um smartphone são identificados por um ícone de telefone no lado direito das telas. Os outros são utilizadores de refrigeração com um telefone básico. Em ambos os casos, pode clicar em um nome para acessar seus detalhes e a pesquisa do utilizador de refrigeração.',
@@ -1693,7 +1693,7 @@ export default {
         'Parabéns! Completou o tutorial! Se tiver dúvidas sobre a aplicação, recomendamos que verifique as Perguntas Frequentes (FAQ), pergunte a um operador da unidade de refrigeração ou escreva-nos para app@yourvcca.org.',
       more: 'Ao clicar em "Mais", poderá selecionar os ecrãs "Histórico", "Preços das Culturas", "Unidades de Refrigeração" e "Encomendas".',
       marketplaceStep1:
-        'Este é o marketplace digital da Coldboxstore, onde todos os utilizadores podem comprar e vender produtos que estão a ser armazenados na unidade de refrigeração. Cada caixa disponível para venda está listada aqui, e pode comprar qualquer quantidade (em kg) ou a caixa completa.',
+        'Este é o marketplace digital da coldboxstore, onde todos os utilizadores podem comprar e vender produtos que estão a ser armazenados na unidade de refrigeração. Cada caixa disponível para venda está listada aqui, e pode comprar qualquer quantidade (em kg) ou a caixa completa.',
       marketplaceStep2:
         'Depois de selecionar os itens para compra, clique no ícone do carrinho de compras para ver os itens no seu carrinho.',
       shoppingCart:

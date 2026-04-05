@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Coldbox Store</string>
+	<string>coldboxstore</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIconName</key>
@@ -40,10 +40,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>Coldbox Store</string>
+			<string>coldboxstore</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>Coldbox Store</string>
+				<string>coldboxstore</string>
 			</array>
 		</dict>
 		<dict>
@@ -53,7 +53,7 @@
 			<string>com.base.coldtivate</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>Coldbox Store</string>
+				<string>coldboxstore</string>
 			</array>
 		</dict>
 	</array>
